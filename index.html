@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><title>Amazon Quick — 企业级 AI 工作流自动化引擎</title><meta name="description" content="Amazon Quick Desktop Playbook：企业 AI 落地的两条路径、六层能力模型、Skill 从 L1 到 L4 的成熟度阶梯，财务域两个端到端场景实践（可导入的 SKILL.md），以及落地四步与企业 SSO 接入。"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style id="qw-theme">:root {
+  --color-bg: #faf9fc;
+  --color-text: #131920;
+  --color-navbar-bg: #f9f9fb;
+  --color-bg-chat-view: #fcfcfd;
+  --color-bg-secondary: #fff;
+  --color-bg-tertiary: #f9fafb;
+  --color-bg-hover: #f3f4f6;
+  --color-surface: #f9fafb;
+  --color-surface-hover: #f3f4f6;
+  --color-surface-active: #e5e7eb;
+  --color-border: #0000001f;
+  --color-border-light: #0000000f;
+  --color-border-strong: #d1d5db;
+  --color-primary: #4200db;
+  --color-primary-dark: #35009e;
+  --color-primary-light: #8575ff;
+  --color-primary-bg: #e8e6ff;
+  --color-primary-hover-border: #35009e;
+  --color-nav-icon-active: #4200db;
+  --color-nav-hover-border: #4200db;
+  --color-primary-alpha-3: color-mix(in srgb, #4200db 3%, transparent);
+  --color-primary-alpha-5: color-mix(in srgb, #4200db 5%, transparent);
+  --color-primary-alpha-8: color-mix(in srgb, #4200db 8%, transparent);
+  --color-primary-alpha-12: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-alpha-15: color-mix(in srgb, #4200db 15%, transparent);
+  --color-primary-alpha-20: color-mix(in srgb, #4200db 20%, transparent);
+  --color-primary-alpha-25: color-mix(in srgb, #4200db 25%, transparent);
+  --color-primary-alpha-30: color-mix(in srgb, #4200db 30%, transparent);
+  --color-primary-alpha-40: color-mix(in srgb, #4200db 40%, transparent);
+  --color-primary-alpha-50: color-mix(in srgb, #4200db 50%, transparent);
+  --color-primary-alpha-60: color-mix(in srgb, #4200db 60%, transparent);
+  --color-primary-subtle: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-border: color-mix(in srgb, #4200db 30%, transparent);
+  --color-focus-ring: color-mix(in srgb, #4200db 50%, transparent);
+  --color-sidebar-hover: color-mix(in srgb, #4200db 12%, transparent);
+  --block-hover-outline: 1px dashed color-mix(in srgb, #4200db 50%, transparent);
+  --block-selected-outline: 1px solid #8575ff;
+  --block-selection-outline-offset: 2px;
+  --block-selected-halo: 0 0 8px color-mix(in srgb, #4200db 40%, transparent);
+  --color-accent: #4200db;
+  --color-accent-foreground: #4200db;
+  --color-accent-dark: #35009e;
+  --color-accent-light: #e8e6ff;
+  --color-accent-inverse: #fff;
+  --color-link: #4200db;
+  --color-primary-gradient-end: #e8e6ff;
+  --color-primary-bg-solid: #e8e6ff;
+  --color-user-bubble: #f3f3f7;
+  --color-user-bubble-text: #131920;
+  --color-text-secondary: #5e5e5e;
+  --color-text-tertiary: #656871;
+  --color-text-muted: #9ca3af;
+  --color-text-on-primary: #fff;
+  --color-success: #00802f;
+  --color-success-dark: #00471e;
+  --color-success-light: #d9ffd6;
+  --color-success-hover: #005c26;
+  --color-success-bg: #e6f5eb;
+  --color-success-border: #b3d9bf;
+  --color-success-foreground: #00802f;
+  --color-success-dark-foreground: #00471e;
+  --color-success-text: #00471e;
+  --color-error: #db0000;
+  --color-error-dark: #700000;
+  --color-error-light: #ffe0e0;
+  --color-error-hover: #ffe0e0;
+  --color-error-bg: #fceaea;
+  --color-error-border: #f2cccc;
+  --color-error-active-border: #db0000;
+  --color-error-foreground: #db0000;
+  --color-error-dark-foreground: #700000;
+  --color-error-inverse: #fff;
+  --color-error-text: #700000;
+  --color-warning: #f2b100;
+  --color-warning-dark: #573a00;
+  --color-warning-light: #fffbbd;
+  --color-warning-hover: #db9200;
+  --color-warning-bg: #fef7e6;
+  --color-warning-border: #f9dfa3;
+  --color-warning-foreground: #f2b100;
+  --color-warning-dark-foreground: #573a00;
+  --color-warning-inverse: #573a00;
+  --color-surface-warning: #fffbbd;
+  --color-text-warning: #573a00;
+  --color-info: #006ce0;
+  --color-info-dark: #002a66;
+  --color-info-light: #d1f1ff;
+  --color-info-hover: #003b8f;
+  --color-info-bg: #ebf3fc;
+  --color-info-border: #b3d1f0;
+  --color-info-foreground: #006ce0;
+  --color-info-dark-foreground: #002a66;
+  --color-info-inverse: #fff;
+  --color-overlay: #00000080;
+  --color-shadow: #00000014;
+  --color-hover: #0000000d;
+  --color-tooltip-bg: #000000d9;
+  --color-tooltip-text: #fff;
+  --color-voice-purple: #8575ff;
+  --color-voice-purple-dark: #4200db;
+  --color-voice-purple-light: #8575ff;
+  --color-voice-red: #db0000;
+  --color-voice-red-dark: #700000;
+  --color-voice-amber: #f2b100;
+  --color-voice-purple-glow: #4200db66;
+  --color-voice-red-glow: #db000066;
+  --font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
+  --text-2xs: .5625rem;
+  --text-xs: .625rem;
+  --text-sm: .6875rem;
+  --text-base: .75rem;
+  --text-md: .8125rem;
+  --text-lg: .875rem;
+  --text-xl: 1rem;
+  --text-2xl: 1.125rem;
+  --text-3xl: 1.25rem;
+  --text-4xl: 1.5rem;
+  --text-5xl: 2rem;
+  --spacing-1: calc(.25rem * 1);
+  --spacing-1-5: calc(.25rem * 1.5);
+  --spacing-2: calc(.25rem * 2);
+  --spacing-3: calc(.25rem * 3);
+  --spacing-4: calc(.25rem * 4);
+  --spacing-5: calc(.25rem * 5);
+  --spacing-6: calc(.25rem * 6);
+  --spacing-7: calc(.25rem * 7);
+  --spacing-8: calc(.25rem * 8);
+  --spacing-9: calc(.25rem * 9);
+  --spacing-10: calc(.25rem * 10);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-card: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 8px;
+  --shadow-sm: 0 1px 2px #0000000d;
+  --shadow-md: 0 4px 12px #00000014;
+  --color-success-bg-solid: #d9ffd6;
+  --color-error-bg-solid: #ffe0e0;
+  --color-error-border-solid: #ffe0e0;
+  --color-warning-bg-solid: #fffbbd;
+  --color-warning-text: #573a00;
+  --color-info-bg-solid: #d1f1ff;
+  --color-info-bg-solid-alt: #d1f1ff;
+  --color-info-text: #002a66;
+  --color-info-text-alt: #002a66;
+  --color-emerald: #10b981;
+  --color-teal: #4ecdc4;
+  --color-code-bg: #f3f3f7;
+  --color-code-header-bg: #f1f3f5;
+  --color-code-text: #24292e;
+  --color-code-border: #e1e4e8;
+  --color-code-muted: #6a737d;
+  --color-inline-code-bg: #f3f3f7;
+  --color-inline-code-text: #24292e;
+  --color-inline-code-border: #e1e4e8;
+  --color-scrollbar-thumb: #d1d5db;
+  --color-scrollbar-track: transparent;
+  --color-graph-node-text: #333;
+  --color-graph-node-text-dim: #7f8c8d;
+  --color-graph-edge-default: #95a5a6;
+  --color-graph-edge-cross: #e67e22;
+  --color-graph-edge-text: #666;
+  --color-graph-edge-stroke: #fff;
+  --color-graph-highlight-bg: #ff6b6b;
+  --color-graph-highlight-border: #e74c3c;
+  --color-graph-search-bg: gold;
+  --color-graph-search-border: orange;
+  --color-graph-focus-border: #c0392b;
+  --color-graph-external-border: #95a5a6;
+  --color-graph-cat-file: #3498db;
+  --color-graph-cat-folder: #7f8c8d;
+  --color-graph-cat-file-aggregate: #2980b9;
+  --color-graph-cat-class: #9b59b6;
+  --color-graph-cat-function: #2ecc71;
+  --color-graph-cat-method: #1abc9c;
+  --color-graph-cat-variable: #f39c12;
+  --color-graph-cat-import: #d35400;
+  --color-graph-cat-module: #5b6abf;
+  --color-graph-cat-concept: #e74c3c;
+  --color-graph-cat-person: #ff6b6b;
+  --color-graph-cat-org: #4ecdc4;
+  --color-graph-cat-organization: #4ecdc4;
+  --color-graph-cat-product: #a29bfe;
+  --color-graph-cat-metric: #fd79a8;
+  --color-graph-cat-location: #34495e;
+  --color-graph-cat-date: #e056a0;
+  --color-graph-cat-code: #3498db;
+  --color-graph-cat-doc: #7f8c8d;
+  --color-graph-cat-url: #00b894;
+  --color-graph-cat-email: #6c5ce7;
+  --color-graph-cat-unknown: #bdc3c7;
+  --color-graph-rel-contains: #bdc3c7;
+  --color-graph-rel-extends: #9b59b6;
+  --color-graph-rel-implements: #3498db;
+  --color-graph-rel-imports: #e67e22;
+  --color-graph-rel-uses: #2ecc71;
+  --color-graph-rel-calls: #27ae60;
+  --color-graph-rel-references: #f39c12;
+  --color-graph-rel-related-to: #95a5a6;
+  --color-graph-rel-works-on: #e74c3c;
+  --color-graph-rel-owns: #1abc9c;
+  --color-graph-rel-depends-on: #e67e22;
+  --color-graph-rel-parent-of: #bdc3c7;
+  --qs-content: #fff;
+  --qs-main: #fff;
+  --qs-primary-foreground: #131920;
+  --qs-secondary-foreground: #656871;
+  --qs-tertiary-foreground: #9ca3af;
+  --qs-placeholder-foreground: #8c8c94;
+  --qs-divider: #dedee3;
+  --qs-default-border: #8c8c94;
+  --qs-neutral-soft: #b4b4bb;
+  --qs-neutral-gray-50: #f9fafb;
+  --qs-tertiary-background: #f9fafb;
+  --qs-action-hover: #f3f3f7;
+  --qs-primary-default: #4200db;
+  --qs-primary-dark: #35009e;
+  --qs-primary-light: #e8e6ff;
+  --qs-success-default: #00802f;
+  --qs-error-default: #db0000;
+  --qs-font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+  --safe-top: 0px;
+  --safe-bottom: 0px;
+  --safe-left: 0px;
+  --safe-right: 0px;
+  --qs-font-family: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+  --qs-font-base-letter-spacing: .15px;
+  --qs-shadow-sm: 0 0 2px 0 #00000029, 0 0 4px 0 #00000029;
+  --qs-shadow-md: 0 0 2px 0 #00000029, 0 2px 8px 1px #00000029;
+  --qs-shadow-lg: 0 4px 16px 4px #00000029, 0 2px 6px 1px #00000029;
+  --qs-shadow-xl: 0 4px 8px 2px #00000029, 0 6px 20px 4px #00000029;
+  --qs-width-modal-sm: 384px;
+  --qs-width-modal-md: 600px;
+  --qs-width-modal-lg: 1136px;
+  --qs-grid-gap: 16px;
+  --qs-grid-gap-xl: 24px;
+  --qs-primary-medium: #8575ff;
+  --qs-primary-inverse: #fff;
+  --qs-neutral-lightest: #f9f9fb;
+  --qs-neutral-light: #f3f3f7;
+  --qs-neutral-default: #dedee3;
+  --qs-neutral-medium: #8c8c94;
+  --qs-neutral-deep: #656871;
+  --qs-neutral-dark: #333843;
+  --qs-neutral-strong: #131920;
+  --qs-neutral-white: #fff;
+  --qs-neutral-black: #000;
+  --qs-success-medium: #005c26;
+  --qs-success-dark: #00471e;
+  --qs-success-light: #d9ffd6;
+  --qs-success-inverse: #fff;
+  --qs-info-default: #006ce0;
+  --qs-info-medium: #003b8f;
+  --qs-info-dark: #002a66;
+  --qs-info-light: #d1f1ff;
+  --qs-info-inverse: #fff;
+  --qs-warning-default: #f2b100;
+  --qs-warning-medium: #db9200;
+  --qs-warning-dark: #573a00;
+  --qs-warning-light: #fffbbd;
+  --qs-warning-inverse: #573a00;
+  --qs-warning-experimental: #f2b100;
+  --qs-warning-experimental-light: #fffbbd;
+  --qs-warning-experimental-light-foreground: #fffbbd;
+  --qs-error-medium: #900;
+  --qs-error-dark: #700000;
+  --qs-error-light: #ffe0e0;
+  --qs-error-inverse: #fff;
+  --qs-connection-default: #db3300;
+  --qs-connection-soft: #ff997a;
+  --qs-connection-light: #ffe0d6;
+  --qs-connection-dark: #661800;
+  --qs-automation-default: #b3008f;
+  --qs-automation-medium: #d600ba;
+  --qs-automation-soft: #ff94f1;
+  --qs-automation-light: #ffe0fb;
+  --qs-automation-dark: #660052;
+  --qs-insight-default: #a000b8;
+  --qs-insight-soft: #f299ff;
+  --qs-insight-light: #fce6ff;
+  --qs-insight-dark: #590066;
+  --qs-visualization-default: #7300e5;
+  --qs-visualization-soft: #d4a8ff;
+  --qs-visualization-light: #f2e5ff;
+  --qs-visualization-dark: #45008a;
+  --qs-spice: #ff9800;
+  --qs-coachmark: #006ce0;
+  --qs-brand: #fff;
+  --qs-brand-foreground: #131920;
+  --qs-brand-navbar: #131920;
+  --qs-brand-navbar-foreground: #fff;
+  --qs-brand-navbar-light: #dedee3;
+  --qs-brand-navbar-dark: #000;
+  --qs-application-navbar: #4200db;
+  --qs-application-navbar-foreground: #fff;
+  --qs-application-navbar-light: #e8e6ff;
+  --qs-application-navbar-dark: #35009e;
+  --qs-dimension: #4200db;
+  --qs-dimension-foreground: #fff;
+  --qs-dimension-experimental: #4200db;
+  --qs-dimension-experimental-foreground: #4200db;
+  --qs-measure: #00802f;
+  --qs-measure-foreground: #fff;
+  --qs-measure-experimental: #f2b100;
+  --qs-measure-experimental-foreground: #f2b100;
+  --qs-content-inverse: #333843;
+  --qs-content-inverse-active: #131920;
+  --qs-secondary: #dedee3;
+  --qs-disabled: #8c8c94;
+  --qs-divider-light: #f3f3f7;
+  --qs-hover-border: #333843;
+  --qs-active-border: #4200db;
+  --qs-disabled-border: #dedee3;
+  --qs-error-border: #ffe0e0;
+  --qs-error-active-border: #db0000;
+  --qs-disabled-foreground: #b4b4bb;
+  --qs-primary-inverse-foreground: #fff;
+  --qs-error-foreground: #db0000;
+  --qs-contrast-foreground: #131920;
+  --qs-main-foreground: #131920;
+  --qs-main-secondary-foreground: #656871;
+  --qs-action-disabled: #f3f3f7;
+  --qs-action-active: #e8e6ff;
+  --qs-default-badge: #dedee3;
+  --qs-tag-default: #dedee3;
+  --qs-tag-soft-border: #b4b4bb;
+  --qs-focus-offset: 1px;
+  --qs-toggle-tile-sm: calc(.25rem * 8);
+  --qs-toggle-tile-md: calc(.25rem * 12);
+  --qs-toggle-tile-lg: calc(.25rem * 15);
+  --qs-shadow-pin-right: inset 4px 0 4px -4px #00000029;
+  --qs-shadow-pin-left: inset -4px 0 4px -4px #00000029;
+  --react-pdf-text-layer: 1;
+  --highlight-bg-color: #b400aa;
+  --highlight-selected-bg-color: #006400;
+  --react-pdf-annotation-layer: 1;
+  --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
+  --input-focus-border-color: Highlight;
+  --input-focus-outline: 1px solid Canvas;
+  --input-unfocused-border-color: transparent;
+  --input-disabled-border-color: transparent;
+  --input-hover-border-color: black;
+  --link-outline: none;
+  color-scheme: light;
+}
+body { background: var(--color-bg); color: var(--color-text); }
+a { color: var(--color-link, var(--color-primary)); }</style>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha384-/o6I2CkkWC//PSjvWC/eYN7l3xM3tJm8ZzVkCOfp//W05QcE3mlGskpoHB6XqI+B" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js" integrity="sha384-Mx5lkUEQPM1pOJCwFtUICyX45KNojXbkWdYhkKUKsbv391mavbfoAmONbzkgYPzR" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif);background:var(--color-bg,#fff);color:#1a1f36;line-height:1.72;-webkit-font-smoothing:antialiased}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#1a1f36 0%,#2d3561 50%,#3a4a8a 100%);color:#fff;padding:60px 48px 52px;text-align:center;position:relative;overflow:hidden}
+.hero::before,.hero::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,0.03)}
+.hero::before{width:500px;height:500px;top:-200px;right:-120px}
+.hero::after{width:360px;height:360px;bottom:-140px;left:-80px}
+.hero-badge{display:inline-block;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:12px;padding:5px 18px;border-radius:20px;margin-bottom:22px;font-weight:600;letter-spacing:0.04em}
+.hero h1{font-size:32px;font-weight:800;margin-bottom:14px;line-height:1.3}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#7dd3fc,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:15px;opacity:0.82;max-width:640px;margin:0 auto 30px}
+.hero-pills{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.hero-pill{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:6px 16px;font-size:12px;display:flex;align-items:center;gap:6px}
+
+/* Common */
+.wrap{max-width:900px;margin:0 auto;padding:0 32px}
+section{padding:48px 0}
+section.alt{background:#f7f8fc}
+h2{font-size:21px;font-weight:700;margin-bottom:6px;text-align:center;color:#1a1f36}
+.sec-sub{text-align:center;font-size:14px;color:#5e6687;margin-bottom:28px;max-width:620px;margin-left:auto;margin-right:auto}
+
+/* Cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card{background:#fff;border:1px solid #e6e9f0;border-radius:12px;padding:22px;transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,0.06);transform:translateY(-2px)}
+.card .icon{font-size:26px;margin-bottom:10px}
+.card h3{font-size:15px;font-weight:600;margin-bottom:6px;color:#1a1f36}
+.card p{font-size:13px;color:#5e6687;line-height:1.65}
+
+/* Tags */
+.tag{display:inline-block;font-size:10px;padding:2px 9px;border-radius:4px;font-weight:700;letter-spacing:0.02em}
+.t-g{background:#ecfdf5;color:#065f46}.t-b{background:#eff6ff;color:#1e40af}.t-r{background:#fef2f2;color:#991b1b}
+.t-y{background:#fefce8;color:#854d0e}.t-p{background:#f5f3ff;color:#5b21b6}.t-gray{background:#f1f5f9;color:#475569}
+
+/* Layer Stack */
+.layers{display:flex;flex-direction:column;gap:3px;max-width:720px;margin:0 auto 24px}
+.ly{display:flex;align-items:center;padding:14px 18px;border-radius:10px;font-size:13px;font-weight:500}
+.ly .ln{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-right:14px;color:#fff;flex-shrink:0}
+.ly .lt{margin-left:auto;font-size:11px;font-weight:700;padding:3px 12px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+
+/* Flow */
+.flow{display:flex;align-items:stretch;gap:6px;margin:20px 0;flex-wrap:wrap}
+.flow-step{flex:1;min-width:130px;background:#fff;border:1px solid #e6e9f0;border-radius:12px;padding:16px 14px;text-align:center}
+.flow-step .fs-icon{font-size:24px;margin-bottom:6px}
+.flow-step .fs-label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+.flow-step h4{font-size:13px;font-weight:600;margin:4px 0;color:#1a1f36}
+.flow-step p{font-size:11px;color:#5e6687}
+.flow-arr{display:flex;align-items:center;color:#cbd5e1;font-size:18px;flex-shrink:0}
+
+/* Table */
+.tb{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+.tb th{text-align:left;color:#94a3b8;font-weight:600;padding:9px 10px;border-bottom:2px solid #e6e9f0;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap}
+.tb td{padding:9px 10px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+.tb tr:hover td{background:#f8fafc}
+
+/* Quote */
+.quote{border-left:4px solid #6366f1;background:#f5f3ff;border-radius:0 12px 12px 0;padding:18px 24px;margin:20px 0;font-size:15px;font-weight:600;color:#4338ca;font-style:italic;line-height:1.55}
+
+/* VS */
+.vs-row{display:grid;grid-template-columns:1fr 48px 1fr;gap:0;margin:20px 0;align-items:stretch}
+.vs-side{border-radius:12px;padding:22px}
+.vs-l{background:#fef2f2;border:1px solid #fecaca}
+.vs-r{background:#ecfdf5;border:1px solid #a7f3d0}
+.vs-m{display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#94a3b8}
+.vs-side h4{margin:0 0 8px;font-size:14px;color:#1a1f36}
+.vs-side ul{padding-left:16px;font-size:12px;line-height:1.9;color:#5e6687}
+
+/* Connectors */
+.conn-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.conn{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #e6e9f0;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:500;color:#334155}
+.conn i{color:#6366f1}
+
+/* ── 端到端场景实践（重点区）── */
+.pband{background:linear-gradient(180deg,#f3f1ff 0%,#faf9ff 55%,#fff 100%);border-top:1px solid #e0dcff;border-bottom:1px solid #e6e9f0}
+.pband h2{font-size:24px}
+.pcount{display:inline-flex;align-items:center;gap:7px;background:#6366f1;color:#fff;font-size:11.5px;font-weight:700;padding:5px 14px;border-radius:999px;margin-bottom:12px;letter-spacing:.02em}
+.pcount .sep{opacity:.5}
+
+/* 业务域分组 */
+.dgroup{background:#fff;border:1px solid #ddd8ff;border-radius:14px;padding:20px;margin-top:20px;box-shadow:0 4px 20px rgba(99,102,241,.06)}
+.dgroup-hd{display:flex;align-items:center;gap:11px;padding-bottom:15px;margin-bottom:17px;border-bottom:1px solid #f1f5f9}
+.dgroup-ic{flex:0 0 auto;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;background:#f5f3ff}
+.dgroup-hd h3{font-size:17px;font-weight:750;margin:0;color:#1a1f36;flex:1}
+.dgroup-hd .meta{font-size:11.5px;color:#94a3b8;margin-top:2px;font-weight:400}
+.dgroup-st{flex:0 0 auto;font-size:11px;font-weight:700;padding:4px 12px;border-radius:999px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;white-space:nowrap}
+
+/* 域地图（规划中） */
+.dmap{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.dcell{background:#fff;border:1px dashed #cbd5e1;border-radius:11px;padding:16px;transition:all .18s}
+.dcell:hover{border-color:#a5b4fc;box-shadow:0 4px 16px rgba(99,102,241,.07)}
+.dcell .dh{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.dcell .dh .di{font-size:17px}
+.dcell .dh h4{font-size:13.5px;font-weight:700;margin:0;color:#1a1f36}
+.dcell p{font-size:12px;color:#5e6687;margin:0;line-height:1.62}
+.dcell .dneed{font-size:10.5px;color:#94a3b8;margin-top:9px;padding-top:9px;border-top:1px solid #f1f5f9;font-family:ui-monospace,Menlo,monospace}
+
+/* ── 实践卡 ── */
+.asset{background:#fff;border:1px solid #e6e9f0;border-radius:12px;padding:22px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s}
+.asset:hover{box-shadow:0 6px 24px rgba(0,0,0,.06);transform:translateY(-2px)}
+.asset::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,#6366f1,#a78bfa)}
+.asset-hd{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.asset-ic{flex:0 0 auto;width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;background:#f5f3ff}
+.asset-hd h3{font-size:16px;font-weight:700;margin:0;color:#1a1f36}
+.asset-hd .sub{font-size:11px;color:#94a3b8;font-family:ui-monospace,Menlo,monospace;margin-top:2px}
+.asset > p{font-size:13px;color:#5e6687;line-height:1.65;margin-bottom:14px}
+.asset dl{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px;margin-bottom:14px}
+.asset dt{color:#94a3b8;white-space:nowrap}
+.asset dd{color:#334155;margin:0}
+.asset-links{display:flex;flex-wrap:wrap;gap:7px;padding-top:13px;border-top:1px dashed #e6e9f0}
+.alink{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;text-decoration:none;border:1px solid #e6e9f0;color:#334155;background:#fff;transition:all .16s}
+.alink:hover{border-color:#6366f1;color:#4338ca;background:#f5f3ff}
+.alink.solid{background:#6366f1;border-color:#6366f1;color:#fff}
+.alink.solid:hover{background:#4f46e5;color:#fff}
+.alink code{font-family:ui-monospace,Menlo,monospace;font-size:11px;opacity:.85}
+
+/* 财务子域行 + 紧凑实践卡 */
+.subdom{margin-top:20px}
+.subdom-hd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.subdom-hd .sd-code{font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:#f5f3ff;color:#4338ca}
+.subdom-hd .sd-zh{font-size:14px;font-weight:700;color:#1a1f36}
+.subdom-hd .sd-en{font-size:11.5px;color:#94a3b8}
+.subdom-hd .sd-n{margin-left:auto;font-size:11px;font-weight:700;padding:3px 11px;border-radius:999px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;white-space:nowrap}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+a.pcard{display:flex;flex-direction:column;gap:4px;background:#fff;border:1px solid #e6e9f0;border-radius:10px;padding:12px 14px;text-decoration:none;transition:all .18s}
+a.pcard:hover{border-color:#6366f1;box-shadow:0 6px 20px rgba(99,102,241,.09);transform:translateY(-2px)}
+.pcard .pn{font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:700;color:#6366f1}
+.pcard .pt{font-size:13.5px;font-weight:700;color:#1a1f36;line-height:1.4}
+.pcard .pp{font-size:12px;color:#5e6687;line-height:1.55}
+.pcard .ptags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:4px}
+@media(max-width:720px){.pgrid{grid-template-columns:1fr 1fr}}
+
+/* 待建方向 */
+.todo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px}
+.todo{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:10px;padding:15px}
+.todo h4{font-size:13px;font-weight:650;margin:0 0 4px;color:#1a1f36}
+.todo p{font-size:12px;color:#5e6687;margin:0}
+.todo .need{font-size:10.5px;color:#94a3b8;margin-top:8px;padding-top:8px;border-top:1px solid #e6e9f0;font-family:ui-monospace,Menlo,monospace}
+
+/* 步骤 */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.stp{background:#fff;border:1px solid #e6e9f0;border-radius:12px;padding:17px}
+.stp .n{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:#6366f1;color:#fff;margin-bottom:9px}
+.stp h4{font-size:13px;font-weight:650;margin:0 0 5px;color:#1a1f36}
+.stp p{font-size:12px;color:#5e6687;margin:0}
+
+/* 代码块 */
+pre.cb{background:#131920;border-radius:12px;padding:16px 18px;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.7;color:#d6dbe8;margin:14px 0}
+pre.cb .c{color:#7d8799}
+
+/* 提示条 */
+.note{border-radius:10px;padding:14px 16px;font-size:12.5px;display:flex;gap:10px;align-items:flex-start;margin:16px 0;line-height:1.6}
+.note i{flex:0 0 auto;margin-top:2px}
+.note.warn{background:#fefce8;border:1px solid #fde68a;color:#854d0e}
+.note.info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+
+/* 资源卡 */
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.res{display:flex;align-items:center;gap:13px;background:#fff;border:1px solid #e6e9f0;border-radius:11px;padding:15px 17px;text-decoration:none;transition:all .18s}
+.res:hover{border-color:#6366f1;box-shadow:0 6px 20px rgba(99,102,241,.09);transform:translateY(-2px)}
+.res .ri{flex:0 0 auto;width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;background:#f5f3ff;color:#6366f1}
+.res .rb{flex:1;min-width:0}
+.res .rb h4{font-size:13.5px;font-weight:650;margin:0 0 2px;color:#1a1f36}
+.res .rb p{font-size:11.5px;color:#5e6687;margin:0}
+.res .ra{flex:0 0 auto;color:#cbd5e1;font-size:14px;transition:.18s}
+.res:hover .ra{color:#6366f1;transform:translateX(3px)}
+
+/* 章节导航 */
+.pnav{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(12px);border-bottom:1px solid #e6e9f0}
+.pnav-in{max-width:900px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:4px;height:50px;overflow-x:auto;scrollbar-width:none}
+.pnav-in::-webkit-scrollbar{display:none}
+.pnav-in .brand{font-size:12.5px;font-weight:800;color:#1a1f36;white-space:nowrap;margin-right:8px}
+.pnav-in a{font-size:12.5px;color:#5e6687;padding:6px 10px;border-radius:8px;text-decoration:none;white-space:nowrap;transition:.16s}
+.pnav-in a:hover{color:#4338ca;background:#f5f3ff}
+.pnav-in a.hot{color:#4338ca;font-weight:700;background:#eef2ff;border:1px solid #c7d2fe}
+.pnav-in a.hot:hover{background:#e0e7ff}
+section{scroll-margin-top:58px}
+
+@media(max-width:720px){
+  .todo-grid,.steps,.res-grid{grid-template-columns:1fr}
+  .asset dl{grid-template-columns:1fr}
+  .asset dt{color:#64748b;font-weight:600;margin-top:6px}
+}
+
+/* CTA */
+.cta-box{background:linear-gradient(135deg,#1a1f36,#3a4a8a);color:#fff;border-radius:12px;padding:36px;text-align:center;margin:32px 0}
+.cta-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.cta-box p{font-size:14px;opacity:0.88;max-width:560px;margin:0 auto}
+
+/* CTA 内的下一步入口 */
+.cta-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.cta-link{display:flex;flex-direction:column;gap:3px;text-align:left;padding:13px 18px;border-radius:10px;text-decoration:none;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);transition:all .18s;min-width:168px}
+.cta-link:hover{background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.4);transform:translateY(-2px)}
+.cta-link.primary{background:#6366f1;border-color:#6366f1}
+.cta-link.primary:hover{background:#4f46e5;border-color:#4f46e5}
+.cta-link .t{font-size:14px;font-weight:650;color:#fff}
+.cta-link .d{font-size:11px;color:rgba(255,255,255,.72)}
+
+/* 常驻跳转入口 */
+.jump-bar{position:fixed;top:14px;right:16px;z-index:1000;display:flex;gap:8px}
+.jump-bar a{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:999px;text-decoration:none;
+  background:rgba(15,18,37,.84);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;font-size:12px;font-weight:600;
+  transition:all .18s;white-space:nowrap;
+}
+.jump-bar a:hover{background:#6366f1;border-color:#6366f1;transform:translateY(-1px)}
+@media(max-width:720px){
+  .jump-bar{top:8px;right:8px;gap:6px}
+  .jump-bar a{padding:6px 11px;font-size:11px}
+  .jump-bar .lbl{display:none}
+  .cta-link{min-width:0;flex:1 1 100%}
+}
+
+footer{text-align:center;padding:28px;font-size:11px;color:#94a3b8;background:#f7f8fc;border-top:1px solid #e6e9f0}
+</style>
+</head>
+<body>
+
+<div class="jump-bar">
+  <a href="overview-guided.html" title="同一套内容的语音自讲解版，10 段式逐页讲解">🎤 <span class="lbl">自讲解版</span></a>
+  <a href="playbook.html" title="技术参考手册：内置系统工具明细、权限模型、界面速览">📘 <span class="lbl">技术</span>参考</a>
+</div>
+
+<div class="pnav">
+  <div class="pnav-in">
+    <span class="brand">Quick Desktop Playbook</span>
+    <a href="#paths">定位</a>
+    <a href="#layers">能力模型</a>
+    <a href="#skill">Skill 机制</a>
+    <a href="#practices" class="hot">场景实践</a>
+    <a href="#connect">开放连接</a>
+    <a href="#local">本地架构</a>
+    <a href="#adopt">怎么落地</a>
+    <a href="#enterprise">企业接入</a>
+    <a href="#resources">资源</a>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <span class="hero-badge"><i class="fa-solid fa-bolt"></i>&nbsp; Amazon Quick</span>
+  <h1>企业级<br><em>AI 工作流自动化引擎</em></h1>
+  <p class="hero-sub">从数据获取、分析处理、标准化输出到自动交付——跨系统编排，一键固化，定时自动运行，还能直接处理您电脑上授权的文件。</p>
+  <div class="hero-pills">
+    <span class="hero-pill"><i class="fa-solid fa-shield-halved"></i> 本机访问按授权</span>
+    <span class="hero-pill"><i class="fa-solid fa-plug"></i> 通过 MCP 对接自有业务系统</span>
+    <span class="hero-pill"><i class="fa-solid fa-gears"></i> 流程一键复用</span>
+    <span class="hero-pill"><i class="fa-solid fa-clock"></i> 定时自动执行</span>
+  </div>
+</div>
+
+<!-- ═══ S1: 两条路 ═══ -->
+<section class="alt" id="paths">
+<div class="wrap">
+  <h2>企业 AI 落地的两条路径</h2>
+  <p class="sec-sub">AI 提效不必等平台建好——今天安装，今天见效</p>
+
+  <div class="vs-row">
+    <div class="vs-side vs-l">
+      <h4>🏗️ 路径 A：先建 AI 平台</h4>
+      <ul>
+        <li>搭建大模型基础设施</li>
+        <li>开发 AI 中台 + 业务应用</li>
+        <li>组建 AI 工程团队</li>
+        <li>周期 <strong>3-12 个月</strong>，投入高</li>
+        <li>场景不确定——还没用就要定义需求</li>
+      </ul>
+    </div>
+    <div class="vs-m">VS</div>
+    <div class="vs-side vs-r">
+      <h4>⚡ 路径 B：先用 Quick 提效</h4>
+      <ul>
+        <li>安装桌面应用 → <strong>登录即可上手</strong>（企业账户需管理员先开启桌面访问）</li>
+        <li>连接已有系统 → 无需开发</li>
+        <li>业务人员自建自动化流程</li>
+        <li>实战发现真实场景 → <strong>反哺平台规划</strong></li>
+        <li>两条路<strong>不矛盾</strong>，Quick 是平台建好前的"快速通道"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quote">
+    "先用起来，再系统化"——Quick 帮您今天就产出 AI 价值，同时为未来的平台建设积累真实的业务场景和数据。
+  </div>
+</div>
+</section>
+
+<!-- ═══ S2: 六层模型 ═══ -->
+<section id="layers">
+<div class="wrap">
+  <h2>六层能力模型</h2>
+  <p class="sec-sub">通用 AI 聊天工具停留在第 1-2 层——Quick 构建了完整的六层闭环</p>
+
+  <div class="layers">
+    <div class="ly" style="background:#fef2f2"><span class="ln" style="background:#ef4444">1</span><strong>对话 + 生成</strong>&nbsp;&nbsp;智能问答、文档分析、数据处理<span class="lt" style="background:#fecaca;color:#991b1b">所有 AI 工具都行</span></div>
+    <div class="ly" style="background:#fefce8"><span class="ln" style="background:#eab308">2</span><strong>连接 + 执行</strong>&nbsp;&nbsp;对接邮件、IM、云存储、浏览器操作<span class="lt" style="background:#fef08a;color:#854d0e">行业趋同</span></div>
+    <div class="ly" style="background:#eff6ff"><span class="ln" style="background:#3b82f6">3</span><strong>知识积累</strong>&nbsp;&nbsp;持续从日常工作中构建个人知识图谱<span class="lt" style="background:#bfdbfe;color:#1e40af">Quick 优势</span></div>
+    <div class="ly" style="background:#ecfdf5"><span class="ln" style="background:#10b981">4</span><strong>流程固化</strong>&nbsp;&nbsp;Skill：将跨系统工作流标准化为一键可复用的自动化流程<span class="lt" style="background:#a7f3d0;color:#065f46">Quick 特色</span></div>
+    <div class="ly" style="background:#f5f3ff"><span class="ln" style="background:#7c3aed">5</span><strong>自主运行</strong>&nbsp;&nbsp;定时任务（routine）：按计划自动执行，无需人工触发<span class="lt" style="background:#c4b5fd;color:#5b21b6">Quick 特色</span></div>
+    <div class="ly" style="background:#ecfdf5;border:2px solid #10b981"><span class="ln" style="background:#064e3b">6</span><strong>本地安全</strong>&nbsp;&nbsp;本机文件按文件夹授权访问，工具权限逐项可控<span class="lt" style="background:#064e3b;color:#fff">Quick 亮点</span></div>
+  </div>
+
+  <div class="quote">Quick 的核心价值 = 让您的工作流"长出记忆和肌肉"。越用越懂您，做过一次不用教第二遍，人不在它也在工作。</div>
+</div>
+</section>
+
+<!-- ═══ S3: Skill 演进 ═══ -->
+<section class="alt" id="skill">
+<div class="wrap">
+  <h2>Skill：从"做一次"到"自动跑"</h2>
+  <p class="sec-sub">不是展示"AI 能做什么"——而是展示如何将 AI 能力固化为可复用、可自动运行的标准化流程</p>
+
+  <table class="tb">
+    <tbody><tr><th></th><th>阶段</th><th>数据输入</th><th>处理</th><th>输出</th><th>差异化</th></tr>
+    <tr>
+      <td><span class="tag t-y">L1</span></td>
+      <td>单次对话处理</td>
+      <td>手动上传文件</td>
+      <td>AI 对话分析</td>
+      <td>生成报告</td>
+      <td style="color:#94a3b8">任何 AI 工具都能做</td>
+    </tr>
+    <tr>
+      <td><span class="tag t-b">L2</span></td>
+      <td><strong>Skill 固化</strong></td>
+      <td>指定文件 / 目录</td>
+      <td>标准化流程</td>
+      <td>一句话 → 标准输出</td>
+      <td><strong>做过一次不再教，任何人都能用</strong></td>
+    </tr>
+    <tr>
+      <td><span class="tag t-p">L3</span></td>
+      <td><strong>跨系统编排</strong></td>
+      <td>连接器 → ERP / 业务系统 / OA</td>
+      <td>多源合并 + 异常检测</td>
+      <td>报告 + 自动上传 + 邮件发送</td>
+      <td><strong>Skill + 连接器 = 端到端自动化</strong></td>
+    </tr>
+    <tr>
+      <td><span class="tag t-g">L4</span></td>
+      <td><strong>全自动运行</strong></td>
+      <td>定时自动触发</td>
+      <td>自动执行全流程</td>
+      <td>人不用动，结果自动到位</td>
+      <td><strong>定时任务（routine）+ 本地安全闭环</strong></td>
+    </tr>
+  </tbody></table>
+
+  <h3 style="font-size:15px;font-weight:600;margin:28px 0 14px;text-align:center">L3 端到端工作流示意：以财务周报为例</h3>
+
+  <div class="flow">
+    <div class="flow-step" style="border-top:3px solid #3b82f6">
+      <div class="fs-icon">🔌</div>
+      <div class="fs-label">Step 1</div>
+      <h4>数据获取</h4>
+      <p>连接器自动从 ERP 拉取资金流水、业务系统 API 查询余额、云盘读取历史基准</p>
+    </div>
+    <div class="flow-arr"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="flow-step" style="border-top:3px solid #7c3aed">
+      <div class="fs-icon">⚙️</div>
+      <div class="fs-label">Step 2</div>
+      <h4>本地处理</h4>
+      <p>多源数据合并清洗、多维度指标计算、异常值自动检测</p>
+    </div>
+    <div class="flow-arr"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="flow-step" style="border-top:3px solid #10b981">
+      <div class="fs-icon">📊</div>
+      <div class="fs-label">Step 3</div>
+      <h4>标准输出</h4>
+      <p>Excel + PDF 报告、HTML 交互仪表盘、异常指标预警高亮</p>
+    </div>
+    <div class="flow-arr"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="flow-step" style="border-top:3px solid #f59e0b">
+      <div class="fs-icon">📬</div>
+      <div class="fs-label">Step 4</div>
+      <h4>自动交付</h4>
+      <p>上传至企业云盘、邮件发送给相关团队、IM 频道推送摘要</p>
+    </div>
+  </div>
+
+  <div class="quote">关键差异：通用 AI 工具的系统连接是"每次对话时临时调用"。Quick 的 Skill 是"把整条流程固化下来"——一次定义，永久复用，换人也能出一样的结果。</div>
+</div>
+</section>
+<!-- ═══ 端到端场景实践（重点区）═══ -->
+<section class="pband" id="practices">
+<div class="wrap" style="text-align:center">
+  <span class="pcount"><i class="fa-solid fa-circle-check"></i> 20 个实践 <span class="sep">·</span> 1 个业务域</span>
+</div>
+<div class="wrap">
+  <h2>端到端场景实践</h2>
+  <p class="sec-sub">上面的 L3、L4 长什么样，看真实跑通的实践最直接。每个实践都交付三件套：讲解网页、可导入的 <code>SKILL.md</code>、承担确定性计算的脚本——可以直接取走试跑。这些实践是财务核对场景的参考实现，可按自身流程修改、扩展和优化；样例数据均为构造，投入生产前需按自身会计政策和数据校验规则、阈值与容差，并自行完成安全评审。</p>
+
+  <!-- ── 财务域 ── -->
+  <div class="dgroup">
+    <div class="dgroup-hd">
+      <div class="dgroup-ic">💰</div>
+      <div style="flex:1">
+        <h3>财务域</h3>
+        <div class="meta">R2R · P2P · O2C · TAX · ASSET · 20 个可验证核对场景</div>
+      </div>
+      <span class="dgroup-st"><i class="fa-solid fa-check"></i> 20 个实践 · 已就绪</span>
+    </div>
+
+    <div class="asset-links" style="border-top:0;padding-top:0">
+      <a class="alink solid" href="finance-scenarios.html"><i class="fa-solid fa-layer-group"></i> 财务场景库总览（20 个场景）</a>
+      <a class="alink" href="skills/README.md">技能包说明</a>
+    </div>
+
+    <div class="subdom">
+      <div class="subdom-hd"><span class="sd-code">R2R</span><span class="sd-zh">记录到报告</span><span class="sd-en">Record to Report</span><span class="sd-n">7 个实践</span></div>
+      <div class="pgrid">
+        <a class="pcard" href="skills/treasury-weekly-report/solution.html"><span class="pn">#1</span><span class="pt">资金周报生成器</span><span class="pp">汇总多份资金数据源，计算多维指标与风险预警，输出周报三件套</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">恒等式</span></span></a>
+        <a class="pcard" href="skills/finance-monthly-reconciliation/solution.html"><span class="pn">#2</span><span class="pt">月末银行对账</span><span class="pp">ERP 与银行回单按参考号、日期金额、摘要三层匹配对账</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">差异归因</span><span class="tag t-b">交叉一致</span></span></a>
+        <a class="pcard" href="skills/report-tieout-check/solution.html"><span class="pn">#3</span><span class="pt">报表勾稽自检</span><span class="pp">三大报表的会计恒等式、表内小计与三表间勾稽自检</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">恒等式</span></span></a>
+        <a class="pcard" href="skills/gl-voucher-compliance/solution.html"><span class="pn">#4</span><span class="pt">总账凭证合规</span><span class="pp">记账凭证借贷平衡、科目与期间白名单、摘要与附件校验</span><span class="ptags"><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span></span></a>
+        <a class="pcard" href="skills/intercompany-reconciliation/solution.html"><span class="pn">#5</span><span class="pt">关联方往来对账</span><span class="pp">集团内往来双向一致核对，识别金额不符、单边登记与方向错误</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">交叉一致</span><span class="tag t-b">唯一性</span></span></a>
+        <a class="pcard" href="skills/consolidation-elimination-check/solution.html"><span class="pn">#6</span><span class="pt">合并抵消检查</span><span class="pp">抵消分录借贷平衡、四类抵消齐全与合并数守恒校验</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span><span class="tag t-b">交叉一致</span></span></a>
+        <a class="pcard" href="skills/expense-allocation-check/solution.html"><span class="pn">#7</span><span class="pt">期间费用分摊复核</span><span class="pp">待摊费用分摊守恒、账面余额恒等式与超摊检测</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">恒等式</span><span class="tag t-b">交叉一致</span></span></a>
+      </div>
+    </div>
+
+    <div class="subdom">
+      <div class="subdom-hd"><span class="sd-code">P2P</span><span class="sd-zh">采购到付款</span><span class="sd-en">Procure to Pay</span><span class="sd-n">4 个实践</span></div>
+      <div class="pgrid">
+        <a class="pcard" href="skills/three-way-match/solution.html"><span class="pn">#8</span><span class="pt">三单匹配核对</span><span class="pp">采购订单、入库单、发票三单交叉一致核验</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">交叉一致</span><span class="tag t-b">唯一性</span></span></a>
+        <a class="pcard" href="skills/invoice-verification-dedup/solution.html"><span class="pn">#9</span><span class="pt">发票查验与重复报销</span><span class="pp">报销发票唯一性核验，识别重复报销、变造重复与连号发票</span><span class="ptags"><span class="tag t-b">白名单</span><span class="tag t-b">唯一性</span></span></a>
+        <a class="pcard" href="skills/ap-aging/solution.html"><span class="pn">#10</span><span class="pt">应付账龄分析</span><span class="pp">应付账款按账龄分桶，识别逾期应付与欠款集中度</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">恒等式</span><span class="tag t-b">交叉一致</span><span class="tag t-b">唯一性</span></span></a>
+        <a class="pcard" href="skills/supplier-reconciliation/solution.html"><span class="pn">#11</span><span class="pt">供应商对账</span><span class="pp">本方应付台账与供应商对账单双向勾稽，余额差额完整归因</span><span class="ptags"><span class="tag t-b">差异归因</span><span class="tag t-b">恒等式</span><span class="tag t-b">交叉一致</span><span class="tag t-b">唯一性</span></span></a>
+      </div>
+    </div>
+
+    <div class="subdom">
+      <div class="subdom-hd"><span class="sd-code">O2C</span><span class="sd-zh">订单到收款</span><span class="sd-en">Order to Cash</span><span class="sd-n">3 个实践</span></div>
+      <div class="pgrid">
+        <a class="pcard" href="skills/ar-aging-baddebt/solution.html"><span class="pn">#12</span><span class="pt">应收账龄与坏账</span><span class="pp">应收按账龄分桶并按账龄阶梯计提坏账准备，识别坏账敞口</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span><span class="tag t-b">交叉一致</span></span></a>
+        <a class="pcard" href="skills/customer-statement/solution.html"><span class="pn">#13</span><span class="pt">客户对账单生成</span><span class="pp">逐客户生成往来对账单，校验期初+应收−收款=期末</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span><span class="tag t-b">交叉一致</span><span class="tag t-b">唯一性</span></span></a>
+        <a class="pcard" href="skills/ar-settlement-matching/solution.html"><span class="pn">#14</span><span class="pt">收款核销匹配</span><span class="pp">收款单与应收发票核销匹配，校验核销守恒与应收闭环</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">白名单</span><span class="tag t-b">交叉一致</span><span class="tag t-b">唯一性</span></span></a>
+      </div>
+    </div>
+
+    <div class="subdom">
+      <div class="subdom-hd"><span class="sd-code">TAX</span><span class="sd-zh">税务与薪酬</span><span class="sd-en">Tax &amp; Payroll</span><span class="sd-n">4 个实践</span></div>
+      <div class="pgrid">
+        <a class="pcard" href="skills/vat-input-output-matching/solution.html"><span class="pn">#15</span><span class="pt">增值税进销项匹配</span><span class="pp">进销项发票税额恒等式、税率白名单与应纳税额勾稽</span><span class="ptags"><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span><span class="tag t-b">唯一性</span></span></a>
+        <a class="pcard" href="skills/vat-filing-consistency/solution.html"><span class="pn">#16</span><span class="pt">增值税申报一致性</span><span class="pp">申报表与账载发票汇总交叉核对，校验表内应纳税额恒等式</span><span class="ptags"><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span><span class="tag t-b">交叉一致</span></span></a>
+        <a class="pcard" href="skills/social-insurance-base-check/solution.html"><span class="pn">#17</span><span class="pt">社保公积金基数核定</span><span class="pp">缴费基数上下限白名单校验，核验缴费=基数×费率</span><span class="ptags"><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span><span class="tag t-b">交叉一致</span></span></a>
+        <a class="pcard" href="skills/payroll-iit-check/solution.html"><span class="pn">#18</span><span class="pt">薪酬个税复核</span><span class="pp">累计预扣法个税恒等式重算与税率表白名单校验</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span></span></a>
+      </div>
+    </div>
+
+    <div class="subdom">
+      <div class="subdom-hd"><span class="sd-code">ASSET</span><span class="sd-zh">资产管理</span><span class="sd-en">Asset</span><span class="sd-n">2 个实践</span></div>
+      <div class="pgrid">
+        <a class="pcard" href="skills/fixed-asset-verification/solution.html"><span class="pn">#19</span><span class="pt">固定资产卡片与实物核对</span><span class="pp">资产卡片与实物盘点账实交叉，校验净值=原值−累计折旧</span><span class="ptags"><span class="tag t-b">恒等式</span><span class="tag t-b">白名单</span><span class="tag t-b">交叉一致</span></span></a>
+        <a class="pcard" href="skills/inventory-count-variance/solution.html"><span class="pn">#20</span><span class="pt">存货盘点差异处理</span><span class="pp">账存与实盘账实交叉，识别盘盈盘亏并按差异守恒归因</span><span class="ptags"><span class="tag t-b">守恒</span><span class="tag t-b">白名单</span><span class="tag t-b">交叉一致</span></span></a>
+      </div>
+    </div>
+
+    <div class="quote" style="font-size:13.5px;margin:18px 0 0">每个场景都把确定性计算（指标、匹配、校验）下沉到脚本，只把判断类工作留给模型——数字可复现、可审计。</div>
+  </div>
+
+  <!-- ── 其他业务域 ── -->
+  <h3 style="font-size:16px;font-weight:750;margin:34px 0 4px;color:#1a1f36;text-align:center">其他业务域 <span class="tag t-gray">规划中</span></h3>
+  <p class="sec-sub" style="margin-bottom:0">同一套方法论可直接迁移。以下方向尚未产出技能包，列出典型场景与所需能力供评估。</p>
+
+  <div class="dmap">
+    <div class="dcell">
+      <div class="dh"><span class="di">💼</span><h4>销售支持</h4></div>
+      <p>客户背景研究、拜访前 Briefing、CRM 更新、竞品分析、商机跟踪。</p>
+      <div class="dneed">CRM · 邮件/日历 · 知识图谱</div>
+    </div>
+    <div class="dcell">
+      <div class="dh"><span class="di">📋</span><h4>团队管理</h4></div>
+      <p>周报自动生成、项目进度汇总、会议纪要与行动项、跨部门信息整合。</p>
+      <div class="dneed">IM/邮件 · 信息流 · 任务编排</div>
+    </div>
+    <div class="dcell">
+      <div class="dh"><span class="di">🔧</span><h4>IT 运维</h4></div>
+      <p>工单巡检汇总、监控告警分析、知识库查询、变更影响评估。</p>
+      <div class="dneed">MCP Server · 编码 Agent · 定时任务</div>
+    </div>
+    <div class="dcell">
+      <div class="dh"><span class="di">📜</span><h4>合规审计</h4></div>
+      <p>合规检查清单、政策变更影响分析、审计报告生成、风险预警。</p>
+      <div class="dneed">本地文件 · PDF 解析 · 代码执行</div>
+    </div>
+    <div class="dcell">
+      <div class="dh"><span class="di">🔬</span><h4>研究分析</h4></div>
+      <p>行业深度研究、多源信息整合、竞品动态追踪、趋势分析报告。</p>
+      <div class="dneed">Web 搜索 · 浏览器自动化 · 定时任务</div>
+    </div>
+    <div class="dcell">
+      <div class="dh"><span class="di">👥</span><h4>人力与组织</h4></div>
+      <p>招聘进展汇总、面试反馈归集、入职材料准备、组织信息整合。</p>
+      <div class="dneed">邮件/日历 · 文档创建 · 本地文件</div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+
+<!-- ═══ S5: 连接器 ═══ -->
+<section class="alt" id="connect">
+<div class="wrap">
+  <h2>开放连接：打通您的所有业务系统</h2>
+  <p class="sec-sub">不锁定任何生态——有 API 的业务系统可通过 MCP 适配层接入，作为数据源或操作目标</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3><i class="fa-solid fa-plug" style="color:#6366f1"></i> 开箱即用</h3>
+      <div class="conn-grid">
+        <span class="conn"><i class="fa-solid fa-envelope"></i> Outlook 邮件</span>
+        <span class="conn"><i class="fa-solid fa-calendar"></i> Outlook 日历</span>
+        <span class="conn"><i class="fa-solid fa-users"></i> Teams</span>
+        <span class="conn"><i class="fa-brands fa-slack"></i> Slack</span>
+        <span class="conn"><i class="fa-solid fa-cloud"></i> OneDrive</span>
+        <span class="conn"><i class="fa-solid fa-folder"></i> SharePoint</span>
+        <span class="conn"><i class="fa-solid fa-video"></i> Zoom</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-puzzle-piece" style="color:#7c3aed"></i> MCP 自定义扩展（需开发对接）</h3>
+      <div class="conn-grid">
+        <span class="conn"><i class="fa-solid fa-database"></i> ERP</span>
+        <span class="conn"><i class="fa-solid fa-link"></i> 业务接口</span>
+        <span class="conn"><i class="fa-solid fa-file-signature"></i> OA / 审批</span>
+        <span class="conn"><i class="fa-solid fa-address-book"></i> CRM</span>
+        <span class="conn"><i class="fa-solid fa-server"></i> 监控平台</span>
+        <span class="conn"><i class="fa-solid fa-ticket"></i> 工单系统</span>
+        <span class="conn"><i class="fa-solid fa-code"></i> 自建 API</span>
+      </div>
+      <p style="margin-top:10px;font-size:11px;color:#94a3b8">基于 MCP 协议编写适配层即可对接——已有系统无需改造，适配层负责桥接</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ S6: 本地安全 ═══ -->
+<section id="local">
+<div class="wrap">
+  <h2>本地与云端分工：安全写进架构</h2>
+  <p class="sec-sub">Quick 在云端运行；桌面端把它延伸到您的电脑，只在您授权的范围内访问本机</p>
+
+  <div class="grid3">
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">🖥️</div>
+      <h3>云端 Agent，直达本机</h3>
+      <p>桌面端为云端的 Quick 加上本机能力：授权文件夹、本地代码执行、浏览器自动化、本地 MCP 与编码 Agent</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">🧠</div>
+      <h3>记忆与图谱在您的账户</h3>
+      <p>对话、记忆、知识图谱与 Agent 产物保存在您的 Amazon Quick 账户中，按用户隔离，在 My context 查看与管理</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">⏰</div>
+      <h3>定时任务在云端运行</h3>
+      <p>到点即运行，应用关闭或电脑关机也照常执行；读本机文件、浏览器自动化、本地代码执行这类步骤需要电脑开机且应用在线</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">📁</div>
+      <h3>文件按文件夹授权</h3>
+      <p>只能访问在 Customize → Knowledge 中添加的文件夹；添加文件夹只授予访问，全文索引与图谱抽取需要单独打开</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">💾</div>
+      <h3>本机只留必要配置</h3>
+      <p>桌面端在本机只保存文件夹权限、本地连接器配置与登录凭证</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #6366f1">
+      <div class="icon">☁️</div>
+      <h3>工具权限逐项可控</h3>
+      <p>每个系统工具可设 Always Allow / Ask Each Time / Always Deny，并能按单个读写操作细化</p>
+    </div>
+  </div>
+
+  <div class="quote">对于金融、医疗、制造等数据敏感行业——这不是加分项，而是能不能用的前提。</div>
+</div>
+</section>
+
+<!-- ═══ S7: 场景案例 ═══ -->
+<section class="alt" id="cases">
+<div class="wrap">
+  <h2>典型应用场景</h2>
+  <p class="sec-sub">以下场景均可通过 Quick 的 Skill + 连接器 + 定时任务（routine）实现</p>
+
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card" style="border-left:4px solid #3b82f6">
+      <h3>🏭 制造业 — 财务报表自动化</h3>
+      <p><strong>场景</strong>：资金周报涉及 ERP + 业务系统 + OA 等多个系统，手工整理耗时长、口径不易统一</p>
+      <p style="margin-top:8px"><strong>思路</strong>：构建"资金周报 Skill"→ 连接器对接多个系统 → 一键生成标准化报告 → 使用者在 Mission Control 配置定时任务，报告确认后自行分发</p>
+      <p style="margin-top:8px"><span class="tag t-b">多系统拉通</span> <span class="tag t-p">本机文件按授权访问</span></p>
+    </div>
+    <div class="card" style="border-left:4px solid #7c3aed">
+      <h3>🏢 科技企业 — 售前信息整合</h3>
+      <p><strong>场景</strong>：技术顾问每天在 CRM + 邮件 + IM + 文档间来回切换，准备客户材料耗时</p>
+      <p style="margin-top:8px"><strong>思路</strong>：构建"客户 Briefing Skill"→ 自动拉取客户信息 + 历史沟通 → 一键出 Briefing 文档</p>
+      <p style="margin-top:8px"><span class="tag t-b">跨系统整合</span> <span class="tag t-g">新人即来即用</span></p>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card" style="border-left:4px solid #10b981">
+      <h3>🏦 金融行业 — 合规与风控</h3>
+      <p><strong>场景</strong>：风控数据敏感，对云端 AI 工具有顾虑</p>
+      <p style="margin-top:8px"><strong>思路</strong>：按文件夹授权读取本机风控数据 → 在本机执行脚本计算 → 生成合规分析报告</p>
+      <p style="margin-top:8px"><span class="tag t-p">本机按授权访问</span> <span class="tag t-g">合规友好</span></p>
+    </div>
+    <div class="card" style="border-left:4px solid #f59e0b">
+      <h3>🔧 企业 IT — 运维巡检</h3>
+      <p><strong>场景</strong>：工单系统 + 监控平台 + 知识库分散，日常巡检依赖手工操作</p>
+      <p style="margin-top:8px"><strong>思路</strong>：连接器对接工单和监控 API → "工单巡检 Skill"定时自动汇总 → 超时自动告警</p>
+      <p style="margin-top:8px"><span class="tag t-b">自动化巡检</span> <span class="tag t-g">定时执行</span></p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ S7.5: 落地路径 ═══ -->
+<section id="adopt">
+<div class="wrap">
+  <h2>怎么落地</h2>
+  <p class="sec-sub">从装客户端到跑通第一个场景的四步，以及把技能装进 Quick Desktop 的具体操作。</p>
+
+  <div class="steps">
+    <div class="stp"><div class="n">1</div><h4>装客户端</h4><p>macOS 需 13 (Ventura) 或更高，仅支持 Apple Silicon（M 系列），不支持 Intel Mac；Windows 需 Windows 10 64 位（1903 或更高）。均需 8GB 内存，安装需 2GB，建议再留 10GB 以上给索引与知识图谱。安装包见<a href="https://aws.amazon.com/quick/download/" target="_blank" rel="noopener">官方下载页</a>，套餐与价格见<a href="https://aws.amazon.com/quick/pricing/" target="_blank" rel="noopener">官方定价页</a>。</p></div>
+    <div class="stp"><div class="n">2</div><h4>登录与连数据</h4><p>组织账户输入 Amazon Quick 账户名后点 <b>Sign In</b>，在浏览器中完成登录；组织配置了专用身份提供商时选 <b>Continue with single sign-on (SSO)</b>。随后按引导连邮件、日历、IM，并授权技能要读写的本地文件夹。</p></div>
+    <div class="stp"><div class="n">3</div><h4>配权限、试技能</h4><p>按最小必要原则设工具权限（写操作先用 Ask Each Time），再导入一个依赖少的技能，用样例数据跑通全流程。</p></div>
+    <div class="stp"><div class="n">4</div><h4>沉淀与自动化</h4><p>把稳定下来的流程存成技能，挂上定时任务，在 Mission Control 里观察运行质量并迭代。</p></div>
+  </div>
+
+  <h3 style="font-size:15px;font-weight:700;margin:26px 0 0;color:#1a1f36">把技能装进 Quick Desktop</h3>
+  <div class="grid2" style="margin-top:14px;align-items:start">
+    <div>
+      <pre class="cb"><span class="c"># 克隆仓库</span>
+git clone https://github.com/aws-samples/sample-Amazon-QuickDesktop-Finance-Skills.git
+cd sample-Amazon-QuickDesktop-Finance-Skills
+
+<span class="c"># 技能目录</span>
+skills/
+├── README.md
+├── ap-aging/
+├── ar-aging-baddebt/
+├── ar-settlement-matching/
+├── consolidation-elimination-check/
+├── customer-statement/
+├── expense-allocation-check/
+├── finance-monthly-reconciliation/
+│   ├── SKILL.md
+│   ├── solution.html
+│   ├── README.md
+│   ├── scripts/
+│   └── samples/
+├── financial-local-safety/      <span class="c"># 共享依赖 Skill（除 #3 外 19 个场景的 depends-on 引用）</span>
+│   └── SKILL.md
+├── fixed-asset-verification/
+├── gl-voucher-compliance/
+├── intercompany-reconciliation/
+├── inventory-count-variance/
+├── invoice-verification-dedup/
+├── payroll-iit-check/
+├── report-tieout-check/
+├── social-insurance-base-check/
+├── supplier-reconciliation/
+├── three-way-match/
+├── treasury-weekly-report/
+│   ├── SKILL.md
+│   ├── solution.html
+│   ├── scripts/treasury_pipeline.py · self_check.py
+│   └── samples/
+├── vat-filing-consistency/
+└── vat-input-output-matching/
+<span class="c"># 其余 18 个：SKILL.md · solution.html · scripts/（入口脚本 + self_check.py，部分另有 blindspot_*.py / render_worksheet.py 辅助模块）· samples/</span></pre>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <h3>① 导入</h3>
+        <p><b>Customize</b> → <b>Skills</b> → <b>Create</b> → <b>From folder</b>，选择技能文件夹（如 <code>skills/ap-aging/</code>），<code>SKILL.md</code> 与 <code>scripts/</code> 等参考文件一起导入；单个 <code>.md</code> 或 <code>.zip</code> 用 <b>From file</b>。先点 <b>Try it</b> 测试，再 <b>Publish</b>。</p>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <h3>② 配齐依赖</h3>
+        <p>在 <b>Customize → Connectors</b> 连接技能声明的连接器，并确认所需系统工具已启用；在 <b>Customize → Knowledge</b> 添加技能要读写的文件夹。财务技能还需一并导入共享依赖 <code>financial-local-safety</code>。</p>
+      </div>
+      <div class="card">
+        <h3>③ 三种调用方式</h3>
+        <p>对话里<b>点名</b>技能、让 Quick 按描述<b>自动识别</b>，或在技能详情面板点 <b>Try it</b> 开一个已载入该技能的会话。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="note warn"><i class="fa-solid fa-triangle-exclamation"></i><div><b>定时任务在云端运行。</b>到点即触发，应用关闭或电脑关机也照常执行；但读本机文件、浏览器自动化、本地代码执行这类步骤，要求电脑开机、应用运行并保持连接，否则该步骤不可用。本库财务技能读本地文件、跑本地脚本，挂定时任务时请保证电脑在线。</div></div>
+</div>
+</section>
+
+<!-- ═══ S7.6: 企业接入 ═══ -->
+<section class="alt" id="enterprise">
+<div class="wrap">
+  <h2>企业接入</h2>
+  <p class="sec-sub">企业版用户用 Quick Web 端已在使用的登录方式登录桌面端：默认不需要在 IdP 注册 OIDC 应用、不需要 Client ID 或 extension access，管理员一次性添加桌面连接器即可。登录时浏览器需已有 Quick Web 会话；一次登录最长 30 天。</p>
+
+  <a class="res" href="https://docs.aws.amazon.com/quick/latest/userguide/desktop-enterprise-setup.html" target="_blank" rel="noopener" style="border-color:#c7d2fe;background:linear-gradient(180deg,#fff,#f8f7ff);margin-bottom:18px">
+    <div class="ri" style="width:42px;height:42px;font-size:19px">🔐</div>
+    <div class="rb"><h4>Amazon Quick 桌面端企业部署指引（官方）</h4><p>桌面连接器、专用身份提供商（OIDC + PKCE）与 MDM 策略的官方配置文档</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+
+  <div class="steps">
+    <div class="stp"><div class="n">1</div><h4>确认前提</h4><p>Enterprise 版、home Region 支持 agentic 功能（见<a href="https://docs.aws.amazon.com/quick/latest/userguide/regions.html" target="_blank" rel="noopener">官方区域页</a>）、管理员权限、桌面端 1.1.4053 及以上。</p></div>
+    <div class="stp"><div class="n">2</div><h4>（可选）分批放开</h4><p>添加连接器会立即对全员开放；要分批，先在 custom permissions 中限制 Quick desktop 能力。</p></div>
+    <div class="stp"><div class="n">3</div><h4>添加桌面连接器</h4><p>控制台头像 → <b>Manage account</b> → <b>Inbound connectors</b> → <b>Quick Desktop</b> → <b>Add desktop connector</b>，选 <b>Use Quick's existing configured sign-in method</b>。</p></div>
+    <div class="stp"><div class="n">4</div><h4>验证并分发</h4><p>连接器卡片显示 Quick Desktop / Enabled 后，再向用户分发客户端。</p></div>
+  </div>
+
+  <div class="grid2" style="margin-top:6px">
+    <div class="card">
+      <h3>支持的身份提供商</h3>
+      <p>默认的桌面连接器沿用 Quick 已配置的登录方式，IAM Identity Center、IAM Federation、Quick 原生用户均可。需要在 IdP 中单独管理桌面登录时，可改用<b>专用身份提供商配置</b>（advanced，OIDC + PKCE）：官方为 Microsoft Entra ID、Google Workspace、Okta、Ping Identity 提供了分步文档，其他兼容 OIDC 的 IdP 未提供官方分步文档。已用 desktop extension 配置的组织，原配置继续可用。</p>
+      <p style="margin-top:10px"><span class="tag t-p">OIDC</span> <span class="tag t-p">PKCE</span> <span class="tag t-b">Entra ID</span> <span class="tag t-b">Okta</span> <span class="tag t-b">Google</span> <span class="tag t-b">Ping</span></p>
+    </div>
+    <div class="card">
+      <h3>强制走企业 SSO</h3>
+      <p>用 MDM 下发 <code>DisableSocialLogin</code> 策略，隐藏社交登录入口并在服务端拦截，使企业 SSO 成为唯一登录路径。</p>
+      <pre class="cb" style="margin-bottom:0"><span class="c"># macOS 偏好域</span>
+com.aws.QuickWork.mac → DisableSocialLogin = true
+
+<span class="c"># Windows 注册表</span>
+HKLM\SOFTWARE\Policies\Amazon\Quick
+  DisableSocialLogin (REG_DWORD) = 1</pre>
+    </div>
+  </div>
+
+  <div class="note info"><i class="fa-solid fa-circle-info"></i><div>IdP 中的邮箱地址必须与 Amazon Quick 里该用户的邮箱<b>精确匹配</b>，否则映射失败。受限网络下还需把 Quick 与 IdP 域名加入允许列表。应用会自动沿用操作系统的代理配置，无需单独设置。</div></div>
+</div>
+</section>
+
+<!-- ═══ S8: 适合谁 ═══ -->
+<section id="who">
+<div class="wrap">
+  <h2>Quick 适合每一位知识工作者</h2>
+  <p class="sec-sub">只要您的日常工作涉及多系统操作、重复性输出或跨来源信息整合——Quick 都能帮到您</p>
+
+  <div id="chart-roles" style="height:280px;margin:16px 0 24px"></div>
+
+  <div class="grid3">
+    <div class="card" style="border-top:3px solid #3b82f6">
+      <div class="icon">🔍</div>
+      <h3>研究与分析</h3>
+      <p>客户研究、行业分析、竞品调研、多来源信息整合成报告</p>
+    </div>
+    <div class="card" style="border-top:3px solid #10b981">
+      <div class="icon">📋</div>
+      <h3>报表与文档</h3>
+      <p>周报月报、财务报表、项目汇报、会议纪要——标准化输出，一键生成</p>
+    </div>
+    <div class="card" style="border-top:3px solid #7c3aed">
+      <div class="icon">🔌</div>
+      <h3>跨系统协作</h3>
+      <p>邮件 + IM + CRM + ERP + 文档——多系统数据拉通，告别来回切换</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<h3 id="resources" style="font-size:18px;font-weight:700;margin:34px 0 4px;color:#1a1f36;text-align:center">资源导航</h3>
+<p class="sec-sub" style="margin-bottom:0">本 Playbook 的全部页面、技能包与官方文档入口。</p>
+
+<h4 style="font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin:22px 0 0">场景资产</h4>
+<div class="res-grid">
+  <a class="res" href="finance-scenarios.html">
+    <div class="ri"><i class="fa-solid fa-layer-group"></i></div>
+    <div class="rb"><h4>财务场景库 · 20 个场景总览</h4><p>五大流程域、六类验收判据与全部方案讲解</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+  <a class="res" href="skills/treasury-weekly-report/solution.html">
+    <div class="ri">💰</div>
+    <div class="rb"><h4>资金周报生成 · 方案讲解</h4><p>业务价值、流程与产出效果</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+  <a class="res" href="skills/finance-monthly-reconciliation/solution.html">
+    <div class="ri">🎧</div>
+    <div class="rb"><h4>月末财务对账 · 自讲解版</h4><p>带语音讲解的端到端方案</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+  <a class="res" href="skills/report-tieout-check/solution.html">
+    <div class="ri">🧾</div>
+    <div class="rb"><h4>报表勾稽自检 · 方案讲解</h4><p>17 项确定性校验、差异追根与证据留存</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+  <a class="res" href="skills/" target="_blank" rel="noopener">
+    <div class="ri"><i class="fa-solid fa-cube"></i></div>
+    <div class="rb"><h4>技能包源码 <code style="font-size:11px">skills/</code></h4><p>20 套 Skill、方案讲解与确定性计算脚本</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+</div>
+
+<h4 style="font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin:22px 0 0">本站其他形态</h4>
+<div class="res-grid">
+  <a class="res" href="overview-guided.html">
+    <div class="ri">🎤</div>
+    <div class="rb"><h4>自讲解版</h4><p>同一套内容的 10 段语音讲解，适合直接照着讲</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+  <a class="res" href="playbook.html">
+    <div class="ri">📘</div>
+    <div class="rb"><h4>技术参考手册</h4><p>内置系统工具明细、权限模型、界面速览</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+</div>
+
+<h4 style="font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin:22px 0 0">官方文档</h4>
+<div class="res-grid">
+  <a class="res" href="https://docs.aws.amazon.com/quick/latest/userguide/amazon-quick-desktop.html" target="_blank" rel="noopener">
+    <div class="ri"><i class="fa-solid fa-book"></i></div>
+    <div class="rb"><h4>Amazon Quick on desktop 用户指南</h4><p>界面、能力、技能与代理</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+  <a class="res" href="https://docs.aws.amazon.com/quick/latest/userguide/skills-desktop.html" target="_blank" rel="noopener">
+    <div class="ri"><i class="fa-solid fa-bolt"></i></div>
+    <div class="rb"><h4>Skills</h4><p>技能结构、创建与导入、Try it 与 Publish</p></div>
+    <div class="ra"><i class="fa-solid fa-arrow-right"></i></div>
+  </a>
+</div>
+
+<div class="cta-box">
+  <h3>开始体验 Amazon Quick</h3>
+  <p>无需搭建 AI 平台，安装桌面应用、登录即可上手（企业账户需管理员先开启桌面访问）。<br>让您的团队今天就开始构建 Skill、连接系统、自动化工作流。</p>
+
+  <div class="cta-links">
+    <a class="cta-link primary" href="#practices">
+      <span class="t">💼 取走已就绪场景</span>
+      <span class="d">财务域 20 个场景</span>
+    </a>
+    <a class="cta-link" href="#adopt">
+      <span class="t">🚀 按四步落地</span>
+      <span class="d">装客户端 → 连数据 → 试技能 → 自动化</span>
+    </a>
+    <a class="cta-link" href="overview-guided.html">
+      <span class="t">🎤 自讲解版</span>
+      <span class="d">10 段语音讲解</span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  Amazon Quick · 企业级 AI 工作流引擎 · 本地与云端分工 · 开放连接 · 流程可复用<br>
+  <span style="opacity:0.6">本文档由 Amazon Quick 生成</span><br>
+  <span style="opacity:0.8">示例代码，仅供非生产用途（This is sample code, for non-production usage）；部署前请与安全和法务团队确认满足组织的安全、监管与合规要求</span>
+</footer>
+
+<script>
+(function(){var el=document.getElementById('chart-roles');if(!el||typeof echarts==='undefined')return;
+var ch=echarts.init(el);
+ch.setOption({
+  backgroundColor:'transparent',
+  textStyle:{fontFamily:'-apple-system,BlinkMacSystemFont,sans-serif'},
+  grid:{left:40,right:16,top:28,bottom:28},
+  tooltip:{trigger:'item',formatter:function(p){return '提效空间: <b>'+p.data.label+'</b>';}},
+  xAxis:{type:'category',data:['研究分析','报表文档','跨系统协作','项目管理','客户沟通','运维巡检'],axisTick:{show:false},axisLabel:{color:'#5e6687',fontSize:12}},
+  yAxis:{type:'value',name:'自动化提效空间',nameLocation:'middle',nameGap:14,nameTextStyle:{color:'#94a3b8'},max:10,interval:2,axisLabel:{show:false},splitLine:{lineStyle:{color:'#f1f5f9'}}},
+  series:[{type:'bar',barMaxWidth:56,
+    itemStyle:{borderRadius:[6,6,0,0]},
+    label:{show:true,position:'top',formatter:function(p){return p.data.label;},fontSize:11,fontWeight:600,color:'#1a1f36'},
+    data:[
+    {value:9.5,label:'极高',itemStyle:{color:'#3b82f6'}},{value:9,label:'极高',itemStyle:{color:'#6366f1'}},{value:8.5,label:'高',itemStyle:{color:'#10b981'}},
+    {value:8,label:'高',itemStyle:{color:'#a78bfa'}},{value:7.5,label:'高',itemStyle:{color:'#38bdf8'}},{value:7,label:'高',itemStyle:{color:'#f59e0b'}}
+  ]}]
+});
+window.addEventListener('resize',function(){ch.resize();});})();
+setTimeout(()=>{
+  document.querySelectorAll('.card,.ly,.flow-step').forEach((el,i)=>{
+    el.style.opacity='0';el.style.transform='translateY(10px)';
+    el.style.transition='opacity .4s ease,transform .4s ease';
+    setTimeout(()=>{el.style.opacity='1';el.style.transform='none'},60+i*25);
+  });
+},150);
+</script>
+
+</body></html>

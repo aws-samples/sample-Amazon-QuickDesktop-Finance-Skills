@@ -1,0 +1,66 @@
+{
+  "clean": {
+    "summary~keys": [
+      "pass"
+    ],
+    "data_issues~len": 0,
+    "all_ok": true,
+    "total": 108,
+    "pass_rate": 100.0,
+    "issue_types~keys": [],
+    "table_issues~len": 0,
+    "sa_over_cap~len": 0,
+    "incomplete_employees~len": 0,
+    "conservation~keys": [
+      "员工数",
+      "多缴",
+      "少缴",
+      "差异",
+      "正确个税合计",
+      "申报个税合计",
+      "缺月人数",
+      "记录数"
+    ],
+    "employee_summary~len": 12,
+    "inputs~len": 4,
+    "results~len": 108
+  },
+  "error": {
+    "summary~keys": [
+      "fail",
+      "pass"
+    ],
+    "data_issues~len": 1,
+    "all_ok": false,
+    "total": 107,
+    "pass_rate": 70.1,
+    "issue_types~keys": [
+      "专项附加≠备案",
+      "专项附加无备案",
+      "专项附加超上限",
+      "减除费用≠5000",
+      "当月个税≠重算",
+      "当月个税为负",
+      "数据质量·数值无法解析",
+      "税率表·第2档税率错误",
+      "累计已预扣断链",
+      "累计应发≠逐月加总"
+    ],
+    "table_issues~len": 1,
+    "sa_over_cap~len": 1,
+    "incomplete_employees~len": 1,
+    "conservation~keys": [
+      "员工数",
+      "多缴",
+      "少缴",
+      "差异",
+      "正确个税合计",
+      "申报个税合计",
+      "缺月人数",
+      "记录数"
+    ],
+    "employee_summary~len": 12,
+    "inputs~len": 4,
+    "results~len": 107
+  }
+}

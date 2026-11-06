@@ -1,0 +1,13 @@
+.DS_Store
+**/.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+artifacts/
+agent_files/
+.agents/
+.kiro/
+skills/treasury-weekly-report/samples/demo/
+.holmes/
+finance_outputs/

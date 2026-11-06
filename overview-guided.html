@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><title>Amazon Quick 介绍 · 自讲解版（10 段语音讲解）</title><meta name="description" content="Amazon Quick 自讲解版：逐页语音讲解企业 AI 落地的两条路径、六层能力模型、Skill 从 L1 单次对话到 L4 全自动运行、可 Skill 化的业务场景，以及本地与云端分工的架构。"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style id="qw-theme">:root {
+  --color-bg: #faf9fc;
+  --color-text: #131920;
+  --color-navbar-bg: #f9f9fb;
+  --color-bg-chat-view: #fcfcfd;
+  --color-bg-secondary: #fff;
+  --color-bg-tertiary: #f9fafb;
+  --color-bg-hover: #f3f4f6;
+  --color-surface: #f9fafb;
+  --color-surface-hover: #f3f4f6;
+  --color-surface-active: #e5e7eb;
+  --color-border: #0000001f;
+  --color-border-light: #0000000f;
+  --color-border-strong: #d1d5db;
+  --color-primary: #4200db;
+  --color-primary-dark: #35009e;
+  --color-primary-light: #8575ff;
+  --color-primary-bg: #e8e6ff;
+  --color-primary-hover-border: #35009e;
+  --color-nav-icon-active: #4200db;
+  --color-nav-hover-border: #4200db;
+  --color-primary-alpha-3: color-mix(in srgb, #4200db 3%, transparent);
+  --color-primary-alpha-5: color-mix(in srgb, #4200db 5%, transparent);
+  --color-primary-alpha-8: color-mix(in srgb, #4200db 8%, transparent);
+  --color-primary-alpha-12: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-alpha-15: color-mix(in srgb, #4200db 15%, transparent);
+  --color-primary-alpha-20: color-mix(in srgb, #4200db 20%, transparent);
+  --color-primary-alpha-25: color-mix(in srgb, #4200db 25%, transparent);
+  --color-primary-alpha-30: color-mix(in srgb, #4200db 30%, transparent);
+  --color-primary-alpha-40: color-mix(in srgb, #4200db 40%, transparent);
+  --color-primary-alpha-50: color-mix(in srgb, #4200db 50%, transparent);
+  --color-primary-alpha-60: color-mix(in srgb, #4200db 60%, transparent);
+  --color-primary-subtle: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-border: color-mix(in srgb, #4200db 30%, transparent);
+  --color-focus-ring: color-mix(in srgb, #4200db 50%, transparent);
+  --color-sidebar-hover: color-mix(in srgb, #4200db 12%, transparent);
+  --block-hover-outline: 1px dashed color-mix(in srgb, #4200db 50%, transparent);
+  --block-selected-outline: 1px solid #8575ff;
+  --block-selection-outline-offset: 2px;
+  --block-selected-halo: 0 0 8px color-mix(in srgb, #4200db 40%, transparent);
+  --color-accent: #4200db;
+  --color-accent-foreground: #4200db;
+  --color-accent-dark: #35009e;
+  --color-accent-light: #e8e6ff;
+  --color-accent-inverse: #fff;
+  --color-link: #4200db;
+  --color-primary-gradient-end: #e8e6ff;
+  --color-primary-bg-solid: #e8e6ff;
+  --color-user-bubble: #f3f3f7;
+  --color-user-bubble-text: #131920;
+  --color-text-secondary: #5e5e5e;
+  --color-text-tertiary: #656871;
+  --color-text-muted: #9ca3af;
+  --color-text-on-primary: #fff;
+  --color-success: #00802f;
+  --color-success-dark: #00471e;
+  --color-success-light: #d9ffd6;
+  --color-success-hover: #005c26;
+  --color-success-bg: #e6f5eb;
+  --color-success-border: #b3d9bf;
+  --color-success-foreground: #00802f;
+  --color-success-dark-foreground: #00471e;
+  --color-success-text: #00471e;
+  --color-error: #db0000;
+  --color-error-dark: #700000;
+  --color-error-light: #ffe0e0;
+  --color-error-hover: #ffe0e0;
+  --color-error-bg: #fceaea;
+  --color-error-border: #f2cccc;
+  --color-error-active-border: #db0000;
+  --color-error-foreground: #db0000;
+  --color-error-dark-foreground: #700000;
+  --color-error-inverse: #fff;
+  --color-error-text: #700000;
+  --color-warning: #f2b100;
+  --color-warning-dark: #573a00;
+  --color-warning-light: #fffbbd;
+  --color-warning-hover: #db9200;
+  --color-warning-bg: #fef7e6;
+  --color-warning-border: #f9dfa3;
+  --color-warning-foreground: #f2b100;
+  --color-warning-dark-foreground: #573a00;
+  --color-warning-inverse: #573a00;
+  --color-surface-warning: #fffbbd;
+  --color-text-warning: #573a00;
+  --color-info: #006ce0;
+  --color-info-dark: #002a66;
+  --color-info-light: #d1f1ff;
+  --color-info-hover: #003b8f;
+  --color-info-bg: #ebf3fc;
+  --color-info-border: #b3d1f0;
+  --color-info-foreground: #006ce0;
+  --color-info-dark-foreground: #002a66;
+  --color-info-inverse: #fff;
+  --color-overlay: #00000080;
+  --color-shadow: #00000014;
+  --color-hover: #0000000d;
+  --color-tooltip-bg: #000000d9;
+  --color-tooltip-text: #fff;
+  --color-voice-purple: #8575ff;
+  --color-voice-purple-dark: #4200db;
+  --color-voice-purple-light: #8575ff;
+  --color-voice-red: #db0000;
+  --color-voice-red-dark: #700000;
+  --color-voice-amber: #f2b100;
+  --color-voice-purple-glow: #4200db66;
+  --color-voice-red-glow: #db000066;
+  --font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
+  --text-2xs: .5625rem;
+  --text-xs: .625rem;
+  --text-sm: .6875rem;
+  --text-base: .75rem;
+  --text-md: .8125rem;
+  --text-lg: .875rem;
+  --text-xl: 1rem;
+  --text-2xl: 1.125rem;
+  --text-3xl: 1.25rem;
+  --text-4xl: 1.5rem;
+  --text-5xl: 2rem;
+  --spacing-1: calc(.25rem * 1);
+  --spacing-1-5: calc(.25rem * 1.5);
+  --spacing-2: calc(.25rem * 2);
+  --spacing-3: calc(.25rem * 3);
+  --spacing-4: calc(.25rem * 4);
+  --spacing-5: calc(.25rem * 5);
+  --spacing-6: calc(.25rem * 6);
+  --spacing-7: calc(.25rem * 7);
+  --spacing-8: calc(.25rem * 8);
+  --spacing-9: calc(.25rem * 9);
+  --spacing-10: calc(.25rem * 10);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-card: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 8px;
+  --shadow-sm: 0 1px 2px #0000000d;
+  --shadow-md: 0 4px 12px #00000014;
+  --color-success-bg-solid: #d9ffd6;
+  --color-error-bg-solid: #ffe0e0;
+  --color-error-border-solid: #ffe0e0;
+  --color-warning-bg-solid: #fffbbd;
+  --color-warning-text: #573a00;
+  --color-info-bg-solid: #d1f1ff;
+  --color-info-bg-solid-alt: #d1f1ff;
+  --color-info-text: #002a66;
+  --color-info-text-alt: #002a66;
+  --color-emerald: #10b981;
+  --color-teal: #4ecdc4;
+  --color-code-bg: #f3f3f7;
+  --color-code-header-bg: #f1f3f5;
+  --color-code-text: #24292e;
+  --color-code-border: #e1e4e8;
+  --color-code-muted: #6a737d;
+  --color-inline-code-bg: #f3f3f7;
+  --color-inline-code-text: #24292e;
+  --color-inline-code-border: #e1e4e8;
+  --color-scrollbar-thumb: #d1d5db;
+  --color-scrollbar-track: transparent;
+  --color-graph-node-text: #333;
+  --color-graph-node-text-dim: #7f8c8d;
+  --color-graph-edge-default: #95a5a6;
+  --color-graph-edge-cross: #e67e22;
+  --color-graph-edge-text: #666;
+  --color-graph-edge-stroke: #fff;
+  --color-graph-highlight-bg: #ff6b6b;
+  --color-graph-highlight-border: #e74c3c;
+  --color-graph-search-bg: gold;
+  --color-graph-search-border: orange;
+  --color-graph-focus-border: #c0392b;
+  --color-graph-external-border: #95a5a6;
+  --color-graph-cat-file: #3498db;
+  --color-graph-cat-folder: #7f8c8d;
+  --color-graph-cat-file-aggregate: #2980b9;
+  --color-graph-cat-class: #9b59b6;
+  --color-graph-cat-function: #2ecc71;
+  --color-graph-cat-method: #1abc9c;
+  --color-graph-cat-variable: #f39c12;
+  --color-graph-cat-import: #d35400;
+  --color-graph-cat-module: #5b6abf;
+  --color-graph-cat-concept: #e74c3c;
+  --color-graph-cat-person: #ff6b6b;
+  --color-graph-cat-org: #4ecdc4;
+  --color-graph-cat-organization: #4ecdc4;
+  --color-graph-cat-product: #a29bfe;
+  --color-graph-cat-metric: #fd79a8;
+  --color-graph-cat-location: #34495e;
+  --color-graph-cat-date: #e056a0;
+  --color-graph-cat-code: #3498db;
+  --color-graph-cat-doc: #7f8c8d;
+  --color-graph-cat-url: #00b894;
+  --color-graph-cat-email: #6c5ce7;
+  --color-graph-cat-unknown: #bdc3c7;
+  --color-graph-rel-contains: #bdc3c7;
+  --color-graph-rel-extends: #9b59b6;
+  --color-graph-rel-implements: #3498db;
+  --color-graph-rel-imports: #e67e22;
+  --color-graph-rel-uses: #2ecc71;
+  --color-graph-rel-calls: #27ae60;
+  --color-graph-rel-references: #f39c12;
+  --color-graph-rel-related-to: #95a5a6;
+  --color-graph-rel-works-on: #e74c3c;
+  --color-graph-rel-owns: #1abc9c;
+  --color-graph-rel-depends-on: #e67e22;
+  --color-graph-rel-parent-of: #bdc3c7;
+  --qs-content: #fff;
+  --qs-main: #fff;
+  --qs-primary-foreground: #131920;
+  --qs-secondary-foreground: #656871;
+  --qs-tertiary-foreground: #9ca3af;
+  --qs-placeholder-foreground: #8c8c94;
+  --qs-divider: #dedee3;
+  --qs-default-border: #8c8c94;
+  --qs-neutral-soft: #b4b4bb;
+  --qs-neutral-gray-50: #f9fafb;
+  --qs-tertiary-background: #f9fafb;
+  --qs-action-hover: #f3f3f7;
+  --qs-primary-default: #4200db;
+  --qs-primary-dark: #35009e;
+  --qs-primary-light: #e8e6ff;
+  --qs-success-default: #00802f;
+  --qs-error-default: #db0000;
+  --qs-font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+  --safe-top: 0px;
+  --safe-bottom: 0px;
+  --safe-left: 0px;
+  --safe-right: 0px;
+  --qs-font-family: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+  --qs-font-base-letter-spacing: .15px;
+  --qs-shadow-sm: 0 0 2px 0 #00000029, 0 0 4px 0 #00000029;
+  --qs-shadow-md: 0 0 2px 0 #00000029, 0 2px 8px 1px #00000029;
+  --qs-shadow-lg: 0 4px 16px 4px #00000029, 0 2px 6px 1px #00000029;
+  --qs-shadow-xl: 0 4px 8px 2px #00000029, 0 6px 20px 4px #00000029;
+  --qs-width-modal-sm: 384px;
+  --qs-width-modal-md: 600px;
+  --qs-width-modal-lg: 1136px;
+  --qs-grid-gap: 16px;
+  --qs-grid-gap-xl: 24px;
+  --qs-primary-medium: #8575ff;
+  --qs-primary-inverse: #fff;
+  --qs-neutral-lightest: #f9f9fb;
+  --qs-neutral-light: #f3f3f7;
+  --qs-neutral-default: #dedee3;
+  --qs-neutral-medium: #8c8c94;
+  --qs-neutral-deep: #656871;
+  --qs-neutral-dark: #333843;
+  --qs-neutral-strong: #131920;
+  --qs-neutral-white: #fff;
+  --qs-neutral-black: #000;
+  --qs-success-medium: #005c26;
+  --qs-success-dark: #00471e;
+  --qs-success-light: #d9ffd6;
+  --qs-success-inverse: #fff;
+  --qs-info-default: #006ce0;
+  --qs-info-medium: #003b8f;
+  --qs-info-dark: #002a66;
+  --qs-info-light: #d1f1ff;
+  --qs-info-inverse: #fff;
+  --qs-warning-default: #f2b100;
+  --qs-warning-medium: #db9200;
+  --qs-warning-dark: #573a00;
+  --qs-warning-light: #fffbbd;
+  --qs-warning-inverse: #573a00;
+  --qs-warning-experimental: #f2b100;
+  --qs-warning-experimental-light: #fffbbd;
+  --qs-warning-experimental-light-foreground: #fffbbd;
+  --qs-error-medium: #900;
+  --qs-error-dark: #700000;
+  --qs-error-light: #ffe0e0;
+  --qs-error-inverse: #fff;
+  --qs-connection-default: #db3300;
+  --qs-connection-soft: #ff997a;
+  --qs-connection-light: #ffe0d6;
+  --qs-connection-dark: #661800;
+  --qs-automation-default: #b3008f;
+  --qs-automation-medium: #d600ba;
+  --qs-automation-soft: #ff94f1;
+  --qs-automation-light: #ffe0fb;
+  --qs-automation-dark: #660052;
+  --qs-insight-default: #a000b8;
+  --qs-insight-soft: #f299ff;
+  --qs-insight-light: #fce6ff;
+  --qs-insight-dark: #590066;
+  --qs-visualization-default: #7300e5;
+  --qs-visualization-soft: #d4a8ff;
+  --qs-visualization-light: #f2e5ff;
+  --qs-visualization-dark: #45008a;
+  --qs-spice: #ff9800;
+  --qs-coachmark: #006ce0;
+  --qs-brand: #fff;
+  --qs-brand-foreground: #131920;
+  --qs-brand-navbar: #131920;
+  --qs-brand-navbar-foreground: #fff;
+  --qs-brand-navbar-light: #dedee3;
+  --qs-brand-navbar-dark: #000;
+  --qs-application-navbar: #4200db;
+  --qs-application-navbar-foreground: #fff;
+  --qs-application-navbar-light: #e8e6ff;
+  --qs-application-navbar-dark: #35009e;
+  --qs-dimension: #4200db;
+  --qs-dimension-foreground: #fff;
+  --qs-dimension-experimental: #4200db;
+  --qs-dimension-experimental-foreground: #4200db;
+  --qs-measure: #00802f;
+  --qs-measure-foreground: #fff;
+  --qs-measure-experimental: #f2b100;
+  --qs-measure-experimental-foreground: #f2b100;
+  --qs-content-inverse: #333843;
+  --qs-content-inverse-active: #131920;
+  --qs-secondary: #dedee3;
+  --qs-disabled: #8c8c94;
+  --qs-divider-light: #f3f3f7;
+  --qs-hover-border: #333843;
+  --qs-active-border: #4200db;
+  --qs-disabled-border: #dedee3;
+  --qs-error-border: #ffe0e0;
+  --qs-error-active-border: #db0000;
+  --qs-disabled-foreground: #b4b4bb;
+  --qs-primary-inverse-foreground: #fff;
+  --qs-error-foreground: #db0000;
+  --qs-contrast-foreground: #131920;
+  --qs-main-foreground: #131920;
+  --qs-main-secondary-foreground: #656871;
+  --qs-action-disabled: #f3f3f7;
+  --qs-action-active: #e8e6ff;
+  --qs-default-badge: #dedee3;
+  --qs-tag-default: #dedee3;
+  --qs-tag-soft-border: #b4b4bb;
+  --qs-focus-offset: 1px;
+  --qs-toggle-tile-sm: calc(.25rem * 8);
+  --qs-toggle-tile-md: calc(.25rem * 12);
+  --qs-toggle-tile-lg: calc(.25rem * 15);
+  --qs-shadow-pin-right: inset 4px 0 4px -4px #00000029;
+  --qs-shadow-pin-left: inset -4px 0 4px -4px #00000029;
+  --react-pdf-text-layer: 1;
+  --highlight-bg-color: #b400aa;
+  --highlight-selected-bg-color: #006400;
+  --react-pdf-annotation-layer: 1;
+  --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
+  --input-focus-border-color: Highlight;
+  --input-focus-outline: 1px solid Canvas;
+  --input-unfocused-border-color: transparent;
+  --input-disabled-border-color: transparent;
+  --input-hover-border-color: black;
+  --link-outline: none;
+  color-scheme: light;
+}
+body { background: var(--color-bg); color: var(--color-text); }
+a { color: var(--color-link, var(--color-primary)); }</style>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha384-/o6I2CkkWC//PSjvWC/eYN7l3xM3tJm8ZzVkCOfp//W05QcE3mlGskpoHB6XqI+B" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js" integrity="sha384-Mx5lkUEQPM1pOJCwFtUICyX45KNojXbkWdYhkKUKsbv391mavbfoAmONbzkgYPzR" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#0f1225;color:#1a1f36}
+
+/* Slide container */
+.slides-viewport{width:100%;height:100%;position:relative}
+.slide{position:absolute;top:0;left:0;width:100%;height:calc(100% - 56px);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .5s ease,transform .5s ease;transform:translateX(40px);background:#fff}
+.slide.active{opacity:1;pointer-events:auto;transform:translateX(0)}
+.slide.prev{transform:translateX(-40px)}
+
+/* Slide inner padding */
+.slide-inner{max-width:900px;margin:0 auto;padding:48px 40px 60px}
+
+/* ─── HERO SLIDE ─── */
+.slide-hero{background:linear-gradient(135deg,#1a1f36 0%,#2d3561 50%,#3a4a8a 100%)!important;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff}
+.slide-hero .slide-inner{padding:40px}
+.hero-badge{display:inline-block;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:12px;padding:5px 18px;border-radius:20px;margin-bottom:22px;font-weight:600}
+.hero h1{font-size:36px;font-weight:800;margin-bottom:16px;line-height:1.3;color:#fff}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#7dd3fc,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:16px;opacity:0.82;max-width:640px;margin:0 auto 30px;color:#fff}
+.hero-pills{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.hero-pill{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:6px 16px;font-size:13px;display:flex;align-items:center;gap:6px;color:#fff}
+
+/* ─── Common ─── */
+h2{font-size:22px;font-weight:700;margin-bottom:8px;text-align:center;color:#1a1f36}
+.sec-sub{text-align:center;font-size:14px;color:#5e6687;margin-bottom:24px;max-width:620px;margin-left:auto;margin-right:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.card{background:#fff;border:1px solid #e6e9f0;border-radius:10px;padding:18px}
+.card .icon{font-size:22px;margin-bottom:8px}
+.card h3{font-size:14px;font-weight:600;margin-bottom:4px;color:#1a1f36}
+.card p{font-size:12px;color:#5e6687;line-height:1.6}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700}
+.t-g{background:#ecfdf5;color:#065f46}.t-b{background:#eff6ff;color:#1e40af}
+.t-y{background:#fefce8;color:#854d0e}.t-p{background:#f5f3ff;color:#5b21b6}
+
+/* Layers */
+.layers{display:flex;flex-direction:column;gap:3px;margin:0 auto 20px}
+.ly{display:flex;align-items:center;padding:12px 16px;border-radius:8px;font-size:12px;font-weight:500}
+.ly .ln{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:12px;color:#fff;flex-shrink:0}
+.ly .lt{margin-left:auto;font-size:10px;font-weight:700;padding:2px 10px;border-radius:8px;white-space:nowrap;flex-shrink:0}
+
+/* Flow */
+.flow{display:flex;align-items:stretch;gap:6px;margin:16px 0;flex-wrap:wrap}
+.flow-step{flex:1;min-width:120px;background:#fff;border:1px solid #e6e9f0;border-radius:10px;padding:14px 12px;text-align:center}
+.flow-step .fs-icon{font-size:20px;margin-bottom:4px}
+.flow-step .fs-label{font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+.flow-step h4{font-size:12px;font-weight:600;margin:3px 0;color:#1a1f36}
+.flow-step p{font-size:10px;color:#5e6687}
+.flow-arr{display:flex;align-items:center;color:#cbd5e1;font-size:16px;flex-shrink:0}
+
+/* Table */
+.tb{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}
+.tb th{text-align:left;color:#94a3b8;font-weight:600;padding:7px 8px;border-bottom:2px solid #e6e9f0;font-size:10px;text-transform:uppercase;white-space:nowrap}
+.tb td{padding:7px 8px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+
+/* Quote */
+.quote{border-left:4px solid #6366f1;background:#f5f3ff;border-radius:0 10px 10px 0;padding:14px 18px;margin:16px 0;font-size:14px;font-weight:600;color:#4338ca;font-style:italic;line-height:1.5}
+
+/* VS */
+.vs-row{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;margin:16px 0;align-items:stretch}
+.vs-side{border-radius:10px;padding:18px}
+.vs-l{background:#fef2f2;border:1px solid #fecaca}
+.vs-r{background:#ecfdf5;border:1px solid #a7f3d0}
+.vs-m{display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#94a3b8}
+.vs-side h4{margin:0 0 6px;font-size:13px;color:#1a1f36}
+.vs-side ul{padding-left:14px;font-size:11px;line-height:1.8;color:#5e6687}
+
+/* Connectors */
+.conn-grid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.conn{display:inline-flex;align-items:center;gap:4px;background:#fff;border:1px solid #e6e9f0;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:500;color:#334155}
+.conn i{color:#6366f1}
+
+/* CTA slide */
+.slide-cta{background:linear-gradient(135deg,#1a1f36,#3a4a8a)!important;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff}
+.slide-cta h2{color:#fff;font-size:28px}
+.slide-cta p{color:rgba(255,255,255,0.85);font-size:15px;max-width:560px;margin:12px auto 0}
+
+/* CTA slide links */
+.cta-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.cta-link{display:flex;flex-direction:column;gap:3px;text-align:left;padding:13px 18px;border-radius:10px;text-decoration:none;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.18);transition:all .18s;min-width:172px}
+.cta-link:hover{background:rgba(255,255,255,0.16);border-color:rgba(255,255,255,0.38);transform:translateY(-2px)}
+.cta-link.primary{background:#6366f1;border-color:#6366f1}
+.cta-link.primary:hover{background:#4f46e5;border-color:#4f46e5}
+.cta-link .t{font-size:14px;font-weight:650;color:#fff}
+.cta-link .d{font-size:11px;color:rgba(255,255,255,0.7)}
+
+/* 常驻跳转入口（不占幻灯片，避免打断讲解节奏） */
+.jump-bar{position:fixed;top:16px;right:18px;z-index:1001;display:flex;gap:8px}
+.jump-link{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 14px;border-radius:999px;text-decoration:none;
+  background:rgba(15,18,37,.82);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;font-size:12px;font-weight:600;
+  transition:all .18s;
+}
+.jump-link:hover{background:#6366f1;border-color:#6366f1;transform:translateY(-1px)}
+.jump-link .ic{font-size:13px;line-height:1}
+@media(max-width:640px){
+  .jump-bar{top:10px;right:10px;gap:6px}
+  .jump-link{padding:6px 11px;font-size:11px}
+  .jump-link .lbl-full{display:none}
+  .cta-link{min-width:0;flex:1 1 100%}
+}
+
+/* ─── Control Bar ─── */
+.ctrl-bar{position:fixed;bottom:0;left:0;right:0;height:56px;background:rgba(15,18,37,0.97);backdrop-filter:blur(12px);color:#fff;display:flex;align-items:center;padding:0 20px;gap:10px;z-index:1000;border-top:1px solid rgba(255,255,255,0.08)}
+.ctrl-bar .btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:500;transition:all .15s;white-space:nowrap}
+.ctrl-bar .btn:hover{background:rgba(255,255,255,0.18)}
+.ctrl-bar .btn.primary{background:#6366f1;border-color:#6366f1}
+.ctrl-bar .btn.primary:hover{background:#4f46e5}
+.ctrl-bar .btn.primary.speaking{background:#ef4444;border-color:#ef4444}
+.ctrl-bar .dots{display:flex;gap:6px;flex:1;justify-content:center}
+.ctrl-bar .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;transition:all .2s}
+.ctrl-bar .dot.active{background:#a78bfa;width:24px;border-radius:4px}
+.ctrl-bar .dot:hover{background:rgba(255,255,255,0.4)}
+.ctrl-bar .info{font-size:11px;color:rgba(255,255,255,0.5);min-width:60px;text-align:right}
+
+/* Subtitle bar */
+.subtitle-bar{position:fixed;bottom:56px;left:0;right:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);color:#fff;padding:12px 24px;text-align:center;font-size:15px;line-height:1.6;z-index:999;display:none;max-height:80px;overflow:hidden}
+.subtitle-bar.visible{display:block}
+.subtitle-bar .sub-text{max-width:800px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<div class="jump-bar">
+  <a class="jump-link" href="index.html" title="返回首页：长网页版介绍">
+    <span class="ic">←</span><span class="lbl-full">返回</span>首页
+  </a>
+  <a class="jump-link" href="playbook.html" title="查看落地 Playbook：能力底座、Skills 机制、场景方案与企业接入">
+    <span class="ic">📘</span><span class="lbl-full">落地 </span>Playbook →
+  </a>
+</div>
+
+<div class="slides-viewport" id="viewport">
+
+<div class="slide slide-hero active" data-idx="0">
+  <div class="slide-inner hero">
+    <div>
+<span class="hero-badge"><i class="fa-solid fa-bolt"></i>&nbsp; Amazon Quick</span>
+  <h1>企业级<br><em>AI 工作流自动化引擎</em></h1>
+  <p class="hero-sub">从数据获取、分析处理、标准化输出到自动交付——跨系统编排，一键固化，定时自动运行，还能直接处理您电脑上授权的文件。</p>
+  <div class="hero-pills">
+    <span class="hero-pill"><i class="fa-solid fa-shield-halved"></i> 本机访问按授权</span>
+    <span class="hero-pill"><i class="fa-solid fa-plug"></i> 通过 MCP 对接自有业务系统</span>
+    <span class="hero-pill"><i class="fa-solid fa-gears"></i> 流程一键复用</span>
+    <span class="hero-pill"><i class="fa-solid fa-clock"></i> 定时自动执行</span>
+  </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-idx="1" style="background:#f7f8fc">
+  <div class="slide-inner">
+<h2>企业 AI 落地的两条路径</h2>
+  <p class="sec-sub">AI 提效不必等平台建好——今天安装，今天见效</p>
+
+  <div class="vs-row">
+    <div class="vs-side vs-l">
+      <h4>🏗️ 路径 A：先建 AI 平台</h4>
+      <ul>
+        <li>搭建大模型基础设施</li>
+        <li>开发 AI 中台 + 业务应用</li>
+        <li>组建 AI 工程团队</li>
+        <li>周期 <strong>3-12 个月</strong>，投入高</li>
+        <li>场景不确定——还没用就要定义需求</li>
+      </ul>
+    </div>
+    <div class="vs-m">VS</div>
+    <div class="vs-side vs-r">
+      <h4>⚡ 路径 B：先用 Quick 提效</h4>
+      <ul>
+        <li>安装桌面应用 → <strong>登录即可上手</strong>（企业账户需管理员先开启桌面访问）</li>
+        <li>连接已有系统 → 无需开发</li>
+        <li>业务人员自建自动化流程</li>
+        <li>实战发现真实场景 → <strong>反哺平台规划</strong></li>
+        <li>两条路<strong>不矛盾</strong>，Quick 是平台建好前的"快速通道"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quote">
+    "先用起来，再系统化"——Quick 帮您今天就产出 AI 价值，同时为未来的平台建设积累真实的业务场景和数据。
+  </div>
+  </div>
+</div>
+
+<div class="slide" data-idx="2">
+  <div class="slide-inner">
+<h2>六层能力模型</h2>
+  <p class="sec-sub">通用 AI 聊天工具停留在第 1-2 层——Quick 构建了完整的六层闭环</p>
+
+  <div class="layers">
+    <div class="ly" style="background:#fef2f2"><span class="ln" style="background:#ef4444">1</span><strong>对话 + 生成</strong>&nbsp;&nbsp;智能问答、文档分析、数据处理<span class="lt" style="background:#fecaca;color:#991b1b">所有 AI 工具都行</span></div>
+    <div class="ly" style="background:#fefce8"><span class="ln" style="background:#eab308">2</span><strong>连接 + 执行</strong>&nbsp;&nbsp;对接邮件、IM、云存储、浏览器操作<span class="lt" style="background:#fef08a;color:#854d0e">行业趋同</span></div>
+    <div class="ly" style="background:#eff6ff"><span class="ln" style="background:#3b82f6">3</span><strong>知识积累</strong>&nbsp;&nbsp;持续从日常工作中构建个人知识图谱<span class="lt" style="background:#bfdbfe;color:#1e40af">Quick 优势</span></div>
+    <div class="ly" style="background:#ecfdf5"><span class="ln" style="background:#10b981">4</span><strong>流程固化</strong>&nbsp;&nbsp;Skill：将跨系统工作流标准化为一键可复用的自动化流程<span class="lt" style="background:#a7f3d0;color:#065f46">Quick 特色</span></div>
+    <div class="ly" style="background:#f5f3ff"><span class="ln" style="background:#7c3aed">5</span><strong>自主运行</strong>&nbsp;&nbsp;定时任务（routine）：按计划自动执行，无需人工触发<span class="lt" style="background:#c4b5fd;color:#5b21b6">Quick 特色</span></div>
+    <div class="ly" style="background:#ecfdf5;border:2px solid #10b981"><span class="ln" style="background:#064e3b">6</span><strong>本地安全</strong>&nbsp;&nbsp;本机文件按文件夹授权访问，工具权限逐项可控<span class="lt" style="background:#064e3b;color:#fff">Quick 亮点</span></div>
+  </div>
+
+  <div class="quote">Quick 的核心价值 = 让您的工作流"长出记忆和肌肉"。越用越懂您，做过一次不用教第二遍，人不在它也在工作。</div>
+  </div>
+</div>
+
+<div class="slide" data-idx="3" style="background:#f7f8fc">
+  <div class="slide-inner">
+<h2>Skill：从"做一次"到"自动跑"</h2>
+  <p class="sec-sub">不是展示"AI 能做什么"——而是展示如何将 AI 能力固化为可复用、可自动运行的标准化流程</p>
+
+  <table class="tb">
+    <tbody><tr><th></th><th>阶段</th><th>数据输入</th><th>处理</th><th>输出</th><th>差异化</th></tr>
+    <tr>
+      <td><span class="tag t-y">L1</span></td>
+      <td>单次对话处理</td>
+      <td>手动上传文件</td>
+      <td>AI 对话分析</td>
+      <td>生成报告</td>
+      <td style="color:#94a3b8">任何 AI 工具都能做</td>
+    </tr>
+    <tr>
+      <td><span class="tag t-b">L2</span></td>
+      <td><strong>Skill 固化</strong></td>
+      <td>指定文件 / 目录</td>
+      <td>标准化流程</td>
+      <td>一句话 → 标准输出</td>
+      <td><strong>做过一次不再教，任何人都能用</strong></td>
+    </tr>
+    <tr>
+      <td><span class="tag t-p">L3</span></td>
+      <td><strong>跨系统编排</strong></td>
+      <td>连接器 → ERP / 业务系统 / OA</td>
+      <td>多源合并 + 异常检测</td>
+      <td>报告 + 自动上传 + 邮件发送</td>
+      <td><strong>Skill + 连接器 = 端到端自动化</strong></td>
+    </tr>
+    <tr>
+      <td><span class="tag t-g">L4</span></td>
+      <td><strong>全自动运行</strong></td>
+      <td>定时自动触发</td>
+      <td>自动执行全流程</td>
+      <td>人不用动，结果自动到位</td>
+      <td><strong>定时任务（routine）+ 本地安全闭环</strong></td>
+    </tr>
+  </tbody></table>
+
+  <h3 style="font-size:15px;font-weight:600;margin:28px 0 14px;text-align:center">L3 端到端工作流示意：以财务周报为例</h3>
+
+  <div class="flow">
+    <div class="flow-step" style="border-top:3px solid #3b82f6">
+      <div class="fs-icon">🔌</div>
+      <div class="fs-label">Step 1</div>
+      <h4>数据获取</h4>
+      <p>连接器自动从 ERP 拉取资金流水、业务系统 API 查询余额、云盘读取历史基准</p>
+    </div>
+    <div class="flow-arr"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="flow-step" style="border-top:3px solid #7c3aed">
+      <div class="fs-icon">⚙️</div>
+      <div class="fs-label">Step 2</div>
+      <h4>本地处理</h4>
+      <p>多源数据合并清洗、多维度指标计算、异常值自动检测</p>
+    </div>
+    <div class="flow-arr"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="flow-step" style="border-top:3px solid #10b981">
+      <div class="fs-icon">📊</div>
+      <div class="fs-label">Step 3</div>
+      <h4>标准输出</h4>
+      <p>Excel + PDF 报告、HTML 交互仪表盘、异常指标预警高亮</p>
+    </div>
+    <div class="flow-arr"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="flow-step" style="border-top:3px solid #f59e0b">
+      <div class="fs-icon">📬</div>
+      <div class="fs-label">Step 4</div>
+      <h4>自动交付</h4>
+      <p>上传至企业云盘、邮件发送给相关团队、IM 频道推送摘要</p>
+    </div>
+  </div>
+
+  <div class="quote">关键差异：通用 AI 工具的系统连接是"每次对话时临时调用"。Quick 的 Skill 是"把整条流程固化下来"——一次定义，永久复用，换人也能出一样的结果。</div>
+  </div>
+</div>
+
+<div class="slide" data-idx="4">
+  <div class="slide-inner">
+<h2>可 Skill 化的业务场景</h2>
+  <p class="sec-sub">每个高频重复场景都可以被 Skill 化——从财务、销售到 IT 运维</p>
+
+  <div class="grid3">
+    <div class="card" style="border-top:3px solid #3b82f6">
+      <div class="icon">💰</div>
+      <h3>财务报表</h3>
+      <p>资金日报/周报/月报、多系统对账、预算执行对比、应收跟踪、汇率监控</p>
+      <p style="margin-top:8px"><span class="tag t-g">高频</span> <span class="tag t-b">多系统</span> <span class="tag t-p">数据敏感</span></p>
+    </div>
+    <div class="card" style="border-top:3px solid #10b981">
+      <div class="icon">💼</div>
+      <h3>销售支持</h3>
+      <p>客户背景研究、拜访前 Briefing、CRM 更新、竞品分析、商机跟踪</p>
+      <p style="margin-top:8px"><span class="tag t-g">高频</span> <span class="tag t-b">跨系统</span></p>
+    </div>
+    <div class="card" style="border-top:3px solid #7c3aed">
+      <div class="icon">📋</div>
+      <h3>团队管理</h3>
+      <p>周报自动生成、项目进度汇总、会议纪要 + Action Items、跨部门信息整合</p>
+      <p style="margin-top:8px"><span class="tag t-g">高频</span> <span class="tag t-y">重复度高</span></p>
+    </div>
+    <div class="card" style="border-top:3px solid #f59e0b">
+      <div class="icon">🔧</div>
+      <h3>IT 运维</h3>
+      <p>工单巡检汇总、监控告警分析、知识库查询、变更影响评估</p>
+      <p style="margin-top:8px"><span class="tag t-b">多系统</span> <span class="tag t-p">自动化</span></p>
+    </div>
+    <div class="card" style="border-top:3px solid #ef4444">
+      <div class="icon">📜</div>
+      <h3>合规审计</h3>
+      <p>合规检查清单、政策变更影响分析、审计报告生成、风险预警</p>
+      <p style="margin-top:8px"><span class="tag t-p">数据敏感</span> <span class="tag t-y">标准化</span></p>
+    </div>
+    <div class="card" style="border-top:3px solid #06b6d4">
+      <div class="icon">🔬</div>
+      <h3>研究分析</h3>
+      <p>行业深度研究、多源信息整合、竞品动态追踪、趋势分析报告</p>
+      <p style="margin-top:8px"><span class="tag t-b">Deep Research</span> <span class="tag t-g">可复用</span></p>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="slide" data-idx="5" style="background:#f7f8fc">
+  <div class="slide-inner">
+<h2>开放连接：打通您的所有业务系统</h2>
+  <p class="sec-sub">不锁定任何生态——有 API 的业务系统可通过 MCP 适配层接入，作为数据源或操作目标</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3><i class="fa-solid fa-plug" style="color:#6366f1"></i> 开箱即用</h3>
+      <div class="conn-grid">
+        <span class="conn"><i class="fa-solid fa-envelope"></i> Outlook 邮件</span>
+        <span class="conn"><i class="fa-solid fa-calendar"></i> Outlook 日历</span>
+        <span class="conn"><i class="fa-solid fa-users"></i> Teams</span>
+        <span class="conn"><i class="fa-brands fa-slack"></i> Slack</span>
+        <span class="conn"><i class="fa-solid fa-cloud"></i> OneDrive</span>
+        <span class="conn"><i class="fa-solid fa-folder"></i> SharePoint</span>
+        <span class="conn"><i class="fa-solid fa-video"></i> Zoom</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3><i class="fa-solid fa-puzzle-piece" style="color:#7c3aed"></i> MCP 自定义扩展（需开发对接）</h3>
+      <div class="conn-grid">
+        <span class="conn"><i class="fa-solid fa-database"></i> ERP</span>
+        <span class="conn"><i class="fa-solid fa-link"></i> 业务接口</span>
+        <span class="conn"><i class="fa-solid fa-file-signature"></i> OA / 审批</span>
+        <span class="conn"><i class="fa-solid fa-address-book"></i> CRM</span>
+        <span class="conn"><i class="fa-solid fa-server"></i> 监控平台</span>
+        <span class="conn"><i class="fa-solid fa-ticket"></i> 工单系统</span>
+        <span class="conn"><i class="fa-solid fa-code"></i> 自建 API</span>
+      </div>
+      <p style="margin-top:10px;font-size:11px;color:#94a3b8">基于 MCP 协议编写适配层即可对接——已有系统无需改造，适配层负责桥接</p>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="slide" data-idx="6">
+  <div class="slide-inner">
+<h2>本地与云端分工：安全写进架构</h2>
+  <p class="sec-sub">Quick 在云端运行；桌面端把它延伸到您的电脑，只在您授权的范围内访问本机</p>
+
+  <div class="grid3">
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">🖥️</div>
+      <h3>云端 Agent，直达本机</h3>
+      <p>桌面端为云端的 Quick 加上本机能力：授权文件夹、本地代码执行、浏览器自动化、本地 MCP 与编码 Agent</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">🧠</div>
+      <h3>记忆与图谱在您的账户</h3>
+      <p>对话、记忆、知识图谱与 Agent 产物保存在您的 Amazon Quick 账户中，按用户隔离，在 My context 查看与管理</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">⏰</div>
+      <h3>定时任务在云端运行</h3>
+      <p>到点即运行，应用关闭或电脑关机也照常执行；读本机文件、浏览器自动化、本地代码执行这类步骤需要电脑开机且应用在线</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">📁</div>
+      <h3>文件按文件夹授权</h3>
+      <p>只能访问在 Customize → Knowledge 中添加的文件夹；添加文件夹只授予访问，全文索引与图谱抽取需要单独打开</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #10b981">
+      <div class="icon">💾</div>
+      <h3>本机只留必要配置</h3>
+      <p>桌面端在本机只保存文件夹权限、本地连接器配置与登录凭证</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid #6366f1">
+      <div class="icon">☁️</div>
+      <h3>工具权限逐项可控</h3>
+      <p>每个系统工具可设 Always Allow / Ask Each Time / Always Deny，并能按单个读写操作细化</p>
+    </div>
+  </div>
+
+  <div class="quote">对于金融、医疗、制造等数据敏感行业——这不是加分项，而是能不能用的前提。</div>
+  </div>
+</div>
+
+<div class="slide" data-idx="7" style="background:#f7f8fc">
+  <div class="slide-inner">
+<h2>典型应用场景</h2>
+  <p class="sec-sub">以下场景均可通过 Quick 的 Skill + 连接器 + 定时任务（routine）实现</p>
+
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card" style="border-left:4px solid #3b82f6">
+      <h3>🏭 制造业 — 财务报表自动化</h3>
+      <p><strong>场景</strong>：资金周报涉及 ERP + 业务系统 + OA 等多个系统，手工整理耗时长、口径不易统一</p>
+      <p style="margin-top:8px"><strong>思路</strong>：构建"资金周报 Skill"→ 连接器对接多个系统 → 一键生成标准化报告 → 使用者在 Mission Control 配置定时任务，报告确认后自行分发</p>
+      <p style="margin-top:8px"><span class="tag t-b">多系统拉通</span> <span class="tag t-p">本机文件按授权访问</span></p>
+    </div>
+    <div class="card" style="border-left:4px solid #7c3aed">
+      <h3>🏢 科技企业 — 售前信息整合</h3>
+      <p><strong>场景</strong>：技术顾问每天在 CRM + 邮件 + IM + 文档间来回切换，准备客户材料耗时</p>
+      <p style="margin-top:8px"><strong>思路</strong>：构建"客户 Briefing Skill"→ 自动拉取客户信息 + 历史沟通 → 一键出 Briefing 文档</p>
+      <p style="margin-top:8px"><span class="tag t-b">跨系统整合</span> <span class="tag t-g">新人即来即用</span></p>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card" style="border-left:4px solid #10b981">
+      <h3>🏦 金融行业 — 合规与风控</h3>
+      <p><strong>场景</strong>：风控数据敏感，对云端 AI 工具有顾虑</p>
+      <p style="margin-top:8px"><strong>思路</strong>：按文件夹授权读取本机风控数据 → 在本机执行脚本计算 → 生成合规分析报告</p>
+      <p style="margin-top:8px"><span class="tag t-p">本机按授权访问</span> <span class="tag t-g">合规友好</span></p>
+    </div>
+    <div class="card" style="border-left:4px solid #f59e0b">
+      <h3>🔧 企业 IT — 运维巡检</h3>
+      <p><strong>场景</strong>：工单系统 + 监控平台 + 知识库分散，日常巡检依赖手工操作</p>
+      <p style="margin-top:8px"><strong>思路</strong>：连接器对接工单和监控 API → "工单巡检 Skill"定时自动汇总 → 超时自动告警</p>
+      <p style="margin-top:8px"><span class="tag t-b">自动化巡检</span> <span class="tag t-g">定时执行</span></p>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="slide" data-idx="8">
+  <div class="slide-inner">
+<h2>Quick 适合每一位知识工作者</h2>
+  <p class="sec-sub">只要您的日常工作涉及多系统操作、重复性输出或跨来源信息整合——Quick 都能帮到您</p>
+
+  <div id="chart-roles" style="height:280px;margin:16px 0 24px"></div>
+
+  <div class="grid3">
+    <div class="card" style="border-top:3px solid #3b82f6">
+      <div class="icon">🔍</div>
+      <h3>研究与分析</h3>
+      <p>客户研究、行业分析、竞品调研、多来源信息整合成报告</p>
+    </div>
+    <div class="card" style="border-top:3px solid #10b981">
+      <div class="icon">📋</div>
+      <h3>报表与文档</h3>
+      <p>周报月报、财务报表、项目汇报、会议纪要——标准化输出，一键生成</p>
+    </div>
+    <div class="card" style="border-top:3px solid #7c3aed">
+      <div class="icon">🔌</div>
+      <h3>跨系统协作</h3>
+      <p>邮件 + IM + CRM + ERP + 文档——多系统数据拉通，告别来回切换</p>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="slide slide-cta" data-idx="9">
+  <div class="slide-inner" style="display:flex;align-items:center;justify-content:center;height:100%">
+    <div>
+      <h2 style="color:#fff;font-size:28px">开始体验 Amazon Quick</h2>
+      <p style="color:rgba(255,255,255,0.85);font-size:15px;max-width:560px;margin:12px auto 0">无需搭建 AI 平台，安装桌面应用、登录即可上手（企业账户需管理员先开启桌面访问）。<br>让您的团队今天就开始构建 Skill、连接系统、自动化工作流。</p>
+
+      <div class="cta-links">
+        <a class="cta-link primary" href="playbook.html">
+          <span class="t">落地 Playbook</span>
+          <span class="d">能力底座 · Skills 机制 · 企业接入</span>
+        </a>
+        <a class="cta-link" href="skills/treasury-weekly-report/solution.html">
+          <span class="t">💰 资金周报生成</span>
+          <span class="d">已就绪场景 · 方案讲解</span>
+        </a>
+        <a class="cta-link" href="skills/finance-monthly-reconciliation/solution.html">
+          <span class="t">📊 月末财务对账</span>
+          <span class="d">已就绪场景 · 自讲解版</span>
+        </a>
+      </div>
+
+      <p style="margin-top:24px;font-size:11px;opacity:0.5;color:#fff">Amazon Quick · 企业级 AI 工作流引擎</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="subtitle-bar" id="subtitleBar"><div class="sub-text" id="subtitleText"></div></div>
+
+<!-- Control Bar -->
+<div class="ctrl-bar">
+  <button class="btn primary" id="speakBtn" onclick="toggleSpeak()"><i class="fa-solid fa-microphone" id="speakIcon"></i> <span id="speakLabel">开始讲解</span></button>
+  <button class="btn" onclick="goSlide(currentSlide-1)"><i class="fa-solid fa-chevron-left"></i></button>
+  <div class="dots" id="dots"></div>
+  <button class="btn" onclick="goSlide(currentSlide+1)"><i class="fa-solid fa-chevron-right"></i></button>
+  <button class="btn" onclick="toggleFullscreen()" title="全屏"><i class="fa-solid fa-expand"></i></button>
+  <div class="info" id="info">1 / 10</div>
+</div>
+
+<script>
+const TOTAL = 10;
+let currentSlide = 0;
+let isSpeaking = false;
+const synth = window.speechSynthesis;
+
+const narrations = [
+  "\u6B22\u8FCE\u4E86\u89E3 Amazon Quick\u3002\u8FD9\u662F\u4E00\u6B3E\u4F01\u4E1A\u7EA7 AI \u5DE5\u4F5C\u6D41\u81EA\u52A8\u5316\u5F15\u64CE\u3002\u4ECE\u6570\u636E\u83B7\u53D6\u3001\u5206\u6790\u5904\u7406\u3001\u6807\u51C6\u5316\u8F93\u51FA\u5230\u81EA\u52A8\u4EA4\u4ED8\uFF0C\u8DE8\u7CFB\u7EDF\u7F16\u6392\uFF0C\u4E00\u952E\u56FA\u5316\uFF0C\u5B9A\u65F6\u81EA\u52A8\u8FD0\u884C\uFF0C\u8FD8\u80FD\u76F4\u63A5\u5904\u7406\u60A8\u7535\u8111\u4E0A\u6388\u6743\u7684\u6587\u4EF6\u3002",
+  "\u4F01\u4E1A AI \u843D\u5730\u6709\u4E24\u6761\u8DEF\u5F84\u3002\u8DEF\u5F84 A \u662F\u5148\u5EFA AI \u5E73\u53F0\uFF0C\u642D\u5EFA\u57FA\u7840\u8BBE\u65BD\u3001\u5F00\u53D1\u4E2D\u53F0\uFF0C\u5468\u671F\u4E09\u5230\u5341\u4E8C\u4E2A\u6708\u3002\u8DEF\u5F84 B \u662F\u5148\u7528 Quick \u63D0\u6548\uFF0C\u5B89\u88C5\u684C\u9762\u5E94\u7528\u3001\u767B\u5F55\u5C31\u80FD\u4E0A\u624B\uFF0C\u4F01\u4E1A\u8D26\u6237\u9700\u7BA1\u7406\u5458\u5148\u5F00\u542F\u684C\u9762\u8BBF\u95EE\uFF1B\u8FDE\u63A5\u5DF2\u6709\u7CFB\u7EDF\u65E0\u9700\u5F00\u53D1\u3002\u4E24\u6761\u8DEF\u5E76\u4E0D\u77DB\u76FE\uFF0CQuick \u662F\u5E73\u53F0\u5EFA\u597D\u4E4B\u524D\u7684\u5FEB\u901F\u901A\u9053\u3002",
+  "\u516D\u5C42\u80FD\u529B\u6A21\u578B\u3002\u7B2C\u4E00\u5C42\u5BF9\u8BDD\u548C\u751F\u6210\uFF0C\u6240\u6709 AI \u5DE5\u5177\u90FD\u80FD\u505A\u3002\u7B2C\u4E8C\u5C42\u8FDE\u63A5\u548C\u6267\u884C\uFF0C\u884C\u4E1A\u6B63\u5728\u8D8B\u540C\u3002\u4ECE\u7B2C\u4E09\u5C42\u5F00\u59CB\u662F Quick \u7684\u5DEE\u5F02\u5316\u3002\u77E5\u8BC6\u79EF\u7D2F\u3001\u6D41\u7A0B\u56FA\u5316\u3001\u81EA\u4E3B\u8FD0\u884C\u3001\u672C\u5730\u5B89\u5168\u3002\u8D8A\u7528\u8D8A\u61C2\u60A8\uFF0C\u505A\u8FC7\u4E00\u6B21\u4E0D\u7528\u6559\u7B2C\u4E8C\u904D\u3002",
+  "Skill \u662F Quick \u7684\u6838\u5FC3\u80FD\u529B\u3002\u4ECE L1 \u5355\u6B21\u5BF9\u8BDD\u5904\u7406\uFF0C\u5230 L2 Skill \u56FA\u5316\uFF0C\u518D\u5230 L3 \u8DE8\u7CFB\u7EDF\u7F16\u6392\uFF0C\u6700\u540E L4 \u5168\u81EA\u52A8\u8FD0\u884C\u3002\u901A\u8FC7\u8FDE\u63A5\u5668\u81EA\u52A8\u62C9\u53D6\u591A\u7CFB\u7EDF\u6570\u636E\uFF0C\u672C\u5730\u5904\u7406\u5206\u6790\uFF0C\u751F\u6210\u6807\u51C6\u62A5\u544A\uFF0C\u81EA\u52A8\u4EA4\u4ED8\u3002\u4E00\u6B21\u5B9A\u4E49\uFF0C\u6C38\u4E45\u590D\u7528\u3002",
+  "\u6BCF\u4E2A\u9AD8\u9891\u91CD\u590D\u573A\u666F\u90FD\u53EF\u4EE5\u88AB Skill \u5316\u3002\u8D22\u52A1\u62A5\u8868\u3001\u9500\u552E\u652F\u6301\u3001\u56E2\u961F\u7BA1\u7406\u3001IT \u8FD0\u7EF4\u3001\u5408\u89C4\u5BA1\u8BA1\u3001\u7814\u7A76\u5206\u6790\uFF0C\u8FD9\u4E9B\u573A\u666F\u90FD\u53EF\u4EE5\u901A\u8FC7 Quick \u5B9E\u73B0\u6807\u51C6\u5316\u548C\u81EA\u52A8\u5316\u3002",
+  "Quick \u7684\u5F00\u653E\u8FDE\u63A5\u80FD\u529B\u5206\u4E24\u5C42\u3002\u5F00\u7BB1\u5373\u7528\u7684\u8FDE\u63A5\u5668\u5305\u62EC Outlook \u90AE\u4EF6\u548C\u65E5\u5386\u3001Teams\u3001Slack\u3001OneDrive\u3001SharePoint \u548C Zoom\u3002\u5BF9\u4E8E\u60A8\u81EA\u5DF1\u7684\u4E1A\u52A1\u7CFB\u7EDF\uFF0C\u53EA\u8981\u6709 API\uFF0C\u5C31\u53EF\u4EE5\u901A\u8FC7 MCP \u534F\u8BAE\u7F16\u5199\u9002\u914D\u5C42\u6765\u5BF9\u63A5\u3002\u4E0D\u9501\u5B9A\u4EFB\u4F55\u751F\u6001\u3002",
+  "Quick \u5728\u4E91\u7AEF\u8FD0\u884C\uFF0C\u684C\u9762\u7AEF\u628A\u5B83\u5EF6\u4F38\u5230\u60A8\u7684\u7535\u8111\u3002\u5BF9\u8BDD\u3001\u8BB0\u5FC6\u548C\u77E5\u8BC6\u56FE\u8C31\u4FDD\u5B58\u5728\u60A8\u7684 Amazon Quick \u8D26\u6237\u4E2D\uFF0C\u6309\u7528\u6237\u9694\u79BB\u3002\u5B9A\u65F6\u4EFB\u52A1\u5728\u4E91\u7AEF\u8FD0\u884C\uFF0C\u5373\u4F7F\u7535\u8111\u5173\u673A\u4E5F\u4F1A\u6309\u65F6\u6267\u884C\uFF1B\u9700\u8981\u8BFB\u672C\u673A\u6587\u4EF6\u6216\u8FD0\u884C\u672C\u5730\u4EE3\u7801\u7684\u6B65\u9AA4\uFF0C\u8981\u6C42\u7535\u8111\u5F00\u673A\u4E14\u5E94\u7528\u5728\u7EBF\u3002\u6587\u4EF6\u53EA\u5728\u60A8\u6388\u6743\u7684\u6587\u4EF6\u5939\u5185\u8BBF\u95EE\uFF0C\u6BCF\u4E2A\u7CFB\u7EDF\u5DE5\u5177\u7684\u6743\u9650\u90FD\u53EF\u4EE5\u9010\u9879\u6536\u7D27\u3002\u5BF9\u4E8E\u6570\u636E\u654F\u611F\u884C\u4E1A\uFF0C\u8FD9\u4E0D\u662F\u52A0\u5206\u9879\uFF0C\u800C\u662F\u80FD\u4E0D\u80FD\u7528\u7684\u524D\u63D0\u3002",
+  "\u5236\u9020\u4E1A\u7684\u8D22\u52A1\u62A5\u8868\u81EA\u52A8\u5316\u3001\u79D1\u6280\u4F01\u4E1A\u7684\u552E\u524D\u4FE1\u606F\u6574\u5408\u3001\u91D1\u878D\u884C\u4E1A\u7684\u5408\u89C4\u5206\u6790\u3001\u4F01\u4E1A IT \u7684\u8FD0\u7EF4\u5DE1\u68C0\uFF0C\u8FD9\u4E9B\u573A\u666F\u90FD\u53EF\u4EE5\u901A\u8FC7 Skill \u52A0\u8FDE\u63A5\u5668\u52A0\u5B9A\u65F6\u4EFB\u52A1\u6765\u5B9E\u73B0\u3002",
+  "Quick \u9002\u5408\u6BCF\u4E00\u4F4D\u77E5\u8BC6\u5DE5\u4F5C\u8005\u3002\u65E0\u8BBA\u662F\u7814\u7A76\u4E0E\u5206\u6790\u3001\u62A5\u8868\u4E0E\u6587\u6863\u8F93\u51FA\uFF0C\u8FD8\u662F\u8DE8\u7CFB\u7EDF\u534F\u4F5C\uFF0CQuick \u90FD\u80FD\u8BA9\u60A8\u7684\u5DE5\u4F5C\u6D41\u6807\u51C6\u5316\u3001\u81EA\u52A8\u5316\u3001\u53EF\u590D\u7528\u3002",
+  "\u611F\u8C22\u60A8\u7684\u5173\u6CE8\u3002Amazon Quick\uFF0C\u65E0\u9700\u642D\u5EFA AI \u5E73\u53F0\uFF0C\u5B89\u88C5\u684C\u9762\u5E94\u7528\u3001\u767B\u5F55\u5373\u53EF\u4E0A\u624B\uFF0C\u4F01\u4E1A\u8D26\u6237\u9700\u7BA1\u7406\u5458\u5148\u5F00\u542F\u684C\u9762\u8BBF\u95EE\u3002\u8BA9\u60A8\u7684\u56E2\u961F\u4ECE\u4ECA\u5929\u5F00\u59CB\u6784\u5EFA Skill\u3001\u8FDE\u63A5\u7CFB\u7EDF\u3001\u81EA\u52A8\u5316\u5DE5\u4F5C\u6D41\u3002"
+];
+
+// Build dots
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < TOTAL; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goSlide(i);
+  dotsEl.appendChild(d);
+}
+
+function goSlide(idx) {
+  if (idx < 0 || idx >= TOTAL) return;
+  const slides = document.querySelectorAll('.slide');
+  slides.forEach((s, i) => {
+    s.classList.remove('active', 'prev');
+    if (i < idx) s.classList.add('prev');
+  });
+  slides[idx].classList.add('active');
+  currentSlide = idx;
+  // Update dots
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.className = 'dot' + (i === idx ? ' active' : '');
+  });
+  document.getElementById('info').textContent = (idx + 1) + ' / ' + TOTAL;
+}
+
+function toggleSpeak() {
+  if (isSpeaking) {
+    synth.cancel();
+    isSpeaking = false;
+    showSubtitle('');
+    document.getElementById('speakIcon').className = 'fa-solid fa-microphone';
+    document.getElementById('speakLabel').textContent = '\u5F00\u59CB\u8BB2\u89E3';
+    document.getElementById('speakBtn').classList.remove('speaking');
+  } else {
+    isSpeaking = true;
+    document.getElementById('speakIcon').className = 'fa-solid fa-stop';
+    document.getElementById('speakLabel').textContent = '\u505C\u6B62\u8BB2\u89E3';
+    document.getElementById('speakBtn').classList.add('speaking');
+    speakCurrent();
+  }
+}
+
+function getVoice() {
+  const v = synth.getVoices();
+  return v.find(x => x.name.includes('Xiaoxiao')) ||
+         v.find(x => x.name.includes('Yunxi')) ||
+         v.find(x => x.name.includes('Xiaoyi')) ||
+         v.find(x => x.lang === 'zh-CN' && x.name.includes('Microsoft')) ||
+         v.find(x => x.lang === 'zh-CN') ||
+         v.find(x => x.lang.startsWith('zh'));
+}
+
+function speakCurrent() {
+  if (!isSpeaking) return;
+  synth.cancel();
+  var fullText = narrations[currentSlide];
+  var sentences = splitSentences(fullText);
+  if (sentences.length === 0) sentences = [fullText];
+  var idx = 0;
+
+  function speakNext() {
+    if (!isSpeaking) { showSubtitle(''); return; }
+    if (idx >= sentences.length) {
+      showSubtitle('');
+      if (isSpeaking && currentSlide < TOTAL - 1) {
+        goSlide(currentSlide + 1);
+        setTimeout(speakCurrent, 400);
+      } else if (isSpeaking) {
+        toggleSpeak();
+      }
+      return;
+    }
+    var sentence = sentences[idx];
+    showSubtitle(sentence);
+    var utt = new SpeechSynthesisUtterance(sentence);
+    utt.lang = 'zh-CN'; utt.rate = 1.0; utt.pitch = 1.0;
+    var voice = getVoice();
+    if (voice) utt.voice = voice;
+    utt.onend = function() { idx++; speakNext(); };
+    synth.speak(utt);
+  }
+  speakNext();
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault();
+    goSlide(currentSlide + 1);
+    if (isSpeaking) speakCurrent();
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    goSlide(currentSlide - 1);
+    if (isSpeaking) speakCurrent();
+  } else if (e.key === 'f' || e.key === 'F') {
+    toggleFullscreen();
+  } else if (e.key === 'Escape' && isSpeaking) {
+    toggleSpeak();
+  }
+});
+
+// Preload voices
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => {};
+
+
+// Subtitle sync
+function showSubtitle(text) {
+  var bar = document.getElementById('subtitleBar');
+  var el = document.getElementById('subtitleText');
+  if (text) {
+    el.textContent = text;
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+    el.textContent = '';
+  }
+}
+
+// Split narration into sentences for subtitle display
+function splitSentences(text) {
+  return text.split(/(?<=[。！？；])/g).filter(function(s) { return s.trim().length > 0; });
+}
+
+// ECharts: Render chart when slide 8 is shown
+var rolesChart = null;
+function renderChart() {
+  var el = document.getElementById('chart-roles');
+  if (el && typeof echarts !== 'undefined') {
+    rolesChart = echarts.getInstanceByDom(el) || echarts.init(el);
+    rolesChart.setOption({
+      backgroundColor:'transparent',
+      textStyle:{fontFamily:'-apple-system,BlinkMacSystemFont,sans-serif'},
+      grid:{left:40,right:16,top:28,bottom:28},
+      tooltip:{trigger:'item',formatter:function(p){return '提效空间: <b>'+p.data.label+'</b>';}},
+      xAxis:{type:'category',data:['研究分析','报表文档','跨系统协作','项目管理','客户沟通','运维巡检'],axisTick:{show:false},axisLabel:{color:'#5e6687',fontSize:12}},
+      yAxis:{type:'value',name:'自动化提效空间',nameLocation:'middle',nameGap:14,nameTextStyle:{color:'#94a3b8'},max:10,interval:2,axisLabel:{show:false},splitLine:{lineStyle:{color:'#f1f5f9'}}},
+      series:[{type:'bar',barMaxWidth:56,
+        itemStyle:{borderRadius:[6,6,0,0]},
+        label:{show:true,position:'top',formatter:function(p){return p.data.label;},fontSize:11,fontWeight:600,color:'#1a1f36'},
+        data:[
+        {value:9.5,label:'极高',itemStyle:{color:'#3b82f6'}},{value:9,label:'极高',itemStyle:{color:'#6366f1'}},{value:8.5,label:'高',itemStyle:{color:'#10b981'}},
+        {value:8,label:'高',itemStyle:{color:'#a78bfa'}},{value:7.5,label:'高',itemStyle:{color:'#38bdf8'}},{value:7,label:'高',itemStyle:{color:'#f59e0b'}}
+      ]}]
+    });
+  }
+}
+// Render chart: must wait until slide 8 is visible (active) so ECharts can measure container
+var chartRendered = false;
+var _origGoSlide = goSlide;
+goSlide = function(idx) {
+  _origGoSlide(idx);
+  if (idx === 8) {
+    setTimeout(function() { if (!chartRendered) { renderChart(); chartRendered = true; } else if (rolesChart) { rolesChart.resize(); } }, 200);
+  }
+};
+window.addEventListener('resize', function() { if (rolesChart) rolesChart.resize(); });
+
+</script>
+
+</body></html>

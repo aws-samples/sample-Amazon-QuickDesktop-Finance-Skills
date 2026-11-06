@@ -1,0 +1,95 @@
+{
+  "clean": {
+    "cutoff": "2026-09-30",
+    "data_issues~len": 0,
+    "all_ok": true,
+    "summary~keys": [
+      "matched",
+      "timing"
+    ],
+    "total": 230,
+    "match_rate": 100.0,
+    "supplier_summary~keys": [
+      "一致",
+      "一致(仅在途)"
+    ],
+    "issue_types~keys": [
+      "一致",
+      "在途"
+    ],
+    "suppliers~len": 8,
+    "conservation~keys": [
+      "供方明细笔数",
+      "供方期末合计",
+      "供方汇总差",
+      "供方独有",
+      "其中在途净额",
+      "差额合计",
+      "期初差",
+      "未回函余额",
+      "本方余额表差",
+      "本方明细笔数",
+      "本方期末合计(已回函)",
+      "本方独有",
+      "正向毛额",
+      "负向毛额",
+      "配对金额差"
+    ],
+    "inputs~len": 5,
+    "results~len": 230
+  },
+  "error": {
+    "cutoff": "2026-09-30",
+    "data_issues~len": 1,
+    "all_ok": false,
+    "summary~keys": [
+      "difference",
+      "exception",
+      "matched",
+      "review",
+      "timing"
+    ],
+    "total": 198,
+    "match_rate": 95.9,
+    "supplier_summary~keys": [
+      "不一致",
+      "未回函"
+    ],
+    "issue_types~keys": [
+      "一致",
+      "业务类型不一致",
+      "供应商未回函",
+      "供方期末与其明细不符",
+      "供方独有",
+      "在途",
+      "数据质量·数值无法解析",
+      "方向错误",
+      "期初不一致",
+      "本方余额表与明细不符",
+      "本方独有",
+      "本方重复入账",
+      "疑似单号录错",
+      "金额不符"
+    ],
+    "suppliers~len": 8,
+    "conservation~keys": [
+      "供方明细笔数",
+      "供方期末合计",
+      "供方汇总差",
+      "供方独有",
+      "其中在途净额",
+      "差额合计",
+      "期初差",
+      "未回函余额",
+      "本方余额表差",
+      "本方明细笔数",
+      "本方期末合计(已回函)",
+      "本方独有",
+      "正向毛额",
+      "负向毛额",
+      "配对金额差"
+    ],
+    "inputs~len": 5,
+    "results~len": 198
+  }
+}

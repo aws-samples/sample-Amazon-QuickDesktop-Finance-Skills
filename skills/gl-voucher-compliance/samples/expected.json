@@ -1,0 +1,78 @@
+{
+  "clean": {
+    "summary~keys": [
+      "pass"
+    ],
+    "data_issues~len": 0,
+    "all_ok": true,
+    "total": 201,
+    "pass_rate": 100.0,
+    "fail_amount": 0,
+    "review_amount": 0,
+    "issue_types~keys": [
+      "合规"
+    ],
+    "maker_risk~keys": [
+      "员工017",
+      "员工026",
+      "员工044",
+      "员工050"
+    ],
+    "conservation~keys": [
+      "不平凭证差额合计",
+      "全表借方",
+      "全表借贷差",
+      "全表贷方",
+      "凭证数",
+      "分录行数"
+    ],
+    "cross_whitelist": true,
+    "inputs~len": 3,
+    "results~len": 201
+  },
+  "error": {
+    "summary~keys": [
+      "fail",
+      "pass",
+      "review"
+    ],
+    "data_issues~len": 1,
+    "all_ok": false,
+    "total": 203,
+    "pass_rate": 88.2,
+    "fail_amount": 3522042.61,
+    "review_amount": 1351338.54,
+    "issue_types~keys": [
+      "借贷不平",
+      "凭证内会计期间不一致",
+      "单边分录",
+      "合规",
+      "大额无附件",
+      "数值无法解析",
+      "数据质量·数值无法解析",
+      "科目不在白名单",
+      "科目与业务不符",
+      "缺摘要",
+      "非法会计期间"
+    ],
+    "maker_risk~keys": [
+      "员工001",
+      "员工002",
+      "员工017",
+      "员工026",
+      "员工044",
+      "员工050"
+    ],
+    "conservation~keys": [
+      "不平凭证差额合计",
+      "全表借方",
+      "全表借贷差",
+      "全表贷方",
+      "凭证数",
+      "分录行数"
+    ],
+    "cross_whitelist": true,
+    "inputs~len": 3,
+    "results~len": 203
+  }
+}

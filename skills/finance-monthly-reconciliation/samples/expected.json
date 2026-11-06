@@ -1,0 +1,311 @@
+{
+  "clean": {
+    "数据": {
+      "ERP行数": 6,
+      "银行行数": 6,
+      "回单数": 4
+    },
+    "stats": {
+      "total_erp": 6,
+      "total_bank": 6,
+      "matched": 6,
+      "erp_only": 0,
+      "bank_only": 0,
+      "match_by_ref": 3,
+      "match_by_amount": 2,
+      "match_by_text": 1
+    },
+    "matched_pairs": [
+      [
+        "PZ-0801",
+        "SN-0801"
+      ],
+      [
+        "PZ-0802",
+        "SN-0802"
+      ],
+      [
+        "PZ-0803",
+        "SN-0803"
+      ],
+      [
+        "PZ-0811",
+        "SN-0811"
+      ],
+      [
+        "PZ-0812",
+        "SN-0812"
+      ],
+      [
+        "PZ-0821",
+        "SN-0821"
+      ]
+    ],
+    "erp_only_ids": [],
+    "bank_only_ids": [],
+    "kpi": {
+      "unmatched_count": 0,
+      "ar_overdue": 50000.0,
+      "ap_overdue": 15000.0,
+      "cash_balance": 506200.0
+    },
+    "ar_aging": [
+      {
+        "name": "0-30天",
+        "y": 20000.0
+      },
+      {
+        "name": "30-60天",
+        "y": 30000.0
+      },
+      {
+        "name": "60-90天",
+        "y": 12000.0
+      },
+      {
+        "name": "90天以上",
+        "y": 8000.0
+      }
+    ],
+    "ap_aging": [
+      {
+        "name": "0-30天",
+        "y": 15000.0
+      },
+      {
+        "name": "30-60天",
+        "y": 9000.0
+      },
+      {
+        "name": "60-90天",
+        "y": 0.0
+      },
+      {
+        "name": "90天以上",
+        "y": 6000.0
+      }
+    ],
+    "receipts": [
+      {
+        "日期": "2026-08-03",
+        "收款方": "示例供应商A",
+        "金额": 52000.0
+      },
+      {
+        "日期": "2026-08-10",
+        "收款方": "示例物业C",
+        "金额": 30000.0
+      },
+      {
+        "日期": "2026-08-12",
+        "收款方": "示例物流D",
+        "金额": 10000.0
+      },
+      {
+        "日期": "2026-08-20",
+        "收款方": "示例供应商F",
+        "金额": 6800.0
+      }
+    ],
+    "receipt_check": {
+      "回单数": 4,
+      "可作凭证": 4,
+      "未验证来源回单": [],
+      "正文不符": [],
+      "未提供正文": []
+    },
+    "known_gaps": [
+      {
+        "id": "halt_gate",
+        "finding": "SA「Documented reconciliation halt gates ... have no enforcement point」",
+        "说明": "SKILL.md：匹配率<90% 黄色预警、<70% 或单笔差异>50万 红色告警暂停；引擎无此判定（stats 无 gate 字段）",
+        "expected": "ok",
+        "expected_big_diffs": []
+      },
+      {
+        "id": "receipts_unused",
+        "finding": "SA「Bank e-receipt leg ... receipts_df is parsed then discarded」",
+        "说明": "SKILL.md：cloud 模式以回单为银行侧凭证；引擎解析回单后不参与对账，传不传回单结果相同",
+        "expected": "传入回单后对账结果应体现回单"
+      }
+    ]
+  },
+  "error": {
+    "数据": {
+      "ERP行数": 9,
+      "银行行数": 9,
+      "回单数": 7
+    },
+    "stats": {
+      "total_erp": 9,
+      "total_bank": 9,
+      "matched": 7,
+      "erp_only": 2,
+      "bank_only": 2,
+      "match_by_ref": 4,
+      "match_by_amount": 2,
+      "match_by_text": 1
+    },
+    "matched_pairs": [
+      [
+        "PZ-0801",
+        "SN-0801"
+      ],
+      [
+        "PZ-0802",
+        "SN-0802"
+      ],
+      [
+        "PZ-0803",
+        "SN-0803"
+      ],
+      [
+        "PZ-0805",
+        "SN-0805"
+      ],
+      [
+        "PZ-0811",
+        "SN-0811"
+      ],
+      [
+        "PZ-0812",
+        "SN-0812"
+      ],
+      [
+        "PZ-0821",
+        "SN-0821"
+      ]
+    ],
+    "erp_only_ids": [
+      "PZ-0831",
+      "PZ-0832"
+    ],
+    "bank_only_ids": [
+      "SN-0841",
+      "SN-0842"
+    ],
+    "kpi": {
+      "unmatched_count": 4,
+      "ar_overdue": 50000.0,
+      "ap_overdue": 15000.0,
+      "cash_balance": 506200.0
+    },
+    "ar_aging": [
+      {
+        "name": "0-30天",
+        "y": 20000.0
+      },
+      {
+        "name": "30-60天",
+        "y": 30000.0
+      },
+      {
+        "name": "60-90天",
+        "y": 12000.0
+      },
+      {
+        "name": "90天以上",
+        "y": 8000.0
+      }
+    ],
+    "ap_aging": [
+      {
+        "name": "0-30天",
+        "y": 15000.0
+      },
+      {
+        "name": "30-60天",
+        "y": 9000.0
+      },
+      {
+        "name": "60-90天",
+        "y": 0.0
+      },
+      {
+        "name": "90天以上",
+        "y": 6000.0
+      }
+    ],
+    "receipts": [
+      {
+        "日期": "2026-08-03",
+        "收款方": "示例供应商A",
+        "金额": 52000.0
+      },
+      {
+        "日期": "2026-08-10",
+        "收款方": "示例物业C",
+        "金额": 30000.0
+      },
+      {
+        "日期": "2026-08-12",
+        "收款方": "示例物流D",
+        "金额": 10000.0
+      },
+      {
+        "日期": "2026-08-18",
+        "收款方": "示例供应商G",
+        "金额": 800000.0
+      },
+      {
+        "日期": "2026-08-20",
+        "收款方": "示例供应商F",
+        "金额": 6800.0
+      },
+      {
+        "日期": "2026-08-28",
+        "收款方": "示例咨询H",
+        "金额": 15000.0
+      },
+      {
+        "日期": "2026-08-29",
+        "收款方": "示例保险J",
+        "金额": 9600.0
+      }
+    ],
+    "receipt_check": {
+      "回单数": 7,
+      "可作凭证": 4,
+      "未验证来源回单": [
+        "银行回单_2026-08-28_示例咨询H_15000元.pdf"
+      ],
+      "正文不符": [
+        "银行回单_2026-08-29_示例保险J_9600元.pdf"
+      ],
+      "未提供正文": [
+        "银行回单_2026-08-12_示例物流D_10000元.pdf"
+      ]
+    },
+    "known_gaps": [
+      {
+        "id": "match_rate_denominator",
+        "finding": "f-c2d4674a-771e-46d5-964a-fff2fbc7db68",
+        "说明": "安全扫描建议：匹配率分母改为去重交易数（匹配对+仅ERP+仅银行，即 ERP 行数+银行行数−匹配数）；引擎只用银行行数作分母",
+        "expected": 63.6
+      },
+      {
+        "id": "halt_gate",
+        "finding": "SA「Documented reconciliation halt gates ... have no enforcement point」",
+        "说明": "SKILL.md：匹配率<90% 黄色预警、<70% 或单笔差异>50万 红色告警暂停；引擎无此判定（stats 无 gate 字段）",
+        "expected": "halt",
+        "expected_big_diffs": [
+          "PZ-0805"
+        ]
+      },
+      {
+        "id": "receipts_unused",
+        "finding": "SA「Bank e-receipt leg ... receipts_df is parsed then discarded」",
+        "说明": "SKILL.md：cloud 模式以回单为银行侧凭证；引擎解析回单后不参与对账，传不传回单结果相同",
+        "expected": "传入回单后对账结果应体现回单"
+      }
+    ]
+  },
+  "trusted_senders": [
+    "e-receipt@bank.example.com"
+  ],
+  "xss_payloads": [
+    "<img src=x onerror=alert(1)>",
+    "</script><script>alert(2)</script>"
+  ],
+  "formula_payload": "=HYPERLINK(\"https://example.com\",\"点击\")"
+}

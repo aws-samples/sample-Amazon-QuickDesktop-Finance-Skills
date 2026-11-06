@@ -1,0 +1,68 @@
+{
+  "clean": {
+    "summary~keys": [
+      "pass"
+    ],
+    "data_issues~len": 0,
+    "all_ok": true,
+    "total": 72,
+    "pass_rate": 100.0,
+    "issue_types~keys": [
+      "分摊正确"
+    ],
+    "period_end": "2026-09",
+    "conservation~keys": [
+      "入账差",
+      "原值−累计−账面",
+      "原值合计",
+      "台账本期应摊",
+      "总账本期入账",
+      "累计摊销合计",
+      "账面余额合计",
+      "逐单差异合计"
+    ],
+    "orphan_gl~len": 0,
+    "inputs~len": 4,
+    "results~len": 72
+  },
+  "error": {
+    "summary~keys": [
+      "fail",
+      "pass"
+    ],
+    "data_issues~len": 1,
+    "all_ok": false,
+    "total": 73,
+    "pass_rate": 84.9,
+    "issue_types~keys": [
+      "不应摊销却入账",
+      "入账科目与部门不符",
+      "分摊不守恒",
+      "分摊期限超上限",
+      "分摊正确",
+      "台账外摊销",
+      "已摊期数与起始月不符",
+      "数据质量·数值无法解析",
+      "本期入账金额不符",
+      "本期漏入账",
+      "累计摊销与期间不符",
+      "账面余额≠原值−累计",
+      "账面余额为负",
+      "超摊"
+    ],
+    "period_end": "2026-09",
+    "conservation~keys": [
+      "入账差",
+      "原值−累计−账面",
+      "原值合计",
+      "台账本期应摊",
+      "总账本期入账",
+      "累计摊销合计",
+      "账面余额合计",
+      "逐单差异合计"
+    ],
+    "orphan_gl~len": 1,
+    "inputs~len": 4,
+    "results~len": 73
+  }
+}

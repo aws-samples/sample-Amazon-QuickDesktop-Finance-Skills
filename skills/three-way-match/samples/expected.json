@@ -1,0 +1,78 @@
+{
+  "clean": {
+    "summary~keys": [
+      "matched",
+      "pending"
+    ],
+    "data_issues~len": 0,
+    "all_ok": true,
+    "total": 158,
+    "match_rate": 100.0,
+    "issue_types~keys": [
+      "完全匹配",
+      "待开票"
+    ],
+    "duplicates~keys": [
+      "按发票号",
+      "按组合指纹"
+    ],
+    "conservation~keys": [
+      "入库单",
+      "发票",
+      "发票总额",
+      "可付金额",
+      "孤立单据",
+      "暂缓金额",
+      "订单行"
+    ],
+    "inputs~len": 4,
+    "results~len": 158
+  },
+  "error": {
+    "summary~keys": [
+      "difference",
+      "exception",
+      "matched",
+      "pending",
+      "review"
+    ],
+    "data_issues~len": 1,
+    "all_ok": false,
+    "total": 160,
+    "match_rate": 90.3,
+    "issue_types~keys": [
+      "先票后货",
+      "单价差异",
+      "发票供应商不一致",
+      "发票金额≠数量×单价",
+      "含无法解析单据",
+      "完全匹配",
+      "开票超过收货",
+      "待开票",
+      "数据质量·数值无法解析",
+      "无订单入库单",
+      "无订单发票",
+      "疑似换号重开",
+      "短收",
+      "缺入库单",
+      "超订单开票",
+      "超量收货",
+      "重复发票号"
+    ],
+    "duplicates~keys": [
+      "按发票号",
+      "按组合指纹"
+    ],
+    "conservation~keys": [
+      "入库单",
+      "发票",
+      "发票总额",
+      "可付金额",
+      "孤立单据",
+      "暂缓金额",
+      "订单行"
+    ],
+    "inputs~len": 4,
+    "results~len": 160
+  }
+}

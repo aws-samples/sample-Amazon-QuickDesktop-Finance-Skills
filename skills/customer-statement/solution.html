@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><title>#13 客户对账单生成 · 方案讲解 — Amazon Quick Desktop 财务场景库</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'PingFang SC',-apple-system,'Microsoft YaHei',sans-serif;background:#0a0e1a;color:#1e2a44}
+.slide{position:absolute;inset:0;height:calc(100% - 54px);display:none;flex-direction:column;justify-content:center;padding:32px 56px;opacity:0;transition:opacity .5s}
+.slide.active{display:flex;opacity:1}
+.brand{position:absolute;top:20px;left:56px;font-size:12px;color:#4299e1;font-weight:700}
+.tag{position:absolute;top:18px;right:56px;font-size:10px;color:#f6ad55;background:rgba(246,173,85,.1);border:1px solid rgba(246,173,85,.28);border-radius:5px;padding:4px 10px}
+h1{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.3}
+h1 .hl{background:linear-gradient(90deg,#4299e1,#6d4ad8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:14px;color:#5f6b82;margin-bottom:20px;line-height:1.6;max-width:760px}
+.kpi-row{display:flex;gap:14px;margin:10px 0}
+.kpi{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:14px 18px;flex:1}
+.kpi .v{font-size:26px;font-weight:800}.kpi .l{font-size:11px;color:#5f6b82;margin-top:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:12px;padding:18px}
+.card h3{font-size:15px;margin-bottom:8px;color:#2b7fd4}.card p{font-size:12.5px;color:#3f4c66;line-height:1.65}
+.brow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bname{width:120px;font-size:11px;color:#3f4c66;text-align:right;flex-shrink:0}
+.btrack{flex:1;height:14px;background:rgba(30,45,75,.05);border-radius:3px;overflow:hidden}
+.bfill{height:14px;border-radius:3px}.bval{width:48px;font-size:11px;color:#5f6b82}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:11px;color:#5f6b82}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{text-align:left;color:#718096;font-weight:600;padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.12);font-size:9.5px}
+td{padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.05)}
+.flow{display:flex;align-items:center;gap:6px;margin:14px 0}
+.fstep{flex:1;background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:12px;text-align:center}
+.fstep .n{font-size:10px;color:#718096;font-weight:700}.fstep .t{font-size:12.5px;font-weight:600;margin:3px 0}.fstep .d{font-size:10px;color:#5f6b82}
+.farr{color:#4a5568;font-size:16px}
+.quote{border-left:3px solid #4299e1;background:rgba(66,153,225,.08);border-radius:0 8px 8px 0;padding:12px 16px;font-size:13.5px;color:#2b6fb0;font-style:italic;line-height:1.55;margin-top:14px}
+.judge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(66,153,225,.15);color:#2b7fd4;margin:2px}
+.ctrl{position:fixed;bottom:0;left:0;right:0;height:54px;background:rgba(10,14,26,.97);border-top:1px solid rgba(30,45,75,.08);display:flex;align-items:center;padding:0 20px;gap:10px;z-index:99}
+.ctrl button{background:rgba(30,45,75,.1);border:1px solid rgba(30,45,75,.15);color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer}
+.ctrl button.pri{background:#4299e1;border-color:#4299e1}
+.dots{flex:1;display:flex;gap:6px;justify-content:center}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(30,45,75,.2);cursor:pointer}
+.dot.on{background:#2b7fd4;width:22px;border-radius:4px}
+.info{font-size:11px;color:#718096;min-width:56px;text-align:right}
+.sub-bar{position:fixed;bottom:54px;left:0;right:0;background:rgba(0,0,0,.75);color:#fff;padding:10px 24px;text-align:center;font-size:14px;display:none;z-index:98}
+.sub-bar.on{display:block}
+</style></head><body>
+<div class="slide active" data-i="0" style="justify-content:center;text-align:center">
+  <div class="tag">⚠️ 数据及企业均为构造，非真实数据</div>
+  <div style="max-width:900px;margin:0 auto"><div style="font-size:24px;font-weight:800;letter-spacing:.8px;color:#4299e1;margin-bottom:14px">Amazon Quick Desktop</div>
+  <h1>客户对账单生成 <span class="hl">寄给客户的账，一分都不能错</span></h1>
+  <p class="sub" style="margin:0 auto 20px">每月给客户寄一张对账单：上月欠多少、本月买了多少、付了多少、现在欠多少。对账单直接对外，<b style="color:#2b7fd4">只有核过的才能发</b>。</p>
+  <div class="kpi-row" style="max-width:820px;margin:0 auto"><div class="kpi"><div class="v" style="color:#4299e1">10</div><div class="l">家客户 · 104 笔流水</div></div><div class="kpi"><div class="v" style="color:#48bb78">13/13</div><div class="l">植入错误全部抓出</div></div></div></div></div>
+<div class="slide" data-i="1"><div class="brand">客户对账单 · 端到端流程</div>
+  <h1 style="font-size:23px">端到端方案：输入 → 处理 → 输出</h1>
+  <div style="display:grid;grid-template-columns:0.95fr 1.15fr;gap:18px;margin-top:8px">
+    <div class="card"><h3>① 输入契约</h3>
+      <table style="font-size:11px"><tr><th>字段</th><th>说明</th></tr><tr><td style="color:#2b7fd4;white-space:nowrap">上期对账单</td><td style="color:#3f4c66">各客户 8 月期末余额、客户回签状态</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">本期流水</td><td style="color:#3f4c66">流水号, 客户, 日期, 业务类型, 单据号, 发生额</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">明细账与总账</td><td style="color:#3f4c66">应收明细账期末；1122 应收账款、2203 预收</td></tr></table></div>
+    <div class="card"><h3>③ 输出契约</h3>
+      <ul style="font-size:12px;color:#3f4c66;padding-left:16px;margin-top:4px"><li style="margin-bottom:5px">逐户对账单：期初、各类发生额、期末、流水明细、状态（可发送/待核实/不符）</li><li style="margin-bottom:5px">剔除流水清单：每笔写明为什么不进对账单</li><li style="margin-bottom:5px">守恒 + 证据 JSON + 四种报告（Excel 每户一张分表）</li></ul></div>
+  </div>
+  <div style="margin-top:14px"><div style="font-size:12px;color:#2b7fd4;margin-bottom:6px;font-weight:600">② 处理步骤（确定性）</div>
+    <div class="flow" style="margin:0"><div class="fstep"><div class="n">1</div><div class="t" style="font-size:11.5px">跨期衔接</div><div class="d">期初=上期期末
+上期是否回签</div></div><div class="farr">›</div><div class="fstep"><div class="n">2</div><div class="t" style="font-size:11.5px">流水准入</div><div class="d">客户·类型
+方向·期间·唯一</div></div><div class="farr">›</div><div class="fstep"><div class="n">3</div><div class="t" style="font-size:11.5px">逐户生成</div><div class="d">期初+销售−收款
+−退货−折让</div></div><div class="farr">›</div><div class="fstep"><div class="n">4</div><div class="t" style="font-size:11.5px">对明细账</div><div class="d">差额拆成
+剔除+未解释</div></div><div class="farr">›</div><div class="fstep"><div class="n">5</div><div class="t" style="font-size:11.5px">对总账</div><div class="d">应收·预收
+分别核对</div></div></div></div>
+</div>
+<div class="slide" data-i="2"><div class="brand">客户对账单 · 架构全景</div><h1 style="font-size:23px">架构全景：一句话触发，五层完成校验</h1><div style="display:flex;justify-content:center;align-items:center;flex:1;margin-top:4px"><svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-height:calc(100vh - 300px)"><defs><marker id="am63b3ed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2b7fd4"/></marker><marker id="amb794f4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#8b5cf0"/></marker><marker id="am48bb78" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#48bb78"/></marker><marker id="amf6ad55" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f6ad55"/></marker><filter id="ash"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.18"/></filter><linearGradient id="agc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2b7fd4" stop-opacity="0.10"/><stop offset="100%" stop-color="#2b7fd4" stop-opacity="0.02"/></linearGradient></defs><text x="95" y="22" font-size="13" font-weight="700" fill="#2b7fd4" text-anchor="middle">输入与触发</text><rect x="20" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="58" font-size="16" text-anchor="middle">📨</text><text x="95.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">上期对账单</text><text x="95.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">客户回签</text><rect x="20" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="134" font-size="16" text-anchor="middle">📒</text><text x="95.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">本期流水</text><text x="95.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">ERP 应收模块</text><rect x="20" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="210" font-size="16" text-anchor="middle">📋</text><text x="95.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">明细账与总账</text><text x="95.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">期末余额</text><rect x="20" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="95.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">一句话触发</text><text x="95.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">“客户对账单”</text><rect x="20" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="362" font-size="16" text-anchor="middle">⏰</text><text x="95.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">定时任务（使用者配置）</text><text x="95.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">每月初</text><rect x="240" y="16" width="480" height="412" rx="16" fill="url(#agc)" stroke="#2b7fd4" stroke-width="1.4" stroke-dasharray="6,3"/><text x="480" y="40" font-size="14.5" font-weight="800" fill="#2b6fb0" text-anchor="middle">Amazon Quick</text><rect x="262" y="52" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#8b5cf0" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="75" font-size="16">🧭</text><text x="304" y="75" font-size="12.5" font-weight="700" fill="#8b5cf0">① 编排层 · 模型（指挥官）</text><text x="280" y="94" font-size="10.5" fill="#3f4c66">识别意图、编排工具；不接触原始往来数据，只看结果摘要</text><rect x="262" y="116" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="139" font-size="16">📥</text><text x="304" y="139" font-size="12.5" font-weight="700" fill="#2b7fd4">② 数据接入层</text><text x="280" y="158" font-size="10.5" fill="#3f4c66">读取上期、流水、明细账、总账与主数据</text><rect x="262" y="180" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#48bb78" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="203" font-size="16">⚙️</text><text x="304" y="203" font-size="12.5" font-weight="700" fill="#48bb78">③ 确定性校验层 · 本地沙箱（操作员）</text><text x="280" y="222" font-size="10.5" fill="#3f4c66">校验脚本：衔接 · 准入 · 生成 · 对明细 · 对总账</text><rect x="262" y="244" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#f6ad55" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="267" font-size="16">🧾</text><text x="304" y="267" font-size="12.5" font-weight="700" fill="#f6ad55">④ 证据层</text><text x="280" y="286" font-size="10.5" fill="#3f4c66">逐户对账单 + 剔除原因 + 输入指纹</text><rect x="262" y="308" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="331" font-size="16">📤</text><text x="304" y="331" font-size="12.5" font-weight="700" fill="#2b7fd4">⑤ 交付层</text><text x="280" y="350" font-size="10.5" fill="#3f4c66">网页 · PDF · Markdown · Excel；可发送的对账单由使用者确认后自行外发</text><rect x="262" y="374" width="436" height="40" rx="8" fill="rgba(183,148,244,0.08)" stroke="#8b5cf0" stroke-width="1" stroke-dasharray="4,2"/><text x="280" y="399" font-size="15">🧩</text><text x="304" y="399" font-size="11.5" font-weight="700" fill="#8b5cf0">Skill 固化：customer-statement</text><text x="696" y="399" font-size="10" fill="#5f6b82" text-anchor="end">上层判据不折旧 · 下层可替换</text><text x="865" y="22" font-size="13" font-weight="700" fill="#48bb78" text-anchor="middle">输出端</text><rect x="790" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="58" font-size="16" text-anchor="middle">🌐</text><text x="865.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">网页报告</text><text x="865.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">发送前总览</text><rect x="790" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="134" font-size="16" text-anchor="middle">📕</text><text x="865.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">PDF / Excel</text><text x="865.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">每户一张对账单</text><rect x="790" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="210" font-size="16" text-anchor="middle">📝</text><text x="865.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">证据 JSON</text><text x="865.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">可回溯 · 可复算</text><rect x="790" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="286" font-size="16" text-anchor="middle">📧</text><text x="865.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">Outlook</text><text x="865.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">使用者确认后自行发给客户</text><rect x="790" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="362" font-size="16" text-anchor="middle">🗄️</text><text x="865.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">Agent Files 归档</text><text x="865.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">逐月留档</text><line x1="172" y1="68" x2="258" y2="143" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="144" x2="258" y2="146" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="220" x2="258" y2="150" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="296" x2="258" y2="79" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="172" y1="372" x2="258" y2="85" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="700" y1="335" x2="786" y2="68" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="335" x2="786" y2="144" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="271" x2="786" y2="220" stroke="#f6ad55" stroke-width="1.6" marker-end="url(#amf6ad55)"/><line x1="700" y1="340" x2="786" y2="296" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="345" x2="786" y2="372" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/></svg></div><div class="quote" style="margin-top:6px">全部本地模式下，客户往来数据、计算和对账单都留在本机，模型只看到结果摘要；云上模式则由连接器取数、云端沙箱计算。两种模式只看数据源头在哪。</div></div>
+<div class="slide" data-i="3"><div class="brand">客户对账单 · 是什么实现的</div>
+  <h1 style="font-size:23px">实现机制：从对话到 <span class="hl">可复用 Skill</span></h1>
+  <p class="sub" style="margin-bottom:14px">模型当"指挥官"做意图识别与工具编排，本地沙箱当"操作员"跑确定性脚本——最终固化为一个 Skill</p>
+  <div class="flow" style="margin:6px 0 14px">
+    <div class="fstep" style="border-top:3px solid #4299e1"><div class="t">🗣️ 触发</div><div class="d">一句话 / 连接器<br>/ 定时任务（使用者配置）</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #6d4ad8"><div class="t">🧭 模型编排</div><div class="d">意图识别<br>工具编排(指挥官)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #48bb78"><div class="t">🔒 本地沙箱</div><div class="d">确定性脚本<br>数据本地(操作员)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #ed8936"><div class="t">✅ 判据校验</div><div class="d">守恒 · 恒等式 · 白名单<br>交叉一致 · 唯一性</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #f6ad55"><div class="t">📊 产出</div><div class="d">报告+仪表盘<br>+沉淀归档</div></div>
+  </div>
+  <div class="two" style="gap:16px">
+    <div class="card" style="border-color:rgba(99,179,237,.4)"><h3>🧱 固化为 Skill（核心）</h3>
+      <p style="font-size:12px;line-height:1.7">这套流程被写成一个 <b style="color:#2b7fd4">SKILL.md</b>，一句"<b>客户对账单</b>"即可复用：<br>
+      · <b style="color:#2b6fb0">上层不折旧</b>：目标+输入契约+处理步骤+输出契约+<b>验收判据</b>（跨平台、核心IP）<br>
+      · <b style="color:#9ae6b4">下层可替换</b>：连接器+API+脚本+路径（随平台演进替换）</p></div>
+    <div class="card"><h3>⚙️ 本场景实现</h3>
+      <p style="font-size:12px;line-height:1.7">
+      · 连接器：ERP 应收导出、上期对账单回函<br>
+      · 确定性脚本：<code style="color:#f6ad55">customer_statement_v2.py</code>（含守恒自检 assert）<br>
+      · Skill 名：<code style="color:#2b7fd4">customer-statement</code><br>
+      · 敏感数据走 <b style="color:#9ae6b4">本地安全执行</b>（financial-local-safety）</p></div>
+  </div>
+</div>
+<div class="slide" data-i="4"><div class="brand">客户对账单 · 样例数据</div>
+  <h1 style="font-size:23px">构造数据与一张对账单样例</h1>
+  <div class="two"><div><div class="card"><h3>示例公司34 · 2026 年 9 月对账单（全平版）</h3><table style="font-size:10px"><tr><th>日期</th><th>类型</th><th>单据</th><th style="text-align:right">金额</th></tr><tr><td>09-01</td><td>期初</td><td>上期结转</td><td style="text-align:right">464,069.50</td></tr><tr><td>09-01</td><td>销售</td><td>XS-C007-0063</td><td style="text-align:right">+209,954.20</td></tr><tr><td>09-02</td><td>销售</td><td>XS-C007-0062</td><td style="text-align:right">+368,632.97</td></tr><tr><td>09-02</td><td>销售</td><td>XS-C007-0068</td><td style="text-align:right">+181,716.15</td></tr><tr><td>09-05</td><td>收款</td><td>SK-C007-0057</td><td style="text-align:right">-218,690.37</td></tr><tr><td>09-06</td><td>收款</td><td>SK-C007-0055</td><td style="text-align:right">-310,981.68</td></tr><tr><td>09-11</td><td>销售</td><td>XS-C007-0059</td><td style="text-align:right">+199,026.62</td></tr><tr><td>09-13</td><td>折让</td><td>TH-C007-0060</td><td style="text-align:right">-14,070.26</td></tr><tr><td>…</td><td></td><td></td><td style="text-align:right"></td></tr><tr><td>09-30</td><td>期末</td><td>应收</td><td style="text-align:right">731,535.85</td></tr></table></div></div>
+  <div><div class="card"><h3>两个版本做对照</h3><p style="font-size:12px">10 家虚构客户 · 101 笔流水（销售、收款、退货、折让）· 一户多收形成预收<br><br>· <b style="color:#48bb78">全平版</b>：10 户全部可发送，与上期、明细账、总账一致<br><br>· <b style="color:#f56565">植错版</b>：植入 13 处<br><b style="color:#f6ad55">衔接</b>：期初≠上期期末 · 上期客户有异议 · 追加一行 5 月旧对账单 · 8 月对账单重复一行（已回签）<br><b>流水</b>：收款记正 · 退货登记成销售 · 10 月流水 · 流水重复 · 未登记客户 · “其他调整”<br><b>核对</b>：明细账差 9,000 · 总账未同步<br><b>数据质量</b>：一笔发生额写成 "12,345.60"（无法解析，登记为数据质量问题）</p></div></div></div>
+  <div class="quote">预收余额的客户，对账单要标明“我方欠贵方”，不能与其他客户的应收相抵。</div></div>
+<div class="slide" data-i="5"><div class="brand">客户对账单 · 核心判据</div>
+  <h1 style="font-size:23px">三方对上才能发</h1>
+  <table style="font-size:11.5px"><tr><th>判据</th><th>规则</th><th>结果</th></tr><tr><td><b style="color:#f6ad55">跨期衔接</b></td><td>本期期初 = 上期对账单期末（按客户 + 对账期间取上一期，同期多行判不符）；上期未回签或有异议</td><td>不符 / 待核实</td></tr><tr><td><b style="color:#f6ad55">流水准入</b></td><td>客户已登记；类型在白名单；方向与类型一致；日期在本期；流水号唯一</td><td>剔除并列明</td></tr><tr><td><b style="color:#f6ad55">恒等式</b></td><td>期末 = 期初 + 销售 − 收款 − 退货 − 折让</td><td>自检</td></tr><tr><td>对明细账</td><td>对账单期末 vs 明细账；差额 = 剔除流水影响 + 未解释差额</td><td>未解释 → 不符</td></tr><tr><td>对总账</td><td>应收合计对 1122；预收合计对 2203，分开核对</td><td>不符</td></tr></table>
+  <div class="quote">只有“可发送”的对账单才直接外发；“待核实”先解释差异，“不符”先改账。</div></div>
+<div class="slide" data-i="6"><div class="brand">客户对账单 · 校验结果</div>
+  <h1 style="font-size:23px">10 处全部抓出</h1>
+  <div class="two"><div style="display:flex;gap:10px;justify-content:center;flex-direction:column">
+      <div style="display:flex;gap:10px;justify-content:center">
+      <div class="card" style="text-align:center"><h3>全平版</h3><svg viewBox="0 0 120 120" width="116" height="116"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#48bb78" stroke-width="16" stroke-dasharray="301.6 0.0" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2a44">100.0%</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">可发送率</text></svg><p style="font-size:12px">10 户全部可发送</p></div>
+      <div class="card" style="text-align:center"><h3>植错版</h3><svg viewBox="0 0 120 120" width="116" height="116"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#f56565" stroke-width="16" stroke-dasharray="60.3 241.3" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2a44">20.0%</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">可发送率</text></svg><p style="font-size:12px">可发送 2 · 待核实 5 · 不符 3</p></div></div>
+      </div><div><table style="font-size:10.5px"><tr><th>植入错误</th><th>检出</th></tr><tr><td>期初≠上期期末</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>上期客户有异议</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>收款记成正数</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>退货登记成销售</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>10 月流水记进 9 月</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>流水重复</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>未登记客户</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>非白名单类型</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>明细账差 9,000</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>总账未同步</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>5 月旧对账单冒充上期</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>上期对账单重复</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>发生额写成千分位</td><td><span style="color:#48bb78">✓</span></td></tr></table></div></div></div>
+<div class="slide" data-i="7"><div class="brand">客户对账单 · 发送前总览</div>
+  <h1 style="font-size:23px">植错版：逐户状态 + 剔除流水</h1>
+  <div class="card"><table style="font-size:9.8px"><tr><th>客户 / 流水</th><th style="text-align:right">期初 / 客户</th><th style="text-align:right">期末 / 类型</th><th style="text-align:right">状态 / 金额</th><th>问题</th></tr><tr><td>示例公司42</td><td style="text-align:right">226,152</td><td style="text-align:right">1,152,670</td><td style="text-align:right">待核实</td><td>含被剔除流水</td></tr><tr><td>示例公司11</td><td style="text-align:right">1,572,062</td><td style="text-align:right">1,347,060</td><td style="text-align:right">不符</td><td>明细账与对账单不符</td></tr><tr><td>示例公司09</td><td style="text-align:right">214,560</td><td style="text-align:right">888,623</td><td style="text-align:right">不符</td><td>期初与上期期末不符</td></tr><tr><td>示例公司49</td><td style="text-align:right">902,901</td><td style="text-align:right">560,038</td><td style="text-align:right">待核实</td><td>含被剔除流水</td></tr><tr><td>示例公司39</td><td style="text-align:right">1,123,008</td><td style="text-align:right">1,758,830</td><td style="text-align:right">待核实</td><td>含被剔除流水</td></tr><tr><td>示例公司26</td><td style="text-align:right">341,729</td><td style="text-align:right">1,293,522</td><td style="text-align:right">不符</td><td>上期对账单重复；上期对账有异议</td></tr><tr><td>示例公司34</td><td style="text-align:right">464,070</td><td style="text-align:right">731,536</td><td style="text-align:right">待核实</td><td>含被剔除流水</td></tr><tr><td>示例公司43</td><td style="text-align:right">527,328</td><td style="text-align:right">1,085,948</td><td style="text-align:right">待核实</td><td>含无法解析数据</td></tr><tr><td>—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td>以下为剔除流水</td></tr><tr><td>LS-202609-0004</td><td style="text-align:right">C001</td><td style="text-align:right">销售</td><td style="text-align:right">-21,297</td><td>方向错误</td></tr><tr><td>LS-202609-0002</td><td style="text-align:right">C001</td><td style="text-align:right">收款</td><td style="text-align:right">147,722</td><td>方向错误</td></tr><tr><td>LS-202609-9902</td><td style="text-align:right">C004</td><td style="text-align:right">其他调整</td><td style="text-align:right">-18,000</td><td>业务类型不在白名单</td></tr><tr><td>LS-202609-0043</td><td style="text-align:right">C005</td><td style="text-align:right">销售</td><td style="text-align:right">108,036</td><td>跨期流水</td></tr><tr><td>LS-202609-0059</td><td style="text-align:right">C007</td><td style="text-align:right">销售</td><td style="text-align:right">199,027</td><td>流水重复</td></tr><tr><td>LS-202609-9901</td><td style="text-align:right">C099</td><td style="text-align:right">销售</td><td style="text-align:right">56,800</td><td>客户不在主数据</td></tr></table></div>
+  <div class="quote">流水 104 笔 = 进入对账单 98 + 剔除 6（另有示例公司43的 1 笔发生额无法解析，登记为数据质量问题，不计入，该户判待核实）；植错版应收合计比 1122 总账多 85,984，差异来自上述问题。</div></div>
+<div class="slide" data-i="8"><div class="brand">客户对账单 · 判据边界</div>
+  <h1 style="font-size:23px">对账单对上了，也要客户认才算数</h1>
+  <table style="font-size:11.5px"><tr><th>盲区</th><th>为什么抓不到</th><th>处置</th><th>可闭合性</th></tr><tr><td>漏记退货折让</td><td>只认销售和收款</td><td>按业务类型白名单全量计入，<b>已在脚本中实现</b></td><td><span style="color:#48bb78">🟢 已闭合</span></td></tr><tr><td>上期差异未处理</td><td>上期有异议仍直接结转</td><td>跨期衔接 + 回签状态，<b>已在脚本中实现</b></td><td><span style="color:#48bb78">🟢 已闭合</span></td></tr><tr><td>流水挂错客户</td><td>A 客户的收款记到 B 客户名下，双方合计不变</td><td>对接银行回单付款人（#14 收款核销）</td><td><span style="color:#f6ad55">🟡 需外部锚点</span></td></tr><tr><td>客户是否认可</td><td>对账单发出后客户不回函</td><td>跟踪回函；逾期未回执行替代程序</td><td><span style="color:#f6ad55">🟡 需外部锚点</span></td></tr></table>
+  <div class="quote">对账单能证明“我们的账前后一致、三方对上”，客户是否认可要看回函——这些边界已写入 Skill 的判据覆盖声明。</div></div>
+<div class="slide" data-i="9"><div class="brand">客户对账单 · 过程可回溯</div>
+  <h1 style="font-size:23px">每个结论都能倒查回原始数据</h1>
+  <div class="three"><div class="card"><h3>① 逐户留痕</h3><p>10 户各记期初、上期期末、各类发生额、期末、明细账差额拆解与状态。</p></div><div class="card"><h3>② 剔除有据</h3><p>6 笔剔除流水逐笔写明原因；流水笔数守恒。</p></div><div class="card"><h3>③ 指纹 + 复算</h3><p>七个输入各记 SHA-256 指纹；本机用同一份 CSV 独立复算，与云端一致。</p></div></div>
+  <div class="quote">Excel 报告中每户一张分表，就是可直接寄出的对账单；证据 JSON 可追溯每一个数字的来源。</div></div>
+<div class="slide" data-i="10"><div class="brand">客户对账单 · 部署与复用</div>
+  <h1 style="font-size:23px">一次构建 · 处处复用</h1>
+  <div class="three" style="margin-bottom:14px">
+    <div class="card"><h3>🗣️ 一句话触发</h3><p>对话框输入"客户对账单"触发词即时运行</p></div>
+    <div class="card"><h3>⏰ 定时任务</h3><p>使用者在 Mission Control 自行配置定时任务（routine）周期运行；产出由使用者确认后自行分发</p></div>
+    <div class="card"><h3>🧠 Agent Files 记忆</h3><p>规则表、上期结果持久缓存，形成环比链</p></div>
+  </div>
+  <div class="kpi-row" style="margin-bottom:12px"><div class="kpi"><div class="v" style="color:#48bb78;font-size:22px">分钟级</div><div class="l">人工逐户编制 → 自动生成</div></div><div class="kpi"><div class="v" style="color:#4299e1;font-size:22px">100%</div><div class="l">对账单数字可追溯</div></div><div class="kpi"><div class="v" style="color:#f6ad55;font-size:22px">0</div><div class="l">原始往来数据上云（本地模式）</div></div></div>
+  <div class="quote">“跨期衔接 + 流水准入 + 三方核对 + 状态闸门”这套判据，可复用到供应商对账单回函、员工借款确认、关联方往来确认函。</div>
+</div>
+<div class="sub-bar" id="subbar"><span id="subtxt"></span></div>
+<div class="ctrl">
+  <button class="pri" id="play" onclick="toggle()">▶ 开始讲解</button>
+  <button onclick="go(cur-1)">‹ 上一页</button>
+  <div class="dots" id="dots"></div>
+  <button onclick="go(cur+1)">下一页 ›</button>
+  <button onclick="fs()">⛶ 全屏</button>
+  <div class="info" id="info">1 / 11</div>
+</div>
+<script>
+var TOTAL=11,cur=0,speaking=false,synth=window.speechSynthesis;
+var narr=[
+"本页介绍客户对账单生成方案。上一个场景算的是客户欠我们多少、能收回多少，要让客户确认，就得每月寄一张对账单：上月欠多少、本月买了多少、付了多少、现在欠多少。对账单直接发给客户，所以只有核过的才能发。需要说明，以下数据及企业均为构造，非真实数据。本次样例有 10 家客户，植入的 13 处错误全部抓出。",
+"先看端到端流程。输入有三类：上期对账单和客户的回签状态、本期流水，以及明细账和总账。处理分五步：先看本期期初是否等于上期对账单期末，上期客户有没有回签；再给每笔流水做准入检查，客户、业务类型、方向、期间和流水号都要合格；然后逐户生成对账单；接着把对账单期末和明细账比对，差额拆成剔除流水的影响和未解释的部分；最后应收和预收分别和总账核对。",
+"这是架构全景图。左侧是上期对账单、本期流水和明细账总账，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，每月初运行。中间是 Amazon Quick 内部的五层：编排层由模型充当指挥官，不接触原始往来数据，只看结果摘要；数据接入层读取五类数据；确定性校验层由本地沙箱里的脚本做衔接、准入、生成和核对；证据层记录每户对账单和每笔剔除原因；交付层输出四种格式的报告，状态为可发送的对账单，再由使用者确认后自行通过邮件发给客户。",
+"这套方案是怎么实现的。用户一句客户对账单即可触发。模型负责理解意图和编排工具，不接触原始往来数据，只看结果摘要；计算在本地沙箱里由确定性脚本完成。有三个关键设计：销售、收款、退货、折让全部计入；每笔流水先过准入检查，不合格的剔除并写明原因；对账单要和上期、明细账、总账三方都对上，才标记为可发送。",
+"来看样例数据和一张对账单。左边是虚构的示例公司34九月对账单：期初、本月每一笔销售、收款和退货，最后是期末。我们一共构造了 10 家客户、101 笔流水，其中一户多付了钱，形成预收。植错版植入了 13 处，分衔接、流水、核对和数据质量四类，比如本期期初和上月对账单对不上、十月的销售记进了九月、同一笔流水记了两次；还追加了一行五月的旧对账单和一行重复的八月对账单，用来检验上期对账单是否按期间取值。",
+"核心判据是三方对上才能发。第一，跨期衔接，本期期初要等于上期对账单期末，上期对账单按客户和对账期间取上一期，同一期有多行就判为不符；上期客户如果没回签或有异议，先要处理。第二，流水准入，客户要登记、类型要在白名单里、方向要和类型一致、日期要在本期、流水号不能重复。第三，恒等式，期末等于期初加销售，减收款、退货和折让。第四，对账单要和明细账对上，差额拆成剔除流水的影响和未解释的部分。第五，应收和预收分别和总账对上。",
+"来看结果。全平版 10 户全部可发送。植错版可发送 2 户、待核实 5 户、不符 3 户，13 处全部抓出。五月的旧对账单不参与判断，期初不符的那户仍是不符；八月重复的两行报为上期对账单重复，那户从待核实变为不符；一笔发生额写成带千分位的数字，按数据质量问题报出，不按 0 计，所属那户少了这笔流水，从可发送变为待核实。",
+"这是发送前总览，上面是不能直接发送的客户，下面是被剔除的流水，每一笔都写明了原因。流水共 104 笔，进入对账单 98 笔，剔除 6 笔。植错版的应收合计比总账多约 8.6 万元，差异就来自这些问题。",
+"还要讲清判据的边界。漏记退货折让、上期差异没处理就结转，这两类脚本已经补上。但还有两类需要外部数据：一笔收款如果记错了客户，两户合计不变，内部核对发现不了，需要对接银行回单上的付款人，这正是下一个场景收款核销要做的；对账单发出去后客户认不认，要跟踪回函，逾期未回就执行替代程序。",
+"最后是过程可回溯。第一，逐户留痕，每户记录期初、上期期末、各类发生额、期末、明细账差额的拆解和状态。第二，剔除有据，每一笔剔除的流水都写明了原因，流水笔数守恒。第三，指纹加复算，七个输入文件各记下指纹，同一份数据在本机独立复算，结果与云端一致。Excel 报告里每户一张分表，就是可以直接寄出的对账单。",
+"部署上，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，每月初生成，可发送的对账单由使用者确认后自行通过邮件发给客户。跨期衔接、流水准入、三方核对和状态闸门这套思路，还能复用到供应商对账单回函、员工借款确认和关联方往来确认函。总结一句：客户对账单生成不只是套公式，而是保证发出去的每一张都经过核对，一分不错。"
+];
+var dd=document.getElementById('dots');
+for(var i=0;i<TOTAL;i++){var e=document.createElement('div');e.className='dot'+(i===0?' on':'');e.onclick=(function(k){return function(){go(k)}})(i);dd.appendChild(e);}
+function go(n){if(n<0||n>=TOTAL)return;var sl=document.querySelectorAll('.slide');sl.forEach(function(x){x.classList.remove('active')});sl[n].classList.add('active');cur=n;document.querySelectorAll('.dot').forEach(function(x,k){x.className='dot'+(k===n?' on':'')});document.getElementById('info').textContent=(n+1)+' / '+TOTAL;if(speaking)speakCur();}
+function splitS(t){var p=t.replace(/([。！？；])/g,'$1\n').split('\n');return p.map(function(x){return x.trim()}).filter(function(x){return x.length>0});}
+function voice(){var v=synth.getVoices();return v.find(function(x){return x.name.indexOf('Yunxi')>-1})||v.find(function(x){return x.name.indexOf('Yunyang')>-1})||v.find(function(x){return x.name.indexOf('Yunjian')>-1})||v.find(function(x){return x.lang==='zh-CN'&&x.name.indexOf('Microsoft')>-1})||v.find(function(x){return x.lang==='zh-CN'})||v.find(function(x){return x.lang.indexOf('zh')===0});}
+function speakCur(){if(!speaking)return;synth.cancel();var ss=splitS(narr[cur]);if(!ss.length)ss=[narr[cur]];var i=0;var bar=document.getElementById('subbar'),tx=document.getElementById('subtxt');function nx(){if(!speaking){bar.classList.remove('on');return;}if(i>=ss.length){bar.classList.remove('on');if(speaking&&cur<TOTAL-1){go(cur+1);setTimeout(speakCur,400);}else if(speaking){toggle();}return;}bar.classList.add('on');tx.textContent=ss[i];var u=new SpeechSynthesisUtterance(ss[i]);u.lang='zh-CN';u.rate=0.9;u.pitch=1.1;var vo=voice();if(vo)u.voice=vo;u.onend=function(){i++;nx();};synth.speak(u);}nx();}
+function toggle(){if(speaking){speaking=false;synth.cancel();document.getElementById('subbar').classList.remove('on');document.getElementById('play').textContent='▶ 开始讲解';}else{speaking=true;document.getElementById('play').textContent='■ 停止讲解';speakCur();}}
+function fs(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1);}else if(e.key==='ArrowLeft'){go(cur-1);}else if(e.key==='f'||e.key==='F'){fs();}else if(e.key==='Escape'&&speaking){toggle();}});
+if(synth.onvoiceschanged!==undefined)synth.onvoiceschanged=function(){};
+</script><style id="light-theme-v2">
+html,body{background:#eef2f8!important;color:#1e2a44!important}
+.sub{color:#4a5676!important}
+.card,.kpi,.fstep{background:#fff!important;border:1px solid #e4eaf2!important;box-shadow:0 1px 3px rgba(20,35,66,.07),0 1px 2px rgba(20,35,66,.04)!important}
+.card h3{color:#2b6cb0!important}.card p{color:#3f4c66!important}
+.btrack{background:#e6ebf3!important}
+.kpi .l,.fstep .d,.bval,.bname,.info,.legend{color:#5f6b82!important}
+.fstep .n{color:#8a94a8!important}.farr{color:#aab4c6!important}
+table th{color:#6b7589!important;border-bottom:1px solid #dbe2ec!important}
+table td{border-bottom:1px solid #eef1f6!important}
+.quote{background:rgba(43,108,176,.08)!important;border-left-color:#2b6cb0!important;color:#27496d!important}
+.ctrl{background:rgba(248,250,253,.97)!important;border-top:1px solid #e2e8f1!important}
+.ctrl button{background:#fff!important;border:1px solid #d4dce8!important;color:#28334a!important}
+.ctrl button.pri{background:#2b7fd4!important;border-color:#2b7fd4!important;color:#fff!important}
+.dot{background:#c4cedd!important}.dot.on{background:#2b7fd4!important}
+.judge{background:rgba(43,127,212,.12)!important;color:#2366a8!important}
+</style>
+</body></html>

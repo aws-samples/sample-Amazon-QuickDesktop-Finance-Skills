@@ -1,0 +1,109 @@
+{
+  "clean": {
+    "summary~keys": [
+      "matched"
+    ],
+    "data_issues~len": 0,
+    "all_ok": false,
+    "total": 120,
+    "match_rate": 100.0,
+    "issue_types~keys": [
+      "双向一致",
+      "未标记关联方",
+      "未标记关联方余额"
+    ],
+    "elimination_gap": 0.0,
+    "gap_by_sign~keys": [
+      "净额",
+      "正差合计",
+      "毛额",
+      "负差合计"
+    ],
+    "consistent_amount": 110555975.07,
+    "entity_net~keys": [
+      "示例子公司A",
+      "示例子公司B",
+      "示例子公司C",
+      "示例子公司D",
+      "示例子公司E",
+      "示例集团母公司"
+    ],
+    "pair_hints~len": 0,
+    "conservation~keys": [
+      "交易数",
+      "全体净额",
+      "台账行数"
+    ],
+    "scope~keys": [
+      "complete",
+      "leaked_amount",
+      "leaked_balances",
+      "marked",
+      "marked_not_in_registry",
+      "registry",
+      "unmarked_related",
+      "verifiable"
+    ],
+    "inputs~len": 4,
+    "results~len": 120
+  },
+  "error": {
+    "summary~keys": [
+      "difference",
+      "exception",
+      "matched"
+    ],
+    "data_issues~len": 1,
+    "all_ok": false,
+    "total": 122,
+    "match_rate": 84.4,
+    "issue_types~keys": [
+      "交易类型不一致",
+      "单边登记",
+      "双向一致",
+      "对手方不符",
+      "数据质量·数值无法解析",
+      "方向错误",
+      "时间性差异",
+      "未标记关联方",
+      "未标记关联方余额",
+      "疑似交易号不一致",
+      "重复入账",
+      "金额不符"
+    ],
+    "elimination_gap": 2639707.15,
+    "gap_by_sign~keys": [
+      "净额",
+      "正差合计",
+      "毛额",
+      "负差合计"
+    ],
+    "consistent_amount": 96005757.93,
+    "entity_net~keys": [
+      "示例子公司A",
+      "示例子公司B",
+      "示例子公司C",
+      "示例子公司D",
+      "示例子公司E",
+      "示例集团母公司"
+    ],
+    "pair_hints~len": 2,
+    "conservation~keys": [
+      "交易数",
+      "全体净额",
+      "台账行数"
+    ],
+    "scope~keys": [
+      "complete",
+      "leaked_amount",
+      "leaked_balances",
+      "marked",
+      "marked_not_in_registry",
+      "registry",
+      "unmarked_related",
+      "verifiable"
+    ],
+    "inputs~len": 4,
+    "results~len": 122
+  }
+}

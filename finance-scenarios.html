@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>财务 AI 场景库 · 20 个可验证的财务核对场景 — Amazon Quick Desktop Playbook</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC',-apple-system,'Microsoft YaHei',sans-serif;background:#eef2f8;color:#1e2a44;padding:28px 32px 48px;line-height:1.6}
+.wrap{max-width:1240px;margin:0 auto}
+.hero{text-align:center;margin-bottom:18px}
+.tag{display:inline-block;font-size:11.5px;color:#dd6b20;background:rgba(246,173,85,.1);border:1px solid rgba(246,173,85,.3);border-radius:6px;padding:4px 12px;margin-bottom:12px}
+h1{font-size:30px;font-weight:800;line-height:1.3}h1 .hl{background:linear-gradient(90deg,#4299e1,#6d4ad8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:14px;color:#5f6b82;margin-top:8px}
+.kpibar{display:flex;gap:14px;justify-content:center;margin:18px 0 8px;flex-wrap:wrap}
+.kpi{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:12px;padding:12px 24px;text-align:center}.kpi .v{font-size:24px;font-weight:800}.kpi .l{font-size:11px;color:#5f6b82}
+.nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}.nav a{font-size:12px;color:#3f4c66;text-decoration:none;background:rgba(30,45,75,.05);border:1px solid rgba(30,45,75,.1);border-radius:14px;padding:3px 12px}
+h2{font-size:17px;font-weight:700;color:#2b7fd4;margin:28px 0 12px;display:flex;align-items:center;gap:8px}h2::before{content:'';width:4px;height:17px;background:#2b7fd4;border-radius:2px}
+.intro{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.box{background:rgba(30,45,75,.035);border:1px solid rgba(30,45,75,.1);border-radius:12px;padding:16px 18px}
+.box p{font-size:13px;color:#3f4c66;margin-bottom:8px}
+.flow{display:flex;align-items:stretch;gap:6px;margin:10px 0 6px;flex-wrap:wrap}
+.fs{flex:1;min-width:120px;border-radius:10px;padding:10px 12px;font-size:12px;background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1)}.fs b{display:block;font-size:13px;margin-bottom:2px}
+.fa{align-self:center;color:#aab4c6;font-size:18px}
+.gl{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}.g{font-size:12px;color:#5f6b82}.g b{color:#1e2a44;margin-right:6px}
+.dom{margin-top:22px}
+.dh{display:flex;align-items:baseline;gap:10px;border-left:4px solid;padding:4px 12px;margin-bottom:12px;background:rgba(30,45,75,.02);flex-wrap:wrap}
+.dk{font-size:17px;font-weight:800}.dz{font-size:16px;font-weight:700}.de{font-size:11px;color:#8a94a8}.dd{font-size:12.5px;color:#5f6b82}.dc{margin-left:auto;font-size:12px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px}
+.card{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:7px}
+.ch{display:flex;align-items:center;gap:8px}.num{font-size:18px;font-weight:800;min-width:34px}.nm{font-size:15px;font-weight:700}
+.st{margin-left:auto;font-size:10.5px;border:1px solid;border-radius:10px;padding:1px 8px;white-space:nowrap}
+.what{font-size:13px;color:#1e2a44}
+.row{font-size:12px;color:#5f6b82}.row b{display:inline-block;color:#3f4c66;background:rgba(30,45,75,.06);border-radius:4px;padding:0 6px;margin-right:6px;font-weight:600;font-size:11px}
+.foot2{display:flex;gap:6px;flex-wrap:wrap}.chip{font-size:10.5px;color:#3f4c66;background:rgba(30,45,75,.06);border-radius:4px;padding:2px 8px}.chip.trig{color:#2b7fd4;font-family:Menlo,monospace}
+a.chip{text-decoration:none;color:inherit}
+.res{font-size:11.5px;color:#b45309;border-top:1px dashed rgba(30,45,75,.1);padding-top:6px;margin-top:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}td,th{padding:9px 10px;border-bottom:1px solid rgba(30,45,75,.07);text-align:left;vertical-align:middle}
+th{color:#5f6b82;font-weight:600;font-size:12px}.jn{font-weight:700;color:#1e2a44;white-space:nowrap}.jx{color:#5f6b82}
+.jc span{display:inline-block;font-size:10.5px;font-family:Menlo,monospace;background:rgba(30,45,75,.07);border-radius:4px;padding:1px 6px;margin:1px}
+.prog{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}.pd{width:30px;height:24px;border-radius:5px;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#0a0e1a}
+.legend{font-size:12px;color:#5f6b82;display:flex;gap:16px;flex-wrap:wrap}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.three .box b{color:#2b6fb0}
+.end{text-align:center;font-size:11.5px;color:#8a94a8;margin-top:28px}
+@media(max-width:900px){.intro,.three{grid-template-columns:1fr}.gl{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="hero" id="seg-hero"><div style="text-align:left;margin-bottom:10px"><a href="index.html#practices" style="font-size:13px;color:#5f6b82;text-decoration:none">← 返回 Playbook</a></div><div class="tag">⚠️ 以下数据及企业均为构造，非真实数据</div>
+<div style="font-size:24px;font-weight:800;letter-spacing:.8px;color:#4299e1;margin-bottom:14px">Amazon Quick Desktop</div><h1>财务 AI 场景库 · <span class="hl">20 个可验证的财务核对场景</span></h1>
+<div class="sub">每个场景一句话调起 · 确定性脚本计算 · 结果逐条可回溯 · 敏感数据可留在本机计算，只回传结果摘要</div>
+<div class="kpibar"><div class="kpi"><div class="v" style="color:#4299e1">20</div><div class="l">场景 / 已注册 Skill</div></div>
+<div class="kpi"><div class="v" style="color:#48bb78">5</div><div class="l">业务流程域</div></div>
+<div class="kpi"><div class="v" style="color:#dd6b20">6</div><div class="l">类验收判据</div></div>
+<div class="kpi"><div class="v" style="color:#8b5cf0">20/20</div><div class="l">带构造样例与自检（#1 #2 含已知缺口）</div></div></div>
+<div class="nav"><a href="#R2R">R2R · 记录到报告</a><a href="#P2P">P2P · 采购到付款</a><a href="#O2C">O2C · 订单到收款</a><a href="#TAX">TAX · 税务与薪酬</a><a href="#ASSET">ASSET · 资产管理</a><a href="#judge">六类判据</a></div></div>
+
+<h2 id="seg-intro">先看全局：钱在公司里怎么流动</h2>
+<div class="intro"><div class="box">
+<p>公司的财务工作，大体是围绕“钱进、钱出、记下来、报出去”展开的。20 个场景分布在五个环节里：</p>
+<div class="flow">
+<div class="fs" style="border-color:#dd6b20"><b style="color:#dd6b20">P2P 采购到付款</b>买材料、收货、付款给供应商</div><div class="fa">→</div>
+<div class="fs" style="border-color:#2b7fd4"><b style="color:#2b7fd4">R2R 记录到报告</b>每笔记账，月末出报表</div><div class="fa">←</div>
+<div class="fs" style="border-color:#48bb78"><b style="color:#48bb78">O2C 订单到收款</b>卖货、开票、把钱收回</div></div>
+<div class="flow">
+<div class="fs" style="border-color:#8b5cf0"><b style="color:#8b5cf0">TAX 税务与薪酬</b>算税、报税、发工资、交社保</div>
+<div class="fs" style="border-color:#e53e3e"><b style="color:#e53e3e">ASSET 资产管理</b>设备和库存，账实相符</div></div>
+<p style="margin-top:8px">每个环节都有大量“必须对得上”的数：两边金额相等、分项加起来等于总数、两份记录说的是同一件事。这些场景的共同点是——<b style="color:#2b6fb0">错了能用规则立刻查出来</b>，所以可以交给确定性脚本做，而不必依赖 AI 的判断。</p>
+</div>
+<div class="box"><p style="color:#2b6fb0;font-weight:600">名词速查（非财务专业可先看这里）</p><div class="gl"><div class="g"><b>凭证</b><span>每笔业务的标准记账单，写明日期、事由、金额、科目，附原始单据</span></div><div class="g"><b>借 / 贷</b><span>每笔账从两边记，两边金额必须相等；不必纠结字面意思</span></div><div class="g"><b>科目</b><span>记账用的分类，如银行存款、应付账款、管理费用</span></div><div class="g"><b>应收 / 应付</b><span>别人欠我们的钱 / 我们欠别人的钱</span></div><div class="g"><b>三张报表</b><span>资产负债表（家当快照）、利润表（赚亏）、现金流量表（现金进出）</span></div><div class="g"><b>勾稽（gōu jī）</b><span>报表之间、报表内部必须对得上的数量关系</span></div><div class="g"><b>账龄</b><span>一笔欠款已经欠了多久</span></div><div class="g"><b>核销</b><span>把收到的钱对应到具体发票上销账</span></div><div class="g"><b>进项 / 销项</b><span>买东西时付的增值税 / 卖东西时收的增值税</span></div><div class="g"><b>盘盈 / 盘亏</b><span>实物比账上多 / 比账上少</span></div></div></div></div>
+
+<div class="dom" id="R2R"><div class="dh" style="border-color:#2b7fd4"><span class="dk" style="color:#2b7fd4">R2R</span><span class="dz">记录到报告</span><span class="de">Record to Report</span><span class="dd">从每一笔记账，到月末出报表</span><span class="dc" style="color:#2b7fd4">7 个场景</span></div>
+<div class="grid"><div class="card">
+  <div class="ch"><span class="num" style="color:#2b7fd4">#1</span><span class="nm">资金周报生成器</span><span class="st" style="color:#dd6b20;border-color:#dd6b20">自检含已知缺口</span></div>
+  <div class="what">集团财务每周向管理层汇报：钱在哪、够不够用、有没有风险。</div>
+  <div class="row"><b>难在哪</b>数据散在各子公司的银行流水、理财台账和资金计划里，人工汇总耗时长，口径还容易不统一。</div>
+  <div class="row"><b>Skill 查什么</b>汇总 5 份数据源，算出余额、收支、计划执行、理财到期、风险预警等 16 个维度，输出报告、仪表盘和 PDF。</div>
+  <div class="foot2"><a class="chip trig" href="skills/treasury-weekly-report/solution.html">▶ 资金周报</a><span class="chip">判据：守恒 · 恒等式</span></div>
+  <div class="res">样例：植错版植入 5 处预警，自检标出 2 项已知缺口（W001 未实现、W003 名称不一致漏报）；讲解页数字由 5 万笔构造数据实跑得出</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#2b7fd4">#2</span><span class="nm">月末银行对账</span><span class="st" style="color:#dd6b20;border-color:#dd6b20">自检含已知缺口</span></div>
+  <div class="what">企业账上记的每一笔银行收支，要和银行的实际流水逐笔对上。</div>
+  <div class="row"><b>难在哪</b>两边常有时间差：企业已记、银行还没到账（在途）；银行已扣手续费、付了利息，企业还没入账。</div>
+  <div class="row"><b>Skill 查什么</b>按参考号、日期加金额、摘要相似度三层匹配，把只在企业账上的和只在银行的分开列出来。</div>
+  <div class="foot2"><a class="chip trig" href="skills/finance-monthly-reconciliation/solution.html">▶ 月末对账</a><span class="chip">判据：守恒 · 差异归因 · 交叉一致</span></div>
+  <div class="res">样例：ERP 120 笔、银行 100 笔：匹配 80 笔，仅企业 40 笔，仅银行 20 笔</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#2b7fd4">#3</span><span class="nm">报表勾稽自检</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">月末出的三张报表（家当快照、赚亏情况、现金流水），报出前检查前后能不能对上。</div>
+  <div class="row"><b>难在哪</b>三张表之间有很多必须相等的数，比如资产 = 负债 + 所有者权益、月末现金 = 银行存款。一处填错，会牵连好几处。</div>
+  <div class="row"><b>Skill 查什么</b>逐项核对 17 条关系：每层小计等于明细之和、会计恒等式、三张表之间的对应关系。</div>
+  <div class="foot2"><a class="chip trig" href="skills/report-tieout-check/solution.html">▶ 报表勾稽</a><span class="chip">判据：守恒 · 恒等式</span></div>
+  <div class="res">样例：植入 5 处错误 → 触发 8 条告警，顺着告警能找回 5 个源头</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#2b7fd4">#4</span><span class="nm">总账凭证合规</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">每一笔业务都要填一张记账凭证（相当于标准格式的记账单），过账前要审核。</div>
+  <div class="row"><b>难在哪</b>一个月几百到几千张，人工翻看容易漏：两边金额不相等、科目用错、记错月份、缺发票附件。</div>
+  <div class="row"><b>Skill 查什么</b>检查借贷两边是否相等、科目和月份是否合法、科目与业务是否匹配（如发工资只能动应付工资和银行存款）、摘要附件是否齐全。</div>
+  <div class="foot2"><a class="chip trig" href="skills/gl-voucher-compliance/solution.html">▶ 凭证合规</a><span class="chip">判据：恒等式 · 白名单</span></div>
+  <div class="res">样例：201 张凭证（植错版 203 张），植入 24 处错误全部抓出</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#2b7fd4">#5</span><span class="nm">关联方往来对账</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">集团内 A 公司卖给 B 公司，A 记应收、B 记应付，两边金额必须对称。</div>
+  <div class="row"><b>难在哪</b>两边对不上，合并报表时就抵消不干净，会虚增收入和资产；还有关联方根本没被登记，账再平也发现不了。</div>
+  <div class="row"><b>Skill 查什么</b>逐笔核对对手方、方向、金额、类型、时间；把正负差异分开列；并用工商股权登记检查关联方清单是否完整。</div>
+  <div class="foot2"><a class="chip trig" href="skills/intercompany-reconciliation/solution.html">▶ 关联方往来</a><span class="chip">判据：守恒 · 交叉一致 · 唯一性</span></div>
+  <div class="res">样例：120 笔交易，植入 18 处错误全部抓出；另发现 2 家未登记关联方，余额 506.57 万</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#2b7fd4">#6</span><span class="nm">合并抵消检查</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">集团出合并报表时，要把集团内部的交易“抵掉”——左手倒右手不能算收入。</div>
+  <div class="row"><b>难在哪</b>抵消分录要借贷平衡，往来、交易、投资、现金流四类都得做；漏做或做错，合并报表就失真。</div>
+  <div class="row"><b>Skill 查什么</b>检查每条抵消分录借贷是否平衡、科目是否匹配、四类是否齐全；再用往来台账、期末存货、子公司报表和工商持股比例，独立算出每笔应抵多少，并核对哪些公司该纳入合并。</div>
+  <div class="foot2"><a class="chip trig" href="skills/consolidation-elimination-check/solution.html">▶ 合并抵消</a><span class="chip">判据：守恒 · 恒等式 · 白名单 · 交叉一致</span></div>
+  <div class="res">样例：80 笔抵消分录，植入 10 处错误全部抓出；其中联营企业被误纳入合并</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#2b7fd4">#7</span><span class="nm">期间费用分摊复核</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">一次付了一整年的房租或保险，要按月分摊到各期费用里，不能全算在付款当月。</div>
+  <div class="row"><b>难在哪</b>分摊期数、金额容易算错，会出现摊多了、摊少了或提前摊完。</div>
+  <div class="row"><b>Skill 查什么</b>核对月摊额乘以月数是否等于原值；用起始月独立推算已摊了几期，核对累计摊销和账面余额；再把台账算出的本月应摊额和总账实际入账逐笔比对，检查科目、漏记、重记和台账外摊销。</div>
+  <div class="foot2"><a class="chip trig" href="skills/expense-allocation-check/solution.html">▶ 费用分摊</a><span class="chip">判据：守恒 · 恒等式 · 交叉一致</span></div>
+  <div class="res">样例：72 笔待摊费用，植入 12 处错误全部抓出</div>
+</div></div></div><div class="dom" id="P2P"><div class="dh" style="border-color:#dd6b20"><span class="dk" style="color:#dd6b20">P2P</span><span class="dz">采购到付款</span><span class="de">Procure to Pay</span><span class="dd">从下采购单，到把钱付给供应商</span><span class="dc" style="color:#dd6b20">4 个场景</span></div>
+<div class="grid"><div class="card">
+  <div class="ch"><span class="num" style="color:#dd6b20">#8</span><span class="nm">三单匹配核对</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">付款给供应商前，核对三张单：采购订单（买多少、什么价）、入库单（实际到了多少）、发票（对方要多少钱）。</div>
+  <div class="row"><b>难在哪</b>数量或单价对不上、货没到先开票、同一张发票开两次，都可能导致多付钱。</div>
+  <div class="row"><b>Skill 查什么</b>按订单行把分批的入库单和发票归集到一起，核对数量（开票不超过收货）、单价、发票金额、供应商和日期；发票号去空格和前导零后查重，再用供应商+金额+日期查换号重开；最后按“只为收到的货付款”算出可付和暂缓金额。</div>
+  <div class="foot2"><a class="chip trig" href="skills/three-way-match/solution.html">▶ 三单匹配</a><span class="chip">判据：守恒 · 交叉一致 · 唯一性</span></div>
+  <div class="res">样例：158 个订单行，植入 13 处错误全部抓出；植错版暂缓付款 272 万</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#dd6b20">#9</span><span class="nm">发票查验与重复报销</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">员工报销时，检查同一张发票有没有被报过两次。</div>
+  <div class="row"><b>难在哪</b>有人把同一张票报两次，或改一两个字符、拆成两次各报一半，简单查号码发现不了。</div>
+  <div class="row"><b>Skill 查什么</b>先把发票号去空格、全角转半角、去前导零再比对；在本期和上季度已报销发票里查重，用“开票方税号+金额+日期”查换号重开；再查同人同店同日的拆分报销和连号，并核对报销金额、日期、费用类别与上限。</div>
+  <div class="foot2"><a class="chip trig" href="skills/invoice-verification-dedup/solution.html">▶ 发票查验</a><span class="chip">判据：白名单 · 唯一性</span></div>
+  <div class="res">样例：全平版 260 笔报销 + 420 张历史发票；植错版植入 19 笔问题，全部抓出</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#dd6b20">#10</span><span class="nm">应付账龄分析</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">把欠供应商的钱按“欠了多久”分组：未到期、1–30 天……90 天以上。</div>
+  <div class="row"><b>难在哪</b>不分组就看不出哪些快逾期、欠款集中在哪几家，付款计划排不好，还可能影响供应商关系。</div>
+  <div class="row"><b>Skill 查什么</b>按发票日期加主数据账期独立推算到期日，用付款明细核实已付和未付，查重复入账、重复付款和无应付单的付款；只对欠款按逾期天数分组，多付单列，明细合计与总账核对，并给出未来 30 天付款计划。</div>
+  <div class="foot2"><a class="chip trig" href="skills/ap-aging/solution.html">▶ 应付账龄</a><span class="chip">判据：守恒 · 恒等式 · 交叉一致 · 唯一性</span></div>
+  <div class="res">样例：209 张应付，植入 12 处错误全部抓出；植错版台账与总账差 20 万</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#dd6b20">#11</span><span class="nm">供应商对账</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">我方账上欠供应商多少，和供应商寄来的对账单上说的要对上。</div>
+  <div class="row"><b>难在哪</b>双方常有一方漏记、一方多记、金额录错，对不上时要把差额逐项说清楚。</div>
+  <div class="row"><b>Skill 查什么</b>先核对是否回函、双方期初是否相等、各自余额是否等于期初加发生；再按归一化单号逐笔匹配，找回单号录错，识别重复入账、金额不符、方向记反和类型错误；截止日附近的单边项归为在途，最后逐家供应商把差额拆解到每个来源。</div>
+  <div class="foot2"><a class="chip trig" href="skills/supplier-reconciliation/solution.html">▶ 供应商对账</a><span class="chip">判据：差异归因 · 恒等式 · 交叉一致 · 唯一性</span></div>
+  <div class="res">样例：8 家供应商 457 笔明细，植入 13 处全部抓出；植错版差额 65 万逐项闭合</div>
+</div></div></div><div class="dom" id="O2C"><div class="dh" style="border-color:#48bb78"><span class="dk" style="color:#48bb78">O2C</span><span class="dz">订单到收款</span><span class="de">Order to Cash</span><span class="dd">从卖出货，到把钱收回来</span><span class="dc" style="color:#48bb78">3 个场景</span></div>
+<div class="grid"><div class="card">
+  <div class="ch"><span class="num" style="color:#48bb78">#12</span><span class="nm">应收账龄与坏账</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">客户欠我们的钱按拖欠时长分组；拖得越久越可能收不回，要按比例提前计提“坏账准备”。</div>
+  <div class="row"><b>难在哪</b>分组或比例算错，利润就被高估或低估。</div>
+  <div class="row"><b>Skill 查什么</b>按信用期推算到期日，用收款明细核实已收（期后收款不提前冲减），查重复开票、多收和无发票收款；检查计提率是否越久越高；破产、涉诉客户单项计提，其余按六档账龄计提，最后和账面坏账准备对比算出补提或冲回。</div>
+  <div class="foot2"><a class="chip trig" href="skills/ar-aging-baddebt/solution.html">▶ 应收账龄</a><span class="chip">判据：守恒 · 恒等式 · 白名单 · 交叉一致</span></div>
+  <div class="res">样例：170 张发票，植入 12 处全部抓出；植错版需补提坏账准备 360 万</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#48bb78">#13</span><span class="nm">客户对账单生成</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">定期给每个客户发对账单：期初欠多少 + 本期新开票 − 本期回款 = 期末欠多少，请客户确认。</div>
+  <div class="row"><b>难在哪</b>手工做单容易漏票、漏回款，客户一核对就发现数不对。</div>
+  <div class="row"><b>Skill 查什么</b>先核对本期期初是否等于上期对账单期末、上期客户是否回签；每笔流水检查客户、业务类型、方向、期间和流水号，不合格的剔除并写明原因；逐户按期初+销售−收款−退货−折让生成对账单，再与明细账、总账核对，只有三方对上才标记为可发送。</div>
+  <div class="foot2"><a class="chip trig" href="skills/customer-statement/solution.html">▶ 客户对账单</a><span class="chip">判据：守恒 · 恒等式 · 白名单 · 交叉一致 · 唯一性</span></div>
+  <div class="res">样例：10 家客户，植入 13 处全部抓出</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#48bb78">#14</span><span class="nm">收款核销匹配</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">客户打来一笔钱，要对应到具体哪几张发票上“销掉”。</div>
+  <div class="row"><b>难在哪</b>一笔钱可能付多张发票，也可能只付一部分；金额相同的两张发票互换核销，总数照样对得上。</div>
+  <div class="row"><b>Skill 查什么</b>以银行到账为准：每张收款单都要对上银行流水，金额和日期一致，并用付款账户认出是哪家客户付的；每条核销检查发票存在、未作废、同一客户、不重复，不超收款也不超应收；不合格的核销单列不冲减，最后三方守恒、期末应收对总账。</div>
+  <div class="foot2"><a class="chip trig" href="skills/ar-settlement-matching/solution.html">▶ 收款核销</a><span class="chip">判据：守恒 · 白名单 · 交叉一致 · 唯一性</span></div>
+  <div class="res">样例：66 笔收款、142 张发票，植入 14 处全部抓出</div>
+</div></div></div><div class="dom" id="TAX"><div class="dh" style="border-color:#8b5cf0"><span class="dk" style="color:#8b5cf0">TAX</span><span class="dz">税务与薪酬</span><span class="de">Tax & Payroll</span><span class="dd">该交的税、该发的工资，算对、报对</span><span class="dc" style="color:#8b5cf0">4 个场景</span></div>
+<div class="grid"><div class="card">
+  <div class="ch"><span class="num" style="color:#8b5cf0">#15</span><span class="nm">增值税进销项匹配</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">卖东西收的税（销项）减去买东西付的税（进项），差额就是要交的增值税。</div>
+  <div class="row"><b>难在哪</b>单张发票的税额算错、税率填成不存在的档位，都会让应交税额出错。</div>
+  <div class="row"><b>Skill 查什么</b>逐张验算税额是否等于金额乘税率，检查税率是否合法、是否与商品服务类别对应；识别重复、作废和找不到蓝字的红字发票；进项要抬头是本公司、本月勾选、不是餐饮或员工福利才可抵扣；最后按销项−可抵扣进项−上期留抵算出应纳税额。</div>
+  <div class="foot2"><a class="chip trig" href="skills/vat-input-output-matching/solution.html">▶ 增值税进销项</a><span class="chip">判据：恒等式 · 白名单 · 唯一性</span></div>
+  <div class="res">样例：216 张发票，植入 13 处全部抓出；不经校验应纳税额会多算 9.2 万</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#8b5cf0">#16</span><span class="nm">增值税申报一致性</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">每月报税填的申报表，要和账上的发票汇总一致。</div>
+  <div class="row"><b>难在哪</b>申报时手工填栏次，容易少填或多填，申报表自身的计算也可能不自洽。</div>
+  <div class="row"><b>Skill 查什么</b>把主表各栏和账载逐栏对比；核对附表一每档销项税额是否等于销售额乘税率、税率是否合法；附表合计是否等于主表对应栏；验算主表内部的应抵扣、实际抵扣、应纳税额、期末留抵四个恒等式；并检查应纳税额与期末留抵是否同时为正。</div>
+  <div class="foot2"><a class="chip trig" href="skills/vat-filing-consistency/solution.html">▶ 增值税申报</a><span class="chip">判据：恒等式 · 白名单 · 交叉一致</span></div>
+  <div class="res">样例：14 项校验，植入 10 处全部命中（9 处触发 12 项不符，1 处数据质量问题）；植错版少报应纳 0.8 万</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#8b5cf0">#17</span><span class="nm">社保公积金基数核定</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">公司给员工交社保和公积金，缴费基数有上下限（通常为当地平均工资的 60%–300%）。</div>
+  <div class="row"><b>难在哪</b>基数超出上下限、费率用错，会多交或少交，少交有合规风险。</div>
+  <div class="row"><b>Skill 查什么</b>按上年度月均工资在社平60%-300%之间托底封顶核定社保基数、公积金按最低工资到封顶核定，新入职按首月工资；检查基数是否越界、同一员工四个社保险种基数是否一致、费率是否合规、缴费额是否等于基数乘费率；再查漏缴险种和花名册外人员，按核定基数重算应缴与实缴比对。</div>
+  <div class="foot2"><a class="chip trig" href="skills/social-insurance-base-check/solution.html">▶ 社保基数</a><span class="chip">判据：恒等式 · 白名单 · 交叉一致</span></div>
+  <div class="res">样例：30 人五险一金 150 条，植入 12 处全部命中；植错版实缴与应缴差 0.51 万</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#8b5cf0">#18</span><span class="nm">薪酬个税复核</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">工资个税按“累计预扣法”：从 1 月累计到当月的收入，扣掉五险一金、专项附加扣除和每月 5,000 元，再查税率表算税。</div>
+  <div class="row"><b>难在哪</b>累计口径、扣除项、税率档位任何一处算错，就会多扣或少扣。专项附加扣除由员工自行申报，企业无法核实。</div>
+  <div class="row"><b>Skill 查什么</b>把提供的税率表和法定基准逐档比对；逐月累加应纳税所得额、查法定表重算当月应预扣（累计个税减上月累计）；检查累计数是否等于逐月加总、累计已预扣是否与上月衔接；核对减除费用每月5000、专项附加是否有备案且不超上限、个税是否为负、每人是否九个月齐全。</div>
+  <div class="foot2"><a class="chip trig" href="skills/payroll-iit-check/solution.html">▶ 个税复核</a><span class="chip">判据：守恒 · 恒等式 · 白名单</span></div>
+  <div class="res">样例：12 人 9 个月 108 条，植入 11 处全部命中（10 处触发 32 条不符，1 处数据质量问题）；少缴 0.30 万、多缴 1.69 万</div>
+</div></div></div><div class="dom" id="ASSET"><div class="dh" style="border-color:#e53e3e"><span class="dk" style="color:#e53e3e">ASSET</span><span class="dz">资产管理</span><span class="de">Asset</span><span class="dd">账上的东西，仓库里真的有</span><span class="dc" style="color:#e53e3e">2 个场景</span></div>
+<div class="grid"><div class="card">
+  <div class="ch"><span class="num" style="color:#e53e3e">#19</span><span class="nm">固定资产卡片与实物核对</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">账上登记的电脑、设备、车辆（资产卡片），要和实际盘点看到的一一对上。</div>
+  <div class="row"><b>难在哪</b>有卡无物（丢了或报废没销账）、有物无卡（没入账）、存放地点或使用部门不对，折旧也可能算错。</div>
+  <div class="row"><b>Skill 查什么</b>把资产卡片和实物盘点做账实交叉，识别有账无物的盘亏、有物无账的盘盈、部门位置不符；验证账面净值等于原值减累计折旧；按直线法逐卡重算月折旧和累计折旧；检查累计折旧不超可折旧总额、净值不低于残值、使用年限和残值率符合类别规则、已处置资产是否已销账。</div>
+  <div class="foot2"><a class="chip trig" href="skills/fixed-asset-verification/solution.html">▶ 固定资产盘点</a><span class="chip">判据：恒等式 · 白名单 · 交叉一致</span></div>
+  <div class="res">样例：40 张卡片，植入 12 处全部命中；植错版盘亏敞口 53.5 万</div>
+</div><div class="card">
+  <div class="ch"><span class="num" style="color:#e53e3e">#20</span><span class="nm">存货盘点差异处理</span><span class="st" style="color:#4299e1;border-color:#4299e1">已验收</span></div>
+  <div class="what">仓库账上的库存数量，和实际点数对比。</div>
+  <div class="row"><b>难在哪</b>盘盈和盘亏可能互相抵消，净差看着不大，实际两边都有大额问题；计量单位混用也会导致错算。</div>
+  <div class="row"><b>Skill 查什么</b>按 SKU 加仓库把账存和实盘配对，识别账有实无、实有账无、盘盈盘亏；检查单位是否一致；差异率在类别损耗率内的算正常损耗、超出的才是异常；按金额给重大差异分级；检查数量非负、单价大于零、同一 SKU 各仓位是否漏盘；最后差异守恒（净=盘盈−盘亏，分向毛额）。</div>
+  <div class="foot2"><a class="chip trig" href="skills/inventory-count-variance/solution.html">▶ 存货盘点</a><span class="chip">判据：守恒 · 白名单 · 交叉一致</span></div>
+  <div class="res">样例：59 个 SKU-仓位，植入 11 处全部命中</div>
+</div></div></div>
+
+<h2 id="judge">六类验收判据：凭什么说它没算错</h2>
+<div class="box"><table><tr><th>判据</th><th>意思</th><th>生活中的例子</th><th>用到的场景</th></tr><tr><td class="jn">守恒</td><td>分项加起来必须等于总数</td><td class="jx">购物小票：每项加总 = 合计</td><td class="jc"><span>#1</span> <span>#2</span> <span>#3</span> <span>#5</span> <span>#6</span> <span>#7</span> <span>#8</span> <span>#10</span> <span>#12</span> <span>#13</span> <span>#14</span> <span>#18</span> <span>#20</span></td></tr><tr><td class="jn">差异归因</td><td>差额要拆解到具体哪几笔</td><td class="jx">对不上 500 元，要说清是哪几笔造成的</td><td class="jc"><span>#2</span> <span>#11</span></td></tr><tr><td class="jn">恒等式</td><td>按定义必然相等的等式</td><td class="jx">资产 = 负债 + 所有者权益</td><td class="jc"><span>#1</span> <span>#3</span> <span>#4</span> <span>#6</span> <span>#7</span> <span>#10</span> <span>#11</span> <span>#12</span> <span>#13</span> <span>#15</span> <span>#16</span> <span>#17</span> <span>#18</span> <span>#19</span></td></tr><tr><td class="jn">白名单</td><td>只放行规定范围内的取值</td><td class="jx">税率只能是 13%、9%、6% 等法定档</td><td class="jc"><span>#4</span> <span>#6</span> <span>#9</span> <span>#12</span> <span>#13</span> <span>#14</span> <span>#15</span> <span>#16</span> <span>#17</span> <span>#18</span> <span>#19</span> <span>#20</span></td></tr><tr><td class="jn">交叉一致</td><td>两个独立来源记的同一件事必须一致</td><td class="jx">我记欠你 1 万，你记我欠你 1 万</td><td class="jc"><span>#2</span> <span>#5</span> <span>#6</span> <span>#7</span> <span>#8</span> <span>#10</span> <span>#11</span> <span>#12</span> <span>#13</span> <span>#14</span> <span>#16</span> <span>#17</span> <span>#19</span> <span>#20</span></td></tr><tr><td class="jn">唯一性</td><td>关键字段不能重复</td><td class="jx">同一张发票只能报销一次</td><td class="jc"><span>#5</span> <span>#8</span> <span>#9</span> <span>#10</span> <span>#11</span> <span>#13</span> <span>#14</span> <span>#15</span></td></tr></table>
+<p style="margin-top:10px;font-size:12px;color:#5f6b82">每类判据都有它抓不到的错误（例如只查名单内的数据、正负差异互相抵消），这些“盲区”已逐一写进每个 Skill 的判据覆盖声明，并标注是可以自己补上，还是需要接入外部数据。</p></div>
+
+<h2 id="seg-method">方法论架构</h2>
+<div class="three">
+<div class="box"><p><b>🎯 场景筛选三问</b></p><p>① 有守恒或恒等关系吗？<br>② 有权威的数据来源吗？<br>③ 错了能立刻发现吗？<br>三问都满足才纳入。</p></div>
+<div class="box"><p><b>🧱 Skill 两层架构</b></p><p><b>上层不折旧</b>：目标、输入输出契约、验收判据、盲区声明（核心资产，跨平台）。<br><b>下层可替换</b>：连接器、脚本、路径（随平台演进）。</p></div>
+<div class="box"><p><b>🔒 分工与数据模式</b></p><p>模型当指挥官，只看结果摘要，不接触原始数据；本地沙箱里的确定性脚本当操作员。<br>数据模式看源头：源头在云端就云上处理；源头在本地就走本地模式，原始文件留在本机，由本机脚本完成计算，只把结果摘要回传给云端模型。授权文件夹需关闭全文索引与知识图谱抽取（Allow full file context、Always remember file information），这两项开启后会上传该文件夹的文件。</p></div></div>
+<div class="end">财务 AI 场景库 · 基于 Amazon Quick · 所有数据及企业均为构造，非真实数据<br>示例代码，仅供非生产用途（This is sample code, for non-production usage）；部署前请与安全和法务团队确认满足组织的安全、监管与合规要求</div>
+</div><style id="light-theme-v2">
+.tag{color:#9c4221!important;background:#fff4e6!important;border:1.5px solid #dd6b20!important;font-weight:700!important;font-size:12.5px!important;padding:6px 16px!important}
+body{background:#eef2f8!important;color:#1e2a44!important}
+.box,.kpi,.card,.fs{background:#fff!important;border:1px solid #e4eaf2!important;box-shadow:0 1px 3px rgba(20,35,66,.07),0 1px 2px rgba(20,35,66,.04)!important}
+.nav a{background:#fff!important;border:1px solid #d9e1ec!important;color:#3f4c66!important}
+.dh{background:#f3f6fb!important}
+.row b,.chip{background:#eef2f8!important;color:#3f4c66!important}
+.chip.trig{color:#2b7fd4!important}
+.jc span{background:#eef2f8!important;color:#2b6cb0!important}
+.res{color:#b45309!important;border-top:1px dashed #e4eaf2!important}
+table td,table th{border-bottom:1px solid #e8edf4!important}
+.fa{color:#aab4c6!important}
+h2{color:#2b6cb0!important}h2::before{background:#2b6cb0!important}
+</style>
+
+<style id="tts-style">
+body{padding-bottom:150px!important}
+#seg-active-hl{outline:3px solid #2b7fd4!important;outline-offset:4px;border-radius:12px;transition:outline .3s}
+#capbar{position:fixed;left:0;right:0;bottom:56px;height:auto;min-height:48px;max-height:88px;overflow:hidden;
+  background:rgba(16,28,48,.86);backdrop-filter:blur(8px);color:#fff;display:none;align-items:center;justify-content:center;
+  text-align:center;padding:10px 40px;font-size:16px;line-height:1.5;z-index:9998}
+#capbar.on{display:flex}
+#capbar .cap-done{color:#ffd479}#capbar .cap-rest{color:#cbd5e1}
+#ttsbar{position:fixed;left:0;right:0;bottom:0;height:56px;background:rgba(248,250,253,.97);backdrop-filter:blur(8px);
+  border-top:1px solid #e2e8f1;display:flex;align-items:center;justify-content:center;gap:10px;z-index:9999;padding:0 16px}
+#ttsbar button{background:#fff;border:1px solid #d4dce8;color:#28334a;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;transition:all .2s}
+#ttsbar button:hover{background:#eef4fb;border-color:#2b7fd4;color:#2b7fd4}
+#ttsbar button.pri{background:#2b7fd4;border-color:#2b7fd4;color:#fff}
+#ttsbar button.pri:hover{background:#1e6fc0}
+#ttsbar .seg-ind{font-size:12px;color:#5f6b82;min-width:72px;text-align:center}
+</style>
+<div id="capbar"></div>
+<div id="ttsbar">
+  <button class="pri" id="tts-play">▶ 开始讲解</button>
+  <button id="tts-stop">■ 停止</button>
+  <button id="tts-prev">◀ 上一段</button>
+  <button id="tts-next">下一段 ▶</button>
+  <span class="seg-ind" id="tts-ind">— / —</span>
+  <button id="tts-full">⛶ 全屏</button>
+</div>
+<script id="tts-script">
+(function(){
+  var SEG=[["seg-hero", "这是财务 AI 场景库，涵盖二十个可验证的财务核对场景。每个场景都能一句话调起，由确定性脚本计算，结果逐条可回溯，敏感数据还能留在本机计算，只把结果摘要回传给云端模型。二十个场景、五个业务流程域、六类验收判据，每个场景都带构造样例和自检脚本，其中资金周报和月末银行对账的自检标出了几项已知缺口。需要说明，以下数据及企业均为构造，非真实数据。"], ["seg-intro", "先看全局，钱在公司里是怎么流动的。财务工作大体围绕钱进、钱出、记下来、报出去展开，二十个场景分布在五个环节里。它们的共同点是：错了能用规则立刻查出来，所以可以交给确定性脚本，而不必依赖 AI 的判断。"], ["R2R", "第一个流程域是记录到报告，从每一笔记账到月末出报表，共七个场景：资金周报、月末银行对账、报表勾稽自检、总账凭证合规、关联方往来对账、合并抵消检查、期间费用分摊复核。"], ["P2P", "第二个流程域是采购到付款，从下采购单到把钱付给供应商，共四个场景：三单匹配核对、发票查验与重复报销、应付账龄分析、供应商对账。核心是付款前把该付的、不该付的分清楚。"], ["O2C", "第三个流程域是订单到收款，从卖出货到把钱收回，共三个场景：应收账龄与坏账计提、客户对账单生成、收款核销匹配。"], ["TAX", "第四个流程域是税务与薪酬，该交的税、该发的工资要算对报对，共四个场景：增值税进销项匹配、增值税申报一致性、社保公积金基数核定、薪酬个税复核。"], ["ASSET", "第五个流程域是资产管理，账上的东西仓库里真的要有，共两个场景：固定资产卡片与实物核对、存货盘点差异处理。"], ["judge", "这二十个场景靠六类验收判据来证明没算错：守恒、差异归因、恒等式、白名单、交叉一致、唯一性。每一类都有生活中的例子，也都有它抓不到的盲区，这些盲区已逐一写进每个 Skill 的判据覆盖声明，并标注能否自己补上、还是需要接入外部数据。"], ["seg-method", "最后是方法论架构。场景筛选三问：有守恒或恒等关系吗、有权威数据来源吗、错了能立刻发现吗，三问都满足才纳入。Skill 分两层：上层是目标、输入输出契约、验收判据和盲区声明，不折旧、跨平台；下层是连接器、脚本和路径，随平台演进可替换。分工上，模型当指挥官，只看结果摘要、不接触原始数据，本地沙箱里的确定性脚本当操作员；数据模式看源头，源头在云端就云上处理；源头在本地就走本地模式，原始文件留在本机，由本机脚本完成计算，只把结果摘要回传给云端模型。"]];
+  var gen=0, idx=-1, playing=false, voice=null;
+  var cap=document.getElementById('capbar'), ind=document.getElementById('tts-ind');
+  function pickVoice(){
+    var vs=speechSynthesis.getVoices()||[];
+    var pref=['Xiaoxiao','晓晓','Xiaoyi','晓伊','Yunxi','云希','Yunyang','云扬'];
+    for(var i=0;i<pref.length;i++){for(var j=0;j<vs.length;j++){if((vs[j].name||'').indexOf(pref[i])>=0)return vs[j];}}
+    for(var j=0;j<vs.length;j++){if((vs[j].lang||'').toLowerCase().indexOf('zh')===0)return vs[j];}
+    return vs[0]||null;
+  }
+  function hl(el){
+    var old=document.getElementById('seg-active-hl'); if(old)old.id='';
+    if(el){el.id='seg-active-hl'; el.scrollIntoView({behavior:'smooth',block:'center'});}
+  }
+  function showCap(txt,n){
+    cap.classList.add('on');
+    var done=document.createElement('span'), rest=document.createElement('span');
+    done.className='cap-done'; done.textContent=txt.slice(0,n);
+    rest.className='cap-rest'; rest.textContent=txt.slice(n);
+    cap.textContent=''; cap.appendChild(done); cap.appendChild(rest);
+  }
+  function speak(i){
+    if(i<0||i>=SEG.length){stop();return;}
+    idx=i; gen++; var myGen=gen; playing=true;
+    ind.textContent=(i+1)+' / '+SEG.length;
+    var seg=SEG[i], el=document.getElementById(seg[0]), txt=seg[1];
+    hl(el); showCap(txt,0);
+    speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(txt);
+    u.lang='zh-CN'; if(voice)u.voice=voice; u.rate=.95; u.pitch=1.0;
+    var est=null, t0=Date.now();
+    u.onboundary=function(e){ if(myGen!==gen)return; if(e.charIndex!=null)showCap(txt,e.charIndex); };
+    est=setInterval(function(){ if(myGen!==gen){clearInterval(est);return;}
+      var n=Math.min(txt.length, Math.floor((Date.now()-t0)/120)); showCap(txt,n); },120);
+    u.onend=function(){ if(myGen!==gen)return; clearInterval(est); showCap(txt,txt.length);
+      if(playing && idx<SEG.length-1){ setTimeout(function(){ if(myGen===gen)speak(idx+1); },500); }
+      else if(idx>=SEG.length-1){ playing=false; } };
+    speechSynthesis.speak(u);
+  }
+  function stop(){ gen++; playing=false; speechSynthesis.cancel(); cap.classList.remove('on');
+    var old=document.getElementById('seg-active-hl'); if(old)old.id=''; }
+  document.getElementById('tts-play').onclick=function(){ voice=voice||pickVoice(); speak(idx<0?0:idx); };
+  document.getElementById('tts-stop').onclick=stop;
+  document.getElementById('tts-prev').onclick=function(){ voice=voice||pickVoice(); speak(Math.max(0,(idx<0?0:idx)-1)); };
+  document.getElementById('tts-next').onclick=function(){ voice=voice||pickVoice(); speak(Math.min(SEG.length-1,(idx<0?-1:idx)+1)); };
+  document.getElementById('tts-full').onclick=function(){ if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen&&document.exitFullscreen(); };
+  if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=function(){voice=pickVoice();};
+  ind.textContent='— / '+SEG.length;
+})();
+</script>
+
+</body></html>

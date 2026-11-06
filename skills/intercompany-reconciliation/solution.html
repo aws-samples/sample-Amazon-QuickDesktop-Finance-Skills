@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><title>#5 关联方往来对账 · 方案讲解 — Amazon Quick Desktop 财务场景库</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'PingFang SC',-apple-system,'Microsoft YaHei',sans-serif;background:#0a0e1a;color:#1e2a44}
+.slide{position:absolute;inset:0;height:calc(100% - 54px);display:none;flex-direction:column;justify-content:center;padding:32px 56px;opacity:0;transition:opacity .5s}
+.slide.active{display:flex;opacity:1}
+.brand{position:absolute;top:20px;left:56px;font-size:12px;color:#4299e1;font-weight:700}
+.tag{position:absolute;top:18px;right:56px;font-size:10px;color:#f6ad55;background:rgba(246,173,85,.1);border:1px solid rgba(246,173,85,.28);border-radius:5px;padding:4px 10px}
+h1{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.3}
+h1 .hl{background:linear-gradient(90deg,#4299e1,#6d4ad8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:14px;color:#5f6b82;margin-bottom:20px;line-height:1.6;max-width:760px}
+.kpi-row{display:flex;gap:14px;margin:10px 0}
+.kpi{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:14px 18px;flex:1}
+.kpi .v{font-size:26px;font-weight:800}.kpi .l{font-size:11px;color:#5f6b82;margin-top:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:12px;padding:18px}
+.card h3{font-size:15px;margin-bottom:8px;color:#2b7fd4}.card p{font-size:12.5px;color:#3f4c66;line-height:1.65}
+.brow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bname{width:120px;font-size:11px;color:#3f4c66;text-align:right;flex-shrink:0}
+.btrack{flex:1;height:14px;background:rgba(30,45,75,.05);border-radius:3px;overflow:hidden}
+.bfill{height:14px;border-radius:3px}.bval{width:48px;font-size:11px;color:#5f6b82}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:11px;color:#5f6b82}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{text-align:left;color:#718096;font-weight:600;padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.12);font-size:9.5px}
+td{padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.05)}
+.flow{display:flex;align-items:center;gap:6px;margin:14px 0}
+.fstep{flex:1;background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:12px;text-align:center}
+.fstep .n{font-size:10px;color:#718096;font-weight:700}.fstep .t{font-size:12.5px;font-weight:600;margin:3px 0}.fstep .d{font-size:10px;color:#5f6b82}
+.farr{color:#4a5568;font-size:16px}
+.quote{border-left:3px solid #4299e1;background:rgba(66,153,225,.08);border-radius:0 8px 8px 0;padding:12px 16px;font-size:13.5px;color:#2b6fb0;font-style:italic;line-height:1.55;margin-top:14px}
+.judge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(66,153,225,.15);color:#2b7fd4;margin:2px}
+.ctrl{position:fixed;bottom:0;left:0;right:0;height:54px;background:rgba(10,14,26,.97);border-top:1px solid rgba(30,45,75,.08);display:flex;align-items:center;padding:0 20px;gap:10px;z-index:99}
+.ctrl button{background:rgba(30,45,75,.1);border:1px solid rgba(30,45,75,.15);color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer}
+.ctrl button.pri{background:#4299e1;border-color:#4299e1}
+.dots{flex:1;display:flex;gap:6px;justify-content:center}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(30,45,75,.2);cursor:pointer}
+.dot.on{background:#2b7fd4;width:22px;border-radius:4px}
+.info{font-size:11px;color:#718096;min-width:56px;text-align:right}
+.sub-bar{position:fixed;bottom:54px;left:0;right:0;background:rgba(0,0,0,.75);color:#fff;padding:10px 24px;text-align:center;font-size:14px;display:none;z-index:98}
+.sub-bar.on{display:block}
+</style></head><body>
+<div class="slide active" data-i="0" style="justify-content:center;text-align:center">
+  <div class="tag">⚠️ 数据及企业均为构造，非真实数据</div>
+  <div style="max-width:900px;margin:0 auto"><div style="font-size:24px;font-weight:800;letter-spacing:.8px;color:#4299e1;margin-bottom:14px">Amazon Quick Desktop</div>
+  <h1>关联方往来对账 <span class="hl">合并抵消前的双向核对</span></h1>
+  <p class="sub" style="margin:0 auto 20px">同一笔集团内交易，一方记应收、一方记应付，金额必须对称。核心判据：<b style="color:#2b7fd4">守恒 · 交叉一致 · 唯一性</b>，并核对关联方清单是否完整。</p>
+  <div class="kpi-row" style="max-width:820px;margin:0 auto">
+    <div class="kpi"><div class="v" style="color:#4299e1">122</div><div class="l">笔关联交易（植错版 · 6 家主体）</div></div>
+    <div class="kpi"><div class="v" style="color:#48bb78">18/18</div><div class="l">植入错误全部命中</div></div>
+    <div class="kpi"><div class="v" style="color:#f6ad55">507 万</div><div class="l">未标记关联方余额</div></div>
+  </div></div></div>
+<div class="slide" data-i="1"><div class="brand">关联方往来 · 端到端流程</div>
+  <h1 style="font-size:23px">端到端方案：输入 → 处理 → 输出</h1>
+  <div style="display:grid;grid-template-columns:0.95fr 1.15fr;gap:18px;margin-top:8px">
+    <div class="card"><h3>① 输入契约</h3>
+      <table style="font-size:11px"><tr><th>字段</th><th>说明</th></tr><tr><td style="color:#2b7fd4;white-space:nowrap">关联往来台账</td><td style="color:#3f4c66">记账实体, 对手方, 交易号, 交易类型, 金额（应收+/应付−）, 日期</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">关联方清单</td><td style="color:#3f4c66">财务系统标记 + 工商股权登记（主体, 关系, 来源）</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">全部客商余额</td><td style="color:#3f4c66">记账实体, 客商名称, 往来类型, 期末余额</td></tr></table></div>
+    <div class="card"><h3>③ 输出契约</h3>
+      <ul style="font-size:12px;color:#3f4c66;padding-left:16px;margin-top:4px"><li style="margin-bottom:5px">逐交易结果：双方金额、净额、状态（一致/差异/异常）、问题标签</li><li style="margin-bottom:5px">汇总：一致率、抵消差额（正差/负差/毛额）、各主体净额、配对提示</li><li style="margin-bottom:5px">未标记关联方清单及余额 + 证据 JSON + 网页/PDF/Markdown/Excel 报告</li></ul></div>
+  </div>
+  <div style="margin-top:14px"><div style="font-size:12px;color:#2b7fd4;margin-bottom:6px;font-weight:600">② 处理步骤（确定性）</div>
+    <div class="flow" style="margin:0"><div class="fstep"><div class="n">1</div><div class="t" style="font-size:11.5px">按交易号归集</div><div class="d">双方各一条
+单边/重复</div></div><div class="farr">›</div><div class="fstep"><div class="n">2</div><div class="t" style="font-size:11.5px">对称核对</div><div class="d">对手方·方向
+·金额</div></div><div class="farr">›</div><div class="fstep"><div class="n">3</div><div class="t" style="font-size:11.5px">一致性</div><div class="d">类型一致
+时间性</div></div><div class="farr">›</div><div class="fstep"><div class="n">4</div><div class="t" style="font-size:11.5px">抵消守恒</div><div class="d">全体净额
+分向列示</div></div><div class="farr">›</div><div class="fstep"><div class="n">5</div><div class="t" style="font-size:11.5px">范围完备</div><div class="d">清单比对
+量化余额</div></div></div></div>
+</div>
+<div class="slide" data-i="2"><div class="brand">关联方往来 · 架构全景</div><h1 style="font-size:23px">架构全景：一句话触发，五层完成校验</h1><div style="display:flex;justify-content:center;align-items:center;flex:1;margin-top:4px"><svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-height:calc(100vh - 300px)"><defs><marker id="am63b3ed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2b7fd4"/></marker><marker id="amb794f4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#8b5cf0"/></marker><marker id="am48bb78" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#48bb78"/></marker><marker id="amf6ad55" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f6ad55"/></marker><filter id="ash"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.18"/></filter><linearGradient id="agc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2b7fd4" stop-opacity="0.10"/><stop offset="100%" stop-color="#2b7fd4" stop-opacity="0.02"/></linearGradient></defs><text x="95" y="22" font-size="13" font-weight="700" fill="#2b7fd4" text-anchor="middle">输入与触发</text><rect x="20" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="58" font-size="16" text-anchor="middle">📒</text><text x="95.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">关联往来台账</text><text x="95.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">各子公司汇总</text><rect x="20" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="134" font-size="16" text-anchor="middle">🏷️</text><text x="95.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">关联方清单</text><text x="95.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">财务标记 + 工商登记</text><rect x="20" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="210" font-size="16" text-anchor="middle">📊</text><text x="95.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">全部客商余额</text><text x="95.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">应收 / 应付 / 其他</text><rect x="20" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="95.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">一句话触发</text><text x="95.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">“关联方往来”</text><rect x="20" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="362" font-size="16" text-anchor="middle">⏰</text><text x="95.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">定时任务（使用者配置）</text><text x="95.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">每月合并前</text><rect x="240" y="16" width="480" height="412" rx="16" fill="url(#agc)" stroke="#2b7fd4" stroke-width="1.4" stroke-dasharray="6,3"/><text x="480" y="40" font-size="14.5" font-weight="800" fill="#2b6fb0" text-anchor="middle">Amazon Quick</text><rect x="262" y="52" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#8b5cf0" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="75" font-size="16">🧭</text><text x="304" y="75" font-size="12.5" font-weight="700" fill="#8b5cf0">① 编排层 · 模型（指挥官）</text><text x="280" y="94" font-size="10.5" fill="#3f4c66">识别意图、编排工具；不接触原始往来数据，只看结果摘要</text><rect x="262" y="116" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="139" font-size="16">📥</text><text x="304" y="139" font-size="12.5" font-weight="700" fill="#2b7fd4">② 数据接入层</text><text x="280" y="158" font-size="10.5" fill="#3f4c66">读取三类数据，按交易号归集；统一应收记正、应付记负</text><rect x="262" y="180" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#48bb78" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="203" font-size="16">⚙️</text><text x="304" y="203" font-size="12.5" font-weight="700" fill="#48bb78">③ 确定性校验层 · 本地沙箱（操作员）</text><text x="280" y="222" font-size="10.5" fill="#3f4c66">校验脚本：对称 · 方向 · 金额 · 类型 · 时间 · 守恒</text><rect x="262" y="244" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#f6ad55" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="267" font-size="16">🧾</text><text x="304" y="267" font-size="12.5" font-weight="700" fill="#f6ad55">④ 证据层</text><text x="280" y="286" font-size="10.5" fill="#3f4c66">逐交易双方金额/净额/标签 + 输入指纹 + 时间戳</text><rect x="262" y="308" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="331" font-size="16">📤</text><text x="304" y="331" font-size="12.5" font-weight="700" fill="#2b7fd4">⑤ 交付层</text><text x="280" y="350" font-size="10.5" fill="#3f4c66">网页 · PDF · Markdown · Excel；脱敏摘要由使用者自行分发</text><rect x="262" y="374" width="436" height="40" rx="8" fill="rgba(183,148,244,0.08)" stroke="#8b5cf0" stroke-width="1" stroke-dasharray="4,2"/><text x="280" y="399" font-size="15">🧩</text><text x="304" y="399" font-size="11.5" font-weight="700" fill="#8b5cf0">Skill 固化：intercompany-reconciliation</text><text x="696" y="399" font-size="10" fill="#5f6b82" text-anchor="end">上层判据不折旧 · 下层可替换</text><text x="865" y="22" font-size="13" font-weight="700" fill="#48bb78" text-anchor="middle">输出端</text><rect x="790" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="58" font-size="16" text-anchor="middle">🌐</text><text x="865.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">网页报告</text><text x="865.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">待调整清单</text><rect x="790" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="134" font-size="16" text-anchor="middle">📕</text><text x="865.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">PDF / Excel</text><text x="865.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">报送 · 筛选复核</text><rect x="790" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="210" font-size="16" text-anchor="middle">📝</text><text x="865.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">证据 JSON</text><text x="865.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">可回溯 · 可复算</text><rect x="790" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="865.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">脱敏摘要</text><text x="865.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">由使用者自行分发</text><rect x="790" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="362" font-size="16" text-anchor="middle">🗄️</text><text x="865.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">Agent Files 归档</text><text x="865.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">逐月留档</text><line x1="172" y1="68" x2="258" y2="143" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="144" x2="258" y2="146" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="220" x2="258" y2="150" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="296" x2="258" y2="79" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="172" y1="372" x2="258" y2="85" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="700" y1="335" x2="786" y2="68" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="335" x2="786" y2="144" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="271" x2="786" y2="220" stroke="#f6ad55" stroke-width="1.6" marker-end="url(#amf6ad55)"/><line x1="700" y1="340" x2="786" y2="296" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="345" x2="786" y2="372" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/></svg></div><div class="quote" style="margin-top:6px">全部本地模式下，集团往来数据、校验计算和明细结果都留在本机，模型只看到结果摘要；云上模式则由连接器取数、云端沙箱计算。两种模式只看数据源头在哪。</div></div>
+<div class="slide" data-i="3"><div class="brand">关联方往来 · 是什么实现的</div>
+  <h1 style="font-size:23px">实现机制：从对话到 <span class="hl">可复用 Skill</span></h1>
+  <p class="sub" style="margin-bottom:14px">模型当"指挥官"做意图识别与工具编排，本地沙箱当"操作员"跑确定性脚本——最终固化为一个 Skill</p>
+  <div class="flow" style="margin:6px 0 14px">
+    <div class="fstep" style="border-top:3px solid #4299e1"><div class="t">🗣️ 触发</div><div class="d">一句话 / 连接器<br>/ 定时任务（使用者配置）</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #6d4ad8"><div class="t">🧭 模型编排</div><div class="d">意图识别<br>工具编排(指挥官)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #48bb78"><div class="t">🔒 本地沙箱</div><div class="d">确定性脚本<br>数据本地(操作员)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #ed8936"><div class="t">✅ 判据校验</div><div class="d">守恒 · 交叉一致<br>唯一性</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #f6ad55"><div class="t">📊 产出</div><div class="d">报告+仪表盘<br>+沉淀归档</div></div>
+  </div>
+  <div class="two" style="gap:16px">
+    <div class="card" style="border-color:rgba(99,179,237,.4)"><h3>🧱 固化为 Skill（核心）</h3>
+      <p style="font-size:12px;line-height:1.7">这套流程被写成一个 <b style="color:#2b7fd4">SKILL.md</b>，一句"<b>关联方往来</b>"即可复用：<br>
+      · <b style="color:#2b6fb0">上层不折旧</b>：目标+输入契约+处理步骤+输出契约+<b>验收判据</b>（跨平台、核心IP）<br>
+      · <b style="color:#9ae6b4">下层可替换</b>：连接器+API+脚本+路径（随平台演进替换）</p></div>
+    <div class="card"><h3>⚙️ 本场景实现</h3>
+      <p style="font-size:12px;line-height:1.7">
+      · 连接器：各子公司往来台账、工商股权登记（外部来源）<br>
+      · 确定性脚本：<code style="color:#f6ad55">intercompany_recon_v2.py</code>（含守恒自检 assert）<br>
+      · Skill 名：<code style="color:#2b7fd4">intercompany-reconciliation</code><br>
+      · 敏感数据走 <b style="color:#9ae6b4">本地安全执行</b>（financial-local-safety）</p></div>
+  </div>
+</div>
+<div class="slide" data-i="4"><div class="brand">关联方往来 · 样例数据</div>
+  <h1 style="font-size:23px">构造数据：六家主体、三个月的集团内往来</h1>
+  <div class="two">
+    <div><div class="card"><h3>规模（示例集团 · 虚构）</h3>
+    <p>母公司 + 5 家子公司 · 2026-07 至 2026-09 · <b>120</b> 笔交易 · <b>240</b> 条对称分录</p>
+    <table style="font-size:11px;margin-top:8px"><tr><th>交易类型</th><th style="text-align:right">笔数</th></tr><tr><td>内部销售</td><td style="text-align:right">44</td></tr><tr><td>内部服务</td><td style="text-align:right">25</td></tr><tr><td>资金拆借</td><td style="text-align:right">19</td></tr><tr><td>代垫费用</td><td style="text-align:right">17</td></tr><tr><td>租赁</td><td style="text-align:right">15</td></tr></table>
+    <p style="font-size:11px;margin-top:8px">另附：工商股权登记 8 家、全部客商往来余额 34 条</p></div></div>
+    <div><div class="card"><h3>两个版本做对照</h3>
+    <p>· <b style="color:#48bb78">全平版</b>：每笔双方对称入账，抵消差额 0<br><br>· <b style="color:#f56565">植错版</b>：植入 18 处错误<br>
+    金额不符 4（含 ±8,000 一对互相抵消）· 单边 2 · 交易号不一致 2<br>方向错误 2 · <b style="color:#f6ad55">对手方不符 2 · 类型不一致 2 · 重复入账 1</b> · 时间性 2<br><b>数据质量</b>：台账一笔金额写成 "12,345.60"（无法解析，登记为数据质量问题，该行不参与计算）</p></div></div>
+  </div>
+  <div class="quote">两个版本都附同一份工商股权登记：其中两家关联方没有被财务系统标记——这是台账再怎么对平也发现不了的问题。</div></div>
+<div class="slide" data-i="5"><div class="brand">关联方往来 · 核心判据</div>
+  <h1 style="font-size:23px">逐笔六项核对 + 三项守恒 + 范围完备</h1>
+  <table style="font-size:12px">
+    <tr><th>判据</th><th>规则</th><th>结果</th></tr>
+    <tr><td>完整性</td><td>同一交易号双方各一条，不多不少</td><td style="color:#fc8181">单边 / 重复 → 异常</td></tr>
+    <tr><td><b style="color:#f6ad55">对手方对称</b></td><td>A 的对手方 = B 的记账实体，反之亦然</td><td style="color:#fc8181">异常</td></tr>
+    <tr><td>方向</td><td>一方应收（+）、一方应付（−）</td><td style="color:#fc8181">异常</td></tr>
+    <tr><td>交叉一致</td><td>A 额 + B 额 = 0</td><td style="color:#f6ad55">差异</td></tr>
+    <tr><td><b style="color:#f6ad55">类型一致</b> · 时间性</td><td>交易类型相同；入账日期差 ≤ 5 天</td><td style="color:#f6ad55">差异</td></tr>
+    <tr><td>抵消守恒</td><td>全体净额 = 各交易净额之和，正负分开列示</td><td style="color:#5f6b82">自检</td></tr>
+    <tr><td><b style="color:#f6ad55">范围完备</b></td><td>财务标记 ↔ 工商登记，量化未标记关联方余额</td><td style="color:#f6ad55">需外部来源</td></tr>
+  </table></div>
+<div class="slide" data-i="6"><div class="brand">关联方往来 · 校验结果</div>
+  <h1 style="font-size:23px">植错版：18 处错误全部命中，无误报</h1>
+  <div class="two">
+    <div style="display:flex;gap:10px;justify-content:center">
+      <div class="card" style="text-align:center"><h3>全平版</h3><svg viewBox="0 0 120 120" width="116" height="116"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#48bb78" stroke-width="16" stroke-dasharray="301.6 0.0" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2a44">100.0%</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">双向一致</text></svg><p style="font-size:12px">抵消差额 0</p></div>
+      <div class="card" style="text-align:center"><h3>植错版</h3><svg viewBox="0 0 120 120" width="116" height="116"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#f56565" stroke-width="16" stroke-dasharray="254.5 47.0" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2a44">84.4%</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">双向一致</text></svg><p style="font-size:12px">异常 11 · 差异 8</p></div></div>
+    <div class="card"><h3>问题类型（交易笔数）</h3><div class="brow"><div class="bname" style="width:118px">单边登记</div><div class="btrack"><div class="bfill" style="width:100%;background:#f56565"></div></div><div class="bval">6</div></div><div class="brow"><div class="bname" style="width:118px">疑似交易号不一致</div><div class="btrack"><div class="bfill" style="width:67%;background:#f6ad55"></div></div><div class="bval">4</div></div><div class="brow"><div class="bname" style="width:118px">金额不符</div><div class="btrack"><div class="bfill" style="width:67%;background:#f6ad55"></div></div><div class="bval">4</div></div><div class="brow"><div class="bname" style="width:118px">方向错误</div><div class="btrack"><div class="bfill" style="width:33%;background:#f56565"></div></div><div class="bval">2</div></div><div class="brow"><div class="bname" style="width:118px">对手方不符</div><div class="btrack"><div class="bfill" style="width:33%;background:#f56565"></div></div><div class="bval">2</div></div><div class="brow"><div class="bname" style="width:118px">交易类型不一致</div><div class="btrack"><div class="bfill" style="width:33%;background:#f6ad55"></div></div><div class="bval">2</div></div><div class="brow"><div class="bname" style="width:118px">时间性差异</div><div class="btrack"><div class="bfill" style="width:33%;background:#f6ad55"></div></div><div class="bval">2</div></div><div class="brow"><div class="bname" style="width:118px">重复入账</div><div class="btrack"><div class="bfill" style="width:17%;background:#f56565"></div></div><div class="bval">1</div></div>
+      <p style="font-size:11px;color:#5f6b82;margin-top:6px">交易号录错时两边各成一条单边记录，所以单边计 6 笔；其中 4 笔已通过配对提示找到对称记录。</p></div>
+  </div></div>
+<div class="slide" data-i="7"><div class="brand">关联方往来 · 抵消差额</div>
+  <h1 style="font-size:23px">只看净额，会低估待调整的规模</h1>
+  <div class="three">
+    <div class="card" style="text-align:center"><h3>正差合计</h3><p style="font-size:24px;color:#fc8181;font-weight:800">776 万</p></div>
+    <div class="card" style="text-align:center"><h3>负差合计</h3><p style="font-size:24px;color:#2b7fd4;font-weight:800">-512 万</p></div>
+    <div class="card" style="text-align:center"><h3>净额 / 毛额</h3><p style="font-size:24px;font-weight:800"><span style="color:#f6ad55">264 万</span> / <span style="color:#1e2a44">1,288 万</span></p></div>
+  </div>
+  <div class="quote">全体往来净额 264 万，但正负差异的毛额是 1,288 万，将近 5 倍。其中 ±8,000 的一对金额不符在净额里完全消失——分向列示后才看得见。</div></div>
+<div class="slide" data-i="8"><div class="brand">关联方往来 · 待调整清单</div>
+  <h1 style="font-size:23px">问题交易明细（异常优先，前 7 笔）</h1>
+  <div class="card"><table style="font-size:10.5px"><tr><th>交易号</th><th>类型</th><th>主体</th><th style="text-align:right">A 额</th><th style="text-align:right">B 额</th><th>状态</th><th>问题</th></tr><tr><td>IC-202607-0037</td><td>资金拆借</td><td>示例集团母公司→—</td><td style="text-align:right">3,870,378</td><td style="text-align:right">—</td><td style="color:#fc8181">异常</td><td style="text-align:left;font-size:10px">单边登记；疑似交易号不一致</td></tr><tr><td>IC-202607-0037X</td><td>资金拆借</td><td>示例子公司B→—</td><td style="text-align:right">-3,870,378</td><td style="text-align:right">—</td><td style="color:#fc8181">异常</td><td style="text-align:left;font-size:10px">单边登记；疑似交易号不一致</td></tr><tr><td>IC-202608-0064</td><td>内部销售</td><td>示例子公司A→—</td><td style="text-align:right">1,461,193</td><td style="text-align:right">—</td><td style="color:#fc8181">异常</td><td style="text-align:left;font-size:10px">单边登记</td></tr><tr><td>IC-202608-0069</td><td>内部销售</td><td>示例子公司A→—</td><td style="text-align:right">1,158,745</td><td style="text-align:right">—</td><td style="color:#fc8181">异常</td><td style="text-align:left;font-size:10px">单边登记；疑似交易号不一致</td></tr><tr><td>IC-202608-0069X</td><td>内部销售</td><td>示例集团母公司→—</td><td style="text-align:right">-1,158,745</td><td style="text-align:right">—</td><td style="color:#fc8181">异常</td><td style="text-align:left;font-size:10px">单边登记；疑似交易号不一致</td></tr><tr><td>IC-202609-0120</td><td>内部销售</td><td>示例子公司C→—</td><td style="text-align:right">921,167</td><td style="text-align:right">—</td><td style="color:#fc8181">异常</td><td style="text-align:left;font-size:10px">单边登记</td></tr><tr><td>IC-202608-0044</td><td>代垫费用</td><td>示例子公司E→示例子公司A</td><td style="text-align:right">112,050</td><td style="text-align:right">112,050</td><td style="color:#fc8181">异常</td><td style="text-align:left;font-size:10px">方向错误(双方同向)</td></tr></table></div>
+  <div class="quote">异常类（单边、方向、对手方、重复）必须人工调账后才能抵消；差异类（金额、类型、时间）需与对方核实。19 笔完整明细见 Excel 与 PDF。</div></div>
+<div class="slide" data-i="9"><div class="brand">关联方往来 · 判据边界</div>
+  <h1 style="font-size:23px">台账全部对平，也可能漏掉关联方</h1>
+  <div class="two">
+    <div class="card"><h3>范围完备性检查结果</h3>
+      <p style="font-size:12px">财务系统标记 6 家 · 工商股权登记 8 家 · <b style="color:#f6ad55">未标记 2 家</b></p>
+      <table style="font-size:10.5px;margin-top:6px"><tr><th>记账实体</th><th>客商</th><th>关系</th><th>往来</th><th style="text-align:right">余额</th></tr><tr><td>示例子公司C</td><td>示例联营公司F</td><td>联营企业（持股 30%）</td><td>应付账款</td><td style="text-align:right">1,860,000</td></tr><tr><td>示例子公司A</td><td>示例联营公司F</td><td>联营企业（持股 30%）</td><td>应付账款</td><td style="text-align:right">742,500</td></tr><tr><td>示例子公司D</td><td>示例关联公司G</td><td>同一实际控制人</td><td>应付账款</td><td style="text-align:right">963,200</td></tr><tr><td>示例集团母公司</td><td>示例关联公司G</td><td>同一实际控制人</td><td>其他应收款</td><td style="text-align:right">1,500,000</td></tr></table>
+      <p style="font-size:11px;margin-top:6px">合计 <b style="color:#f6ad55">5,065,700</b> 元没有进入内部往来核对和合并抵消。全平版同样存在。</p></div>
+    <div><table style="font-size:11px">
+      <tr><th>盲区</th><th>处置</th><th>可闭合性</th></tr>
+      <tr><td>净额掩盖</td><td>正负差分向列示 + 笔数守恒，<b>已在脚本中实现</b></td><td style="color:#48bb78">🟢 已闭合</td></tr>
+      <tr><td>关联方清单不全</td><td>接入工商股权登记做双向比对，<b>已接入</b></td><td style="color:#f6ad55">🟡 需外部来源</td></tr>
+      <tr><td>同源一起错</td><td>双方数据若来自同一共享服务中心的同一张单据，会一起错；关键交易接合同、银行流水</td><td style="color:#f6ad55">🟡 需外部锚点</td></tr>
+    </table></div>
+  </div></div>
+<div class="slide" data-i="10"><div class="brand">关联方往来 · 过程可回溯</div>
+  <h1 style="font-size:23px">每笔差异都能倒查回双方分录</h1>
+  <div class="three">
+    <div class="card"><h3>① 逐笔留痕</h3><p>植错版 122 笔交易各记双方金额、净额、记录数和问题标签。</p></div>
+    <div class="card"><h3>② 输入指纹</h3><p>台账、两份关联方清单、客商余额四个输入各记 SHA-256 指纹与行数。</p></div>
+    <div class="card"><h3>③ 守恒 + 复算</h3><p>全体净额 = 各交易净额之和；本机用同一份 CSV 独立复算，结果与云端一致。</p></div>
+  </div>
+  <div class="quote">证据 JSON 同时输出为网页、PDF、Markdown、Excel 四种报告，审计可从任意一笔差异追溯到双方原始分录。</div></div>
+<div class="slide" data-i="11"><div class="brand">关联方往来 · 部署与复用</div>
+  <h1 style="font-size:23px">一次构建 · 处处复用</h1>
+  <div class="three" style="margin-bottom:14px">
+    <div class="card"><h3>🗣️ 一句话触发</h3><p>对话框输入"关联方往来"触发词即时运行</p></div>
+    <div class="card"><h3>⏰ 定时任务</h3><p>使用者在 Mission Control 自行配置定时任务（routine）周期运行；产出由使用者确认后自行分发</p></div>
+    <div class="card"><h3>🧠 Agent Files 记忆</h3><p>规则表、上期结果持久缓存，形成环比链</p></div>
+  </div>
+  <div class="kpi-row" style="margin-bottom:12px"><div class="kpi"><div class="v" style="color:#48bb78;font-size:22px">秒级</div><div class="l">人工逐笔核对 → 自动核对</div></div><div class="kpi"><div class="v" style="color:#4299e1;font-size:22px">100%</div><div class="l">逐笔可追溯</div></div><div class="kpi"><div class="v" style="color:#f6ad55;font-size:22px">0</div><div class="l">原始往来数据上云（本地模式）</div></div></div>
+  <div class="quote">交叉一致加抵消守恒这套判据，可直接复用到供应商对账、银企对账、跨系统数据核对——凡是“两个来源记同一件事、结果必须对称”的场景都适用。</div>
+</div>
+<div class="sub-bar" id="subbar"><span id="subtxt"></span></div>
+<div class="ctrl">
+  <button class="pri" id="play" onclick="toggle()">▶ 开始讲解</button>
+  <button onclick="go(cur-1)">‹ 上一页</button>
+  <div class="dots" id="dots"></div>
+  <button onclick="go(cur+1)">下一页 ›</button>
+  <button onclick="fs()">⛶ 全屏</button>
+  <div class="info" id="info">1 / 12</div>
+</div>
+<script>
+var TOTAL=12,cur=0,speaking=false,synth=window.speechSynthesis;
+var narr=[
+"本页介绍关联方往来对账方案。集团内部的每一笔交易，销售方记应收、采购方记应付，双方金额必须对称相等，否则合并报表时就无法抵消干净。核心判据是守恒、交叉一致和唯一性，同时还要核对关联方清单本身是否完整。需要说明，以下数据及企业均为构造，非真实数据。本次植错版样例共 122 笔关联交易，植入的 18 处错误全部被抓出，另外还发现了约 507 万元没有纳入核对的关联方余额。",
+"先看端到端流程。输入是三类数据：关联往来台账；关联方清单，包括财务系统里的标记和工商股权登记两个来源；以及全部客商的往来余额。处理分五步：按交易号归集，发现单边和重复；核对对手方、方向和金额是否对称；检查交易类型和入账时间是否一致；计算抵消差额，并把正差和负差分开列示；最后比对关联方清单，量化没有被标记的关联方余额。",
+"这是架构全景图。左侧是输入与触发：关联往来台账、关联方清单和全部客商余额，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，每月合并报表前运行。中间是 Amazon Quick 内部的五层：编排层由模型充当指挥官，不接触原始往来数据，只看结果摘要；数据接入层按交易号归集，并统一应收记正、应付记负的口径；确定性校验层由本地沙箱里的脚本逐笔核对；证据层记录每笔交易双方的金额、净额和问题标签，以及输入文件指纹；交付层输出四种格式的报告。底部是固化成的 Skill，右侧是输出端。",
+"这套方案是怎么实现的。用户一句关联方往来即可触发。模型负责理解意图和编排工具，不接触原始往来数据，只看结果摘要；真正的核对在本地沙箱里由确定性脚本完成。脚本还检查对手方对称、交易类型一致、重复入账，给出单边记录配对提示，并检查关联方清单是否完备。整套流程已固化为可复用的 Skill。",
+"来看样例数据。我们为虚构的示例集团构造了母公司加五家子公司、三个月、120 笔集团内交易，覆盖内部销售、内部服务、资金拆借、代垫费用和租赁五类业务。植错版植入了 18 处错误，其中有一对金额不符故意设成正负八千互相抵消，用来演示净额掩盖。两个版本都附了同一份工商股权登记，其中有两家关联方没有被财务系统标记。",
+"核心判据分三组。逐笔六项核对：完整性，同一交易号双方各一条；对手方对称，双方必须互为对手方；方向，一方应收一方应付；交叉一致，双方金额相加等于零；交易类型一致；以及时间性，入账日期相差不超过五天。然后是抵消守恒，全体净额等于各笔净额之和，并且正差负差分开列示。最后是范围完备，把财务系统的标记和工商股权登记做比对。",
+"来看结果。全平版 120 笔全部双向一致，抵消差额为零。植错版一致 103 笔、异常 11 笔、差异 8 笔，18 处错误全部命中，没有误报。另有一处是台账里一笔金额写成了带千分位的 12,345.60，无法解析，按数据质量问题报出，该行不参与计算，不按 0 计。其中交易号录错时，两边各自变成一条单边记录，脚本通过金额对称和日期相近把它们配成了对，提示是交易号不一致。",
+"再看抵消差额。如果只看全体往来净额，大约是 264 万元；但把正差和负差分开，正差约 776 万，负差约 512 万，毛额约 1,288 万，接近净额的五倍。那一对正负八千的金额不符，在净额里完全消失了，分向列示之后才看得见。所以只看净额，会严重低估需要调整的规模。",
+"这是待调整清单，异常优先，列出前 7 笔。异常类包括单边登记、方向错误、对手方不符和重复入账，必须人工调账之后才能进入合并抵消；差异类包括金额不符、类型不一致和时间性差异，需要和对方核实。19 笔完整明细在 Excel 和 PDF 报告里。",
+"还要讲清判据的边界：台账全部对平，也可能漏掉关联方。检查发现，财务系统只标记了 6 家关联方，而工商股权登记有 8 家，示例联营公司F和示例关联公司G没有被标记，它们在全部客商往来里的余额合计约 507 万元，完全没有进入内部往来核对和合并抵消，而且全平版也一样存在这个问题。第二类盲区是同源一起错，如果双方数据来自同一个共享服务中心的同一张单据，就会一起错，需要接入合同或银行流水来打破。",
+"最后是过程可回溯。第一，逐笔留痕，每笔交易都记录双方金额、净额、记录数和问题标签。第二，输入指纹，四个输入文件各记下指纹和行数。第三，守恒加复算，全体净额等于各笔净额之和，同一份数据在本机独立复算，结果与云端一致。这些证据同时输出为四种格式的报告，审计可以从任意一笔差异追回双方的原始分录。",
+"部署上，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，每月合并报表前运行，发现异常时在结果中标出预警。交叉一致加抵消守恒这套判据，还能复用到供应商对账、银企对账、跨系统数据核对等场景。总结一句：关联方往来对账把人工逐笔核对，变成可追溯的自动核对，并且清楚说明它能抓到什么、抓不到什么。"
+];
+var dd=document.getElementById('dots');
+for(var i=0;i<TOTAL;i++){var e=document.createElement('div');e.className='dot'+(i===0?' on':'');e.onclick=(function(k){return function(){go(k)}})(i);dd.appendChild(e);}
+function go(n){if(n<0||n>=TOTAL)return;var sl=document.querySelectorAll('.slide');sl.forEach(function(x){x.classList.remove('active')});sl[n].classList.add('active');cur=n;document.querySelectorAll('.dot').forEach(function(x,k){x.className='dot'+(k===n?' on':'')});document.getElementById('info').textContent=(n+1)+' / '+TOTAL;if(speaking)speakCur();}
+function splitS(t){var p=t.replace(/([。！？；])/g,'$1\n').split('\n');return p.map(function(x){return x.trim()}).filter(function(x){return x.length>0});}
+function voice(){var v=synth.getVoices();return v.find(function(x){return x.name.indexOf('Yunxi')>-1})||v.find(function(x){return x.name.indexOf('Yunyang')>-1})||v.find(function(x){return x.name.indexOf('Yunjian')>-1})||v.find(function(x){return x.lang==='zh-CN'&&x.name.indexOf('Microsoft')>-1})||v.find(function(x){return x.lang==='zh-CN'})||v.find(function(x){return x.lang.indexOf('zh')===0});}
+function speakCur(){if(!speaking)return;synth.cancel();var ss=splitS(narr[cur]);if(!ss.length)ss=[narr[cur]];var i=0;var bar=document.getElementById('subbar'),tx=document.getElementById('subtxt');function nx(){if(!speaking){bar.classList.remove('on');return;}if(i>=ss.length){bar.classList.remove('on');if(speaking&&cur<TOTAL-1){go(cur+1);setTimeout(speakCur,400);}else if(speaking){toggle();}return;}bar.classList.add('on');tx.textContent=ss[i];var u=new SpeechSynthesisUtterance(ss[i]);u.lang='zh-CN';u.rate=0.9;u.pitch=1.1;var vo=voice();if(vo)u.voice=vo;u.onend=function(){i++;nx();};synth.speak(u);}nx();}
+function toggle(){if(speaking){speaking=false;synth.cancel();document.getElementById('subbar').classList.remove('on');document.getElementById('play').textContent='▶ 开始讲解';}else{speaking=true;document.getElementById('play').textContent='■ 停止讲解';speakCur();}}
+function fs(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1);}else if(e.key==='ArrowLeft'){go(cur-1);}else if(e.key==='f'||e.key==='F'){fs();}else if(e.key==='Escape'&&speaking){toggle();}});
+if(synth.onvoiceschanged!==undefined)synth.onvoiceschanged=function(){};
+</script><style id="light-theme-v2">
+html,body{background:#eef2f8!important;color:#1e2a44!important}
+.sub{color:#4a5676!important}
+.card,.kpi,.fstep{background:#fff!important;border:1px solid #e4eaf2!important;box-shadow:0 1px 3px rgba(20,35,66,.07),0 1px 2px rgba(20,35,66,.04)!important}
+.card h3{color:#2b6cb0!important}.card p{color:#3f4c66!important}
+.btrack{background:#e6ebf3!important}
+.kpi .l,.fstep .d,.bval,.bname,.info,.legend{color:#5f6b82!important}
+.fstep .n{color:#8a94a8!important}.farr{color:#aab4c6!important}
+table th{color:#6b7589!important;border-bottom:1px solid #dbe2ec!important}
+table td{border-bottom:1px solid #eef1f6!important}
+.quote{background:rgba(43,108,176,.08)!important;border-left-color:#2b6cb0!important;color:#27496d!important}
+.ctrl{background:rgba(248,250,253,.97)!important;border-top:1px solid #e2e8f1!important}
+.ctrl button{background:#fff!important;border:1px solid #d4dce8!important;color:#28334a!important}
+.ctrl button.pri{background:#2b7fd4!important;border-color:#2b7fd4!important;color:#fff!important}
+.dot{background:#c4cedd!important}.dot.on{background:#2b7fd4!important}
+.judge{background:rgba(43,127,212,.12)!important;color:#2366a8!important}
+</style>
+</body></html>

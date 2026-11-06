@@ -1,0 +1,85 @@
+{
+  "clean": {
+    "summary~keys": [
+      "pass"
+    ],
+    "data_issues~len": 0,
+    "all_ok": true,
+    "total": 260,
+    "pass_rate": 100.0,
+    "issue_types~keys": [
+      "查验通过"
+    ],
+    "amount_by_status~keys": [
+      "pass",
+      "review",
+      "risk"
+    ],
+    "risk_amount": 0,
+    "conservation~keys": [
+      "历史发票池",
+      "待核实",
+      "报销金额合计",
+      "笔数",
+      "通过",
+      "风险"
+    ],
+    "employee_risk~keys": [],
+    "inputs~len": 5,
+    "results~len": 260
+  },
+  "error": {
+    "summary~keys": [
+      "pass",
+      "review",
+      "risk"
+    ],
+    "data_issues~len": 2,
+    "all_ok": false,
+    "total": 272,
+    "pass_rate": 91.9,
+    "issue_types~keys": [
+      "号码变形重复",
+      "报销早于开票",
+      "报销超票面",
+      "数据质量·数值无法解析",
+      "数据质量·数值超出范围",
+      "查验通过",
+      "疑似拆分报销",
+      "疑似换号重开",
+      "类别与开票方不符",
+      "费用标准无效",
+      "超期发票",
+      "超标准",
+      "跨期重复报销",
+      "连号发票",
+      "重复报销"
+    ],
+    "amount_by_status~keys": [
+      "pass",
+      "review",
+      "risk"
+    ],
+    "risk_amount": 54031.91,
+    "conservation~keys": [
+      "历史发票池",
+      "待核实",
+      "报销金额合计",
+      "笔数",
+      "通过",
+      "风险"
+    ],
+    "employee_risk~keys": [
+      "员工004",
+      "员工011",
+      "员工013",
+      "员工017",
+      "员工034",
+      "员工044",
+      "员工049",
+      "员工050"
+    ],
+    "inputs~len": 5,
+    "results~len": 272
+  }
+}

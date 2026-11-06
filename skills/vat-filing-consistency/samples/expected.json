@@ -1,0 +1,43 @@
+{
+  "clean": {
+    "checks~len": 14,
+    "data_issues~len": 0,
+    "all_ok": true,
+    "n_checks": 14,
+    "n_inconsistent": 0,
+    "consistent_rate": 100.0,
+    "by_category~keys": [
+      "主表恒等式",
+      "账表交叉",
+      "逻辑互斥",
+      "附表↔主表",
+      "附表一恒等式"
+    ],
+    "declared_payable": 982541.77,
+    "correct_payable": 982541.77,
+    "payable_gap": 0.0,
+    "total_abs_diff": 0.0,
+    "inputs~len": 4
+  },
+  "error": {
+    "checks~len": 16,
+    "data_issues~len": 1,
+    "all_ok": false,
+    "n_checks": 16,
+    "n_inconsistent": 12,
+    "consistent_rate": 25.0,
+    "by_category~keys": [
+      "主表恒等式",
+      "税率白名单",
+      "账表交叉",
+      "逻辑互斥",
+      "附表↔主表",
+      "附表一恒等式"
+    ],
+    "declared_payable": 974541.77,
+    "correct_payable": 982541.77,
+    "payable_gap": -8000.0,
+    "total_abs_diff": 112940.7,
+    "inputs~len": 4
+  }
+}
