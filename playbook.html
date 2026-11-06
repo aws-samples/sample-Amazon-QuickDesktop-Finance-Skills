@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技术参考手册 — Quick Desktop 能力底座 · 系统工具 · 权限模型</title>
+<meta name="description" content="Quick Desktop 技术参考：能力底座、内置系统工具明细与权限档位、界面速览、Skills 机制。">
+<style>
+  :root{
+    /* Amazon Quick 品牌色板，与各方案页 qw-theme 保持一致 */
+    --bg:#faf9fc;
+    --surface:#ffffff;
+    --surface-2:#f9fafb;
+    --border:rgba(0,0,0,.09);
+    --border-strong:#d1d5db;
+    --text:#131920;
+    --text-2:#5e5e5e;
+    --muted:#6b7280;
+    --primary:#4200db;
+    --primary-dark:#35009e;
+    --primary-light:#8575ff;
+    --primary-bg:#e8e6ff;
+    --success:#00802f;
+    --success-bg:#e6f5eb;
+    --warning:#b45309;
+    --warning-bg:#fef3c7;
+    --info:#0369a1;
+    --info-bg:#e0f2fe;
+    --radius:16px;
+    --radius-sm:10px;
+    --shadow:0 10px 30px -12px rgba(66,0,219,.18);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.04);
+    --mono:'SFMono-Regular',ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:78px}
+  body{
+    font-family:var(--sans);
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(66,0,219,.07), transparent 60%),
+      radial-gradient(700px 420px at 0% 4%, rgba(133,117,255,.09), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(250,249,252,.85);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:62px;gap:16px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;letter-spacing:-.2px;white-space:nowrap}
+  .logo .dot{width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--primary-light),var(--primary));box-shadow:0 0 12px rgba(66,0,219,.45)}
+  .nav-links{display:flex;gap:2px;flex-wrap:wrap}
+  .nav-links a{font-size:13.5px;color:var(--text-2);padding:7px 10px;border-radius:9px;transition:.18s;white-space:nowrap}
+  .nav-links a:hover{color:var(--primary-dark);background:var(--primary-bg)}
+  .menu-btn{display:none;background:var(--surface);border:1px solid var(--border-strong);color:var(--text);border-radius:9px;padding:7px 11px;cursor:pointer;font-size:15px}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:76px 0 52px;text-align:center}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12.5px;color:var(--primary-dark);font-weight:600;
+    background:var(--primary-bg);border:1px solid rgba(66,0,219,.16);
+    padding:6px 14px;border-radius:999px;margin-bottom:22px;
+  }
+  .badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary)}
+  .hero h1{font-size:clamp(28px,4.6vw,46px);line-height:1.18;font-weight:800;letter-spacing:-.6px}
+  .hero h1 .grad{background:linear-gradient(100deg,var(--primary),var(--primary-light));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{max-width:690px;margin:20px auto 0;color:var(--text-2);font-size:17px}
+  .hero-cta{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+  .btn{padding:11px 20px;border-radius:11px;font-weight:650;font-size:14.5px;transition:.2s;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:8px}
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 10px 24px -12px rgba(66,0,219,.7)}
+  .btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px)}
+  .btn-ghost{background:var(--surface);border-color:var(--border-strong);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--primary);color:var(--primary-dark)}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:46px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 14px;box-shadow:var(--shadow-sm)}
+  .stat .n{font-size:22px;font-weight:800;color:var(--primary);letter-spacing:-.5px}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+  /* ---------- SECTION ---------- */
+  section{padding:52px 0;scroll-margin-top:70px}
+  .sec-head{margin-bottom:30px}
+  .sec-kicker{color:var(--primary);font-weight:750;font-size:12px;letter-spacing:1.6px;text-transform:uppercase}
+  .sec-head h2{font-size:clamp(22px,3.2vw,31px);font-weight:800;margin-top:7px;letter-spacing:-.4px}
+  .sec-head p{color:var(--text-2);margin-top:9px;max-width:740px;font-size:15px}
+  .sub-head{margin:38px 0 20px}
+  .sub-head h3{font-size:19px;font-weight:780;letter-spacing:-.2px}
+  .sub-head p{color:var(--text-2);font-size:14.5px;margin-top:6px;max-width:740px}
+
+  .grid{display:grid;gap:16px}
+  .grid-2{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+
+  /* ---------- CARD ---------- */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);transition:.2s}
+  .card:hover{box-shadow:var(--shadow);border-color:rgba(66,0,219,.2)}
+  .card h3{font-size:16.5px;font-weight:750;margin-bottom:7px}
+  .card h4{font-size:15px;font-weight:750;margin-bottom:6px}
+  .card p{font-size:14px;color:var(--text-2)}
+  .card .ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:var(--primary-bg);margin-bottom:14px}
+
+  a.card-link{display:flex;align-items:center;gap:16px}
+  a.card-link .body{flex:1;min-width:0}
+  a.card-link .arrow{flex:0 0 auto;color:var(--muted);font-size:17px;transition:.18s}
+  a.card-link:hover .arrow{color:var(--primary);transform:translateX(3px)}
+
+  /* ---------- SOLUTION CARD ---------- */
+  .sol{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:26px;box-shadow:var(--shadow-sm);transition:.22s;position:relative;overflow:hidden;
+  }
+  .sol:hover{box-shadow:var(--shadow);border-color:rgba(66,0,219,.22)}
+  .sol::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+  .sol-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+  .sol-ico{flex:0 0 auto;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:var(--primary-bg)}
+  .sol-title{font-weight:800;font-size:18.5px;letter-spacing:-.2px}
+  .sol-sub{font-size:13px;color:var(--muted);margin-top:3px}
+  .sol-desc{font-size:14.5px;color:var(--text-2);margin-bottom:16px}
+
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-size:13.5px;margin-bottom:18px}
+  .kv dt{color:var(--muted);white-space:nowrap}
+  .kv dd{color:var(--text)}
+
+  .pill-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .pill{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2)}
+  .pill.p{background:var(--primary-bg);border-color:rgba(66,0,219,.15);color:var(--primary-dark)}
+  .pill.s{background:var(--success-bg);border-color:rgba(0,128,47,.18);color:var(--success)}
+  .pill.w{background:var(--warning-bg);border-color:rgba(180,83,9,.2);color:var(--warning)}
+
+  .link-row{display:flex;flex-wrap:wrap;gap:8px;padding-top:16px;border-top:1px dashed var(--border-strong)}
+  .lnk{
+    display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;
+    padding:7px 12px;border-radius:9px;border:1px solid var(--border-strong);
+    background:var(--surface);transition:.18s;
+  }
+  .lnk:hover{border-color:var(--primary);color:var(--primary-dark);background:var(--primary-bg)}
+  .lnk.solid{background:var(--primary);border-color:var(--primary);color:#fff}
+  .lnk.solid:hover{background:var(--primary-dark);color:#fff}
+  .lnk .k{font-family:var(--mono);font-size:11.5px;opacity:.75}
+
+  /* status badge on section headings */
+  .st{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;vertical-align:middle;margin-left:10px}
+  .st.ready{background:var(--success-bg);color:var(--success);border:1px solid rgba(0,128,47,.2)}
+  .st.plan{background:var(--surface-2);color:var(--muted);border:1px solid var(--border-strong)}
+
+  /* planned scenario card */
+  .plan-card{background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--radius);padding:18px}
+  .plan-card .ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:17px;background:var(--surface);border:1px solid var(--border);margin-bottom:11px}
+  .plan-card h4{font-size:14.5px;font-weight:750;margin-bottom:5px}
+  .plan-card p{font-size:13px;color:var(--text-2)}
+  .plan-card .uses{font-size:11.5px;color:var(--muted);margin-top:9px;padding-top:9px;border-top:1px solid var(--border);font-family:var(--mono)}
+
+  /* ---------- TABLE ---------- */
+  .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow-sm)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:620px}
+  th,td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+  thead th{background:var(--surface-2);font-weight:700;font-size:12.5px;color:var(--text)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:rgba(66,0,219,.028)}
+  td:first-child{font-weight:600}
+  code{font-family:var(--mono);font-size:12.5px;background:var(--surface-2);border:1px solid var(--border);border-radius:5px;padding:1px 5px;color:var(--primary-dark)}
+
+  /* ---------- STEPS ---------- */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm)}
+  .step .n{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:13px;background:var(--primary);color:#fff;margin-bottom:11px}
+  .step h4{font-size:14.5px;font-weight:750;margin-bottom:6px}
+  .step p{font-size:13px;color:var(--text-2)}
+
+  /* ---------- CODE ---------- */
+  pre.code{
+    background:#131920;border:1px solid #2a3040;border-radius:var(--radius);
+    padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.7;
+    color:#d6dbe8;box-shadow:var(--shadow-sm);
+  }
+  pre.code .c{color:#7d8799}
+
+  /* ---------- CALLOUT ---------- */
+  .callout{border-radius:var(--radius);padding:16px 18px;font-size:14px;display:flex;gap:12px;align-items:flex-start;margin-top:18px}
+  .callout .ci{flex:0 0 auto;font-size:16px;line-height:1.5}
+  .callout.info{background:var(--info-bg);border:1px solid rgba(3,105,161,.18);color:#075985}
+  .callout.warn{background:var(--warning-bg);border:1px solid rgba(180,83,9,.2);color:#92400e}
+  .callout b{font-weight:700}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  footer a{color:var(--primary-dark);font-weight:600}
+  footer a:hover{text-decoration:underline}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:.65s cubic-bezier(.2,.7,.2,1)}
+  .reveal.on{opacity:1;transform:none}
+
+  @media(max-width:900px){
+    .grid-3,.steps{grid-template-columns:repeat(2,1fr)}
+    .stat-row{grid-template-columns:repeat(2,1fr)}
+    .nav-links{display:none}
+    .nav-links.open{display:flex;position:absolute;top:62px;left:0;right:0;flex-direction:column;background:var(--surface);padding:10px 24px 14px;border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+    .menu-btn{display:block}
+  }
+  @media(max-width:640px){
+    .grid-2,.grid-3,.steps{grid-template-columns:1fr}
+    .hero{padding:56px 0 40px}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="index.html" title="返回首页 · Amazon Quick 自讲解介绍"><span class="dot"></span> 技术参考手册</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">← 返回 Playbook</a>
+      <a href="#what">是什么</a>
+      <a href="#capabilities">能力底座</a>
+      <a href="#interface">界面</a>
+      <a href="#skills">Skills 机制</a>
+    </nav>
+    <button class="menu-btn" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="菜单">☰</button>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<div class="hero wrap">
+  <div class="badge"><span class="pulse"></span> Amazon Quick on desktop · 正式发布（GA）</div>
+  <h1>Quick Desktop<br><span class="grad">技术参考手册</span></h1>
+  <p class="lead">桌面端本身的实操细节 —— 它能碰到什么数据、有哪些工具、权限怎么管、Skills 怎么运作。场景资产与落地步骤见 <a href="index.html" style="color:var(--primary-dark);font-weight:600">Playbook 主页</a>。</p>
+  <div class="hero-cta">
+    <a href="#capabilities" class="btn btn-primary">了解能力底座 →</a>
+    <a href="index.html#practices" class="btn btn-ghost">查看场景实践</a>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="n">14</div><div class="l">内置系统工具</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">工具权限档位</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">MCP 接入方式</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">支持的企业 IdP 分步文档</div></div>
+  </div>
+</div>
+
+<!-- ===================== WHAT ===================== -->
+<section id="what" class="wrap reveal">
+  <div class="sec-head">
+    <div class="sec-kicker">01 · What it is</div>
+    <h2>Quick Desktop 是什么</h2>
+    <p>它是 Amazon Quick 的原生桌面应用，把 Quick 的能力延伸到你的机器上 —— 对你的文件、已连接的服务，以及工作之间的上下文关系，拥有直接且持续的访问能力。</p>
+  </div>
+
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="ico">📁</div>
+      <h3>不再是"上传文件"</h3>
+      <p>授权哪些文件夹由你决定，Quick 可以直接读、写、搜索和索引，无需上传；对某个文件夹开启 Allow full file context 或 Always remember file information 时，才会上传该文件夹的文件。</p>
+    </div>
+    <div class="card">
+      <div class="ico">🔗</div>
+      <h3>跨服务合并信息</h3>
+      <p>连上邮件、日历、聊天、CRM 后，可以在一次对话里从多个服务取数、执行动作并交叉比对，不用来回切工具。</p>
+    </div>
+    <div class="card">
+      <div class="ico">🧠</div>
+      <h3>越用越懂你的上下文</h3>
+      <p>逐步构建关于人、项目、决策的知识图谱，并把偏好与工作方式留在长期记忆里，回答因此带上你的工作背景。</p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <span class="ci">💡</span>
+    <div><b>已正式发布（GA）。</b>Amazon Quick on desktop 已于 2026 年 9 月在 macOS 与 Windows 上正式发布。对话、记忆与知识图谱保存在你的 Amazon Quick 账户中，Web、移动端与桌面端通用。套餐与价格见<a href="https://aws.amazon.com/quick/pricing/" target="_blank" rel="noopener" style="color:var(--primary-dark);font-weight:600">官方定价页</a>，可用区域见<a href="https://docs.aws.amazon.com/quick/latest/userguide/regions.html" target="_blank" rel="noopener" style="color:var(--primary-dark);font-weight:600">官方区域页</a>。</div>
+  </div>
+</section>
+
+<!-- ===================== CAPABILITIES ===================== -->
+<section id="capabilities" class="wrap reveal">
+  <div class="sec-head">
+    <div class="sec-kicker">02 · Capabilities</div>
+    <h2>能力底座</h2>
+    <p>场景方案能不能跑通，取决于下面这些能力是否可用、权限是否够。这里按落地时的关注点重新组织，官方文档的原始编排见<a href="https://docs.aws.amazon.com/quick/latest/userguide/amazon-quick-desktop.html" target="_blank" rel="noopener" style="color:var(--primary-dark);font-weight:600">用户指南目录</a>。</p>
+  </div>
+
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="ico">📁</div>
+      <h3>本地文件访问</h3>
+      <p>在 <b>Customize → Knowledge</b> 按文件夹授权。添加文件夹只授予访问；全文检索索引与知识图谱抽取按文件夹分别打开，访问级别可设 Full Access / Read Only / Ask Each Time。</p>
+    </div>
+    <div class="card">
+      <div class="ico">🔌</div>
+      <h3>连接器与 MCP</h3>
+      <p>内置 Slack、Outlook、Teams、Gmail、Google Calendar、OneDrive 等云连接器；MCP Server 支持 Local、Remote、从配置文件 Import 三种接法。</p>
+    </div>
+    <div class="card">
+      <div class="ico">🧰</div>
+      <h3>系统工具与权限</h3>
+      <p>在 <b>Customize → Connectors</b> 逐项启停。每个工具可设 Always Allow / Ask Each Time / Always Deny，还能按单个读写操作细化 —— 比如整体放开但对某个写操作要求逐次确认。</p>
+    </div>
+    <div class="card">
+      <div class="ico">⚡</div>
+      <h3>Skills</h3>
+      <p>按需加载的指令集。系统技能（带 System 徽标）覆盖文档、演示文稿、表格、网页浏览、代码执行、知识图谱、转写等，可开关、不可编辑；自建技能在 <b>Customize → Skills</b> 管理，草稿经 Try it 测试后 Publish 生效。</p>
+    </div>
+    <div class="card">
+      <div class="ico">⏱️</div>
+      <h3>定时任务与 Mission Control</h3>
+      <p>把工作挂到定时任务（routine）上，在 Mission Control 统一看运行状态、待办输入、KPI 与历史产出，并可暂停或立即执行。定时任务在云端运行；读本机文件、浏览器自动化、本地代码执行这类步骤需要电脑开机且应用在线。</p>
+    </div>
+    <div class="card">
+      <div class="ico">🤝</div>
+      <h3>委派编码 Agent</h3>
+      <p>通过 ACP 协议把开发类任务派给 Kiro 或 Claude Code，Quick 汇总结果回报，适合"分析在 Quick、改代码在 IDE"的分工。</p>
+    </div>
+    <div class="card">
+      <div class="ico">🕸️</div>
+      <h3>知识图谱与记忆</h3>
+      <p>自动抽取人、客户、项目、事件、行动项等实体及关系，保存在你的 Amazon Quick 账户中（按用户隔离）。在 <b>My context</b> 查看与管理；连接应用的自动抽取与文件夹抽取（Customize → Knowledge）分别开关。</p>
+    </div>
+    <div class="card">
+      <div class="ico">🎚️</div>
+      <h3>响应模式</h3>
+      <p>对话与定时任务都可选 Fast / Balanced / Smart。按任务复杂度在速度与质量之间取舍。</p>
+    </div>
+  </div>
+
+  <div class="sub-head">
+    <h3>内置系统工具</h3>
+    <p>在 <b>Customize → Connectors</b> 的连接器表中逐项启停，并通过 Manage permissions 配权限。</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:22%">工具</th><th style="width:48%">能做什么</th><th style="width:30%">要留意的地方</th></tr></thead>
+      <tbody>
+        <tr><td>🔍 Web Search</td><td>联网检索并返回带引用的摘要，可抓取指定网页全文</td><td>可在单次对话里临时开关</td></tr>
+        <tr><td>📄 File operations</td><td>从 URL 下载文件；用系统默认应用打开本地文件</td><td>可在 Manage permissions 里按操作单独设权限</td></tr>
+        <tr><td>🌐 Browser Automation</td><td>启动浏览器导航、与页面元素交互、填表、截图、提取文本</td><td>默认使用独立的浏览器实例和你的配置文件副本；在 Settings → General 开启 <b>Use my existing browser</b> 则使用你自己的浏览器（需开启远程调试，不用时建议关闭）</td></tr>
+        <tr><td>🎨 Image Generation</td><td>生成、编辑、去背景、变体、外扩图像（Amazon Nova Canvas）</td><td>产物可保存到本地或 Library</td></tr>
+        <tr><td>🐍 Code Execution</td><td>在沙箱中编写并运行 Python，用于数据分析、计算、文件处理与图表生成</td><td>使用预装包；同一对话内变量保留；文件访问遵循文件夹授权，另可访问系统临时目录</td></tr>
+        <tr><td>✍️ Engram Builder</td><td>分析你的写作风格并存成 engram，之后用你的语气产出内容</td><td>适合起草邮件、消息与文档</td></tr>
+        <tr><td>🧠 Knowledge &amp; Memory</td><td>查询与构建知识图谱、召回既往学到的事实与偏好</td><td>知识图谱与记忆在 My context 中查看与管理</td></tr>
+        <tr><td>🤖 Agent Management</td><td>在对话里创建、修改、删除、立即触发定时任务</td><td>这是"用一句话建一个定时任务"背后的工具</td></tr>
+        <tr><td>🧩 Task Management</td><td>把复杂请求拆成多个并行子任务，各自独立后台执行</td><td>适合长流程编排</td></tr>
+        <tr><td>💬 Chat &amp; Notifications</td><td>在对话里生成建议气泡与消息回应；发送桌面通知（任务完成等）；在 Home 屏推送简报</td><td>可按工具整体或按操作收紧权限</td></tr>
+        <tr><td>🎙 Transcription</td><td>把音频、视频文件（如 .mp3 .mp4 .wav .m4a）转成文字，再做摘要、引用或问答</td><td>适合会议录音、语音备忘与访谈</td></tr>
+        <tr><td>🧾 Explainability</td><td>输出 Quick 得出答案的结构化说明：假设、来源、计算步骤与局限</td><td>行动前用来核对推理和前提</td></tr>
+        <tr><td>🗂 File indexing &amp; search</td><td>在已授权文件夹中按关键词或语义搜索、读取文档、查看与批准索引</td><td>索引范围在 Customize → Knowledge 按文件夹设置</td></tr>
+        <tr><td>📊 Working with your data</td><td>用自然语言查询通过 Quick spaces 连接的数据集与仪表盘</td><td>可见范围取决于组织的权限设置</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid grid-3" style="margin-top:16px">
+    <div class="card"><h4>Always Allow</h4><p>该工具读写全开，操作不逐次征询确认（默认）。</p></div>
+    <div class="card"><h4>Ask Each Time</h4><p>每次操作前都要你确认，适合写操作与敏感数据。</p></div>
+    <div class="card"><h4>Always Deny</h4><p>完全禁止 Quick 通过该工具执行任何操作。</p></div>
+  </div>
+</section>
+
+<!-- ===================== INTERFACE ===================== -->
+<section id="interface" class="wrap reveal">
+  <div class="sec-head">
+    <div class="sec-kicker">03 · Interface</div>
+    <h2>界面速览</h2>
+    <p>左侧边栏做导航，顶栏切换浮层面板，中间是主内容区。知道东西在哪，配置和排查都会快很多。</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:26%">位置</th><th style="width:74%">内容</th></tr></thead>
+      <tbody>
+        <tr><td>侧边栏 · 主导航</td><td>Chat（发起和继续对话，最主要的工作入口）、Feed（按优先级排列的动态、日历与待办，来自已连接的服务）、Library（集中浏览、搜索和复用内容与 Quick 资源）、<b>Customize</b>（代理、技能、连接器、知识与品牌素材）、Apps（打开和构建交互式应用）、Spaces（团队维护的精选集合，可直接对其对话）、More（Research、Data、Dashboards、Automations 等）；用 Edit navigation 选择和调整导航栏显示的条目</td></tr>
+        <tr><td>侧边栏 · Recents</td><td>按日期组织的历史对话，可建文件夹、置顶、删除，并支持跨对话与产物搜索</td></tr>
+        <tr><td>Customize</td><td><b>Agents</b>（代理）、<b>Skills</b>（技能）、<b>Connectors</b>（Web/云连接器、MCP Server、编码 Agent、系统工具）、<b>Knowledge</b>（本地文件夹授权与索引）、<b>Brand assets</b>（Word/PPT 模板）；知识图谱与记忆在 <b>My context</b> 中管理</td></tr>
+        <tr><td>顶栏面板</td><td>Feed（信息流浮层）、Mission Control（后台任务与代理活动）、All data and apps（已连接数据源状态）</td></tr>
+        <tr><td>Home</td><td>随时段变化的问候语、聊天输入区（选择 Agent / 响应模式 Fast、Balanced、Smart / 思考强度 Off–High / 无痕 Incognito 对话）、未连接数据源的设置卡片、Quick Briefs（最高优先级 Feed 条目的摘要）</td></tr>
+        <tr><td>Activity feed</td><td>内置 Feed 代理按 Important / Informational / Low priority 三档分级，附 AI 摘要、建议动作与草拟回复；离开一段时间后可用 Catch-up 模式一次补齐</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section id="skills" class="wrap reveal">
+  <div class="sec-head">
+    <div class="sec-kicker">04 · Skills</div>
+    <h2>Skills 机制</h2>
+    <p>Skill 是把一套工作方法固化下来的载体 —— 这也是 Playbook 里所有场景方案的交付形式。理解它的结构，才能把自己的业务流程沉淀成可复用资产。</p>
+  </div>
+
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="ico">📋</div>
+      <h3>Instructions</h3>
+      <p>一份 <code>SKILL.md</code>：多步工作流、每步的校验标准、失败时的降级路径。比提示词模板重得多。</p>
+    </div>
+    <div class="card">
+      <div class="ico">🔧</div>
+      <h3>Tools</h3>
+      <p>技能可声明要带的工具。技能激活时，这些工具自动载入当前会话。</p>
+    </div>
+    <div class="card">
+      <div class="ico">📎</div>
+      <h3>Reference files</h3>
+      <p>执行期可访问的脚本、模板、配置等支撑文件。</p>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:16px">
+    <div class="card">
+      <h3>三种创建方式</h3>
+      <p style="margin-bottom:10px">在 <b>Customize → Skills → Create</b> 下：</p>
+      <p><b>From chat</b> —— 描述你要什么，Quick 起草指令、挑工具、写出 <code>SKILL.md</code>，你再审阅修改。<br><br>
+      <b>From file / From folder</b> —— 导入 <code>.md</code> 或 <code>.zip</code>，或选择根目录含 <code>SKILL.md</code> 的文件夹（连同脚本等参考文件）。<br><br>
+      <b>顺手沉淀</b> —— 多步任务完成后，Quick 可能主动提议把这个流程存成技能。</p>
+    </div>
+    <div class="card">
+      <h3>三种调用方式</h3>
+      <p><b>点名</b> —— 在对话里提技能名，例如"用网页浏览技能看下这一页"。<br><br>
+      <b>自动识别</b> —— Quick 判断请求与某技能相关就自动加载，比如你要做 PPT 时演示文稿技能会自己上。<br><br>
+      <b>Try it</b> —— 在技能详情面板点 Try it，直接开一个已载入该技能的会话，常用于发布前测试。</p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <span class="ci">💡</span>
+    <div><b>写技能的关键取舍：</b>把<b>确定性计算</b>（指标、匹配、图表）下沉到脚本，只把<b>判断类工作</b>（字段映射确认、建议生成、异常升级）留给模型。这样产出的数字可复现、可审计，同时保留 AI 的解释能力。本 Playbook 的场景方案都按这个原则组织。</div>
+  </div>
+</section>
+
+<!-- ===================== SCENARIOS ===================== -->
+
+
+<footer>
+  <div class="wrap">
+    Amazon Quick Desktop Playbook · 内容基于 <a href="https://docs.aws.amazon.com/quick/latest/userguide/amazon-quick-desktop.html" target="_blank" rel="noopener">AWS 官方文档</a> 整理<br>
+    所有示例数据与企业名称均为虚构，不含真实业务数据 · Hosted on <a href="https://github.com/aws-samples/sample-Amazon-QuickDesktop-Finance-Skills" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, { threshold: .06, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  document.querySelectorAll('#navLinks a').forEach(function(a){
+    a.addEventListener('click', function(){ document.getElementById('navLinks').classList.remove('open'); });
+  });
+</script>
+
+</body>
+</html>

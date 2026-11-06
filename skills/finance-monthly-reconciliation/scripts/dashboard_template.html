@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>月末财务对账仪表盘</title>
+<!-- ECharts 5（Apache-2.0）：优先加载本地 vendor，缺失时回退 CDN -->
+<script src="/vendor/echarts/echarts.min.js"></script>
+<script>window.echarts || document.write('<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js" integrity="sha384-Mx5lkUEQPM1pOJCwFtUICyX45KNojXbkWdYhkKUKsbv391mavbfoAmONbzkgYPzR" crossorigin="anonymous"><\/script>')</script>
+<style>
+:root { --primary: #0052CC; --orange: #FF9900; --green: #36B37E; --red: #DE350B; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--color-bg, #f5f6f8);
+  color: var(--color-text, #1a1a1a);
+  font-family: var(--font-sans, -apple-system, 'PingFang SC', sans-serif);
+  padding: 24px;
+}
+h1 { font-size: 22px; margin-bottom: 4px; }
+.subtitle { color: var(--color-text-secondary, #666); font-size: 13px; margin-bottom: 20px; }
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px; margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--color-bg-secondary, #fff);
+  border: 1px solid var(--color-border-light, #e0e0e0);
+  border-radius: var(--radius-md, 10px); padding: 16px; text-align: center;
+}
+.kpi-card .label { font-size: 12px; color: var(--color-text-secondary, #888); margin-bottom: 6px; }
+.kpi-card .value { font-size: 24px; font-weight: 700; font-family: var(--font-mono, monospace); }
+.kpi-card .value.green { color: var(--green); }
+.kpi-card .value.red { color: var(--red); }
+.kpi-card .value.blue { color: var(--primary); }
+.kpi-card .value.orange { color: var(--orange); }
+.chart-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 16px; margin-bottom: 24px;
+}
+.chart-card {
+  background: var(--color-bg-secondary, #fff);
+  border: 1px solid var(--color-border-light, #e0e0e0);
+  border-radius: var(--radius-md, 10px); padding: 16px; min-height: 320px;
+}
+.chart-card h3 { font-size: 14px; margin-bottom: 12px; }
+.chart-box { width: 100%; height: 260px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th {
+  background: var(--color-bg-tertiary, #f0f0f0); padding: 8px 10px;
+  text-align: left; font-weight: 600;
+  border-bottom: 2px solid var(--color-border-light, #ddd);
+}
+td { padding: 6px 10px; border-bottom: 1px solid var(--color-border-light, #eee); }
+tr:hover td { background: var(--color-bg-hover, #f8f9fa); }
+</style>
+</head>
+<body>
+
+<h1>📊 月末财务对账仪表盘</h1>
+<div class="subtitle">数据来源：OneDrive(ERP数据) + Outlook(银行回单) | 自动对账引擎 v2.0</div>
+
+<div class="kpi-grid" id="kpi-area"></div>
+
+<div class="chart-grid">
+  <div class="chart-card"><h3>🔄 银企对账结果</h3><div id="chart-recon" class="chart-box"></div></div>
+  <div class="chart-card"><h3>📈 资金余额走势</h3><div id="chart-daily" class="chart-box"></div></div>
+  <div class="chart-card"><h3>📊 应收账龄分布</h3><div id="chart-ar" class="chart-box"></div></div>
+  <div class="chart-card"><h3>📊 应付账龄分布</h3><div id="chart-ap" class="chart-box"></div></div>
+  <div class="chart-card"><h3>🏢 部门费用分布</h3><div id="chart-dept" class="chart-box"></div></div>
+  <div class="chart-card"><h3>🏭 供应商 Top 10</h3><div id="chart-vendor" class="chart-box"></div></div>
+</div>
+
+<div class="chart-card" id="unmatched-section" style="margin-bottom:24px">
+  <h3>⚠️ 未匹配交易明细</h3>
+  <table id="unmatched-table">
+    <thead><tr><th>交易流水号</th><th>日期</th><th>摘要</th><th style="text-align:right">金额</th></tr></thead>
+    <tbody id="unmatched-body"></tbody>
+  </table>
+</div>
+
+<script>
+// ===== 数据注入点 — 由 reconciliation_engine.py 的 generate_dashboard_data() 填充 =====
+const DASHBOARD_DATA = {{DATA_JSON}};
+
+// 外部数据（银行摘要、流水号等）一律按文本写入 DOM（textContent），不拼接 HTML。
+// esc()：如确需拼接 HTML 字符串，先用它转义 & < > " '。
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+// KPI 卡片
+const kpi = DASHBOARD_DATA.kpi;
+const kpis = [
+  { label: '对账匹配率', value: kpi.match_rate + '%', cls: kpi.match_rate >= 80 ? 'green' : 'orange' },
+  { label: '未匹配交易', value: kpi.unmatched_count + ' 笔', cls: 'red' },
+  { label: '应收逾期(>30天)', value: '¥' + (kpi.ar_overdue / 10000).toFixed(0) + '万', cls: 'orange' },
+  { label: '应付逾期(>30天)', value: '¥' + (kpi.ap_overdue / 10000).toFixed(0) + '万', cls: 'orange' },
+  { label: '期末资金余额', value: '¥' + (kpi.cash_balance / 10000).toFixed(0) + '万', cls: 'blue' },
+];
+const kpiArea = document.getElementById('kpi-area');
+kpis.forEach(k => {
+  const card = el('div', 'kpi-card');
+  card.appendChild(el('div', 'label', k.label));
+  card.appendChild(el('div', 'value ' + k.cls, k.value));
+  kpiArea.appendChild(card);
+});
+
+// ECharts 全局
+const PALETTE = ['#0052CC', '#FF9900', '#36B37E', '#DE350B', '#6554C0', '#00B8D9', '#FF5630', '#8993A4'];
+const charts = [];
+function mk(id, opt) {
+  const ch = echarts.init(document.getElementById(id));
+  ch.setOption(Object.assign({ color: PALETTE, backgroundColor: 'transparent', textStyle: { fontFamily: 'inherit' } }, opt));
+  charts.push(ch);
+  return ch;
+}
+window.addEventListener('resize', () => charts.forEach(c => c.resize()));
+const fmtWan = v => (v / 10000).toFixed(0) + '万';
+const toPie = arr => (arr || []).map(d => ({ name: d.name, value: d.y }));
+const names = arr => (arr || []).map(d => d.name);
+const vals = arr => (arr || []).map(d => d.y);
+
+// 对账环形图
+mk('chart-recon', {
+  tooltip: { trigger: 'item' },
+  series: [{ type: 'pie', radius: ['50%', '75%'], label: { formatter: '{b}: {c}笔' }, data: toPie(DASHBOARD_DATA.recon_pie) }]
+});
+
+// 资金走势（余额面积 + 收支柱，双 Y 轴）
+mk('chart-daily', {
+  tooltip: { trigger: 'axis' },
+  legend: { top: 0 },
+  grid: { left: 56, right: 56, top: 32, bottom: 28 },
+  xAxis: { type: 'category', data: DASHBOARD_DATA.daily.dates, axisLabel: { interval: 4, fontSize: 10 } },
+  yAxis: [
+    { type: 'value', name: '余额', axisLabel: { formatter: fmtWan } },
+    { type: 'value', name: '收支', axisLabel: { formatter: fmtWan } }
+  ],
+  series: [
+    { name: '期末余额', type: 'line', areaStyle: { opacity: 0.3 }, yAxisIndex: 0, data: DASHBOARD_DATA.daily.balance },
+    { name: '当日收入', type: 'bar', yAxisIndex: 1, data: DASHBOARD_DATA.daily.income },
+    { name: '当日支出', type: 'bar', yAxisIndex: 1, data: DASHBOARD_DATA.daily.expense }
+  ]
+});
+
+// 应收账龄
+mk('chart-ar', {
+  tooltip: { trigger: 'axis' },
+  grid: { left: 56, right: 16, top: 28, bottom: 28 },
+  xAxis: { type: 'category', data: names(DASHBOARD_DATA.ar_aging) },
+  yAxis: { type: 'value', name: '金额', axisLabel: { formatter: fmtWan } },
+  series: [{ name: '未收金额', type: 'bar', data: vals(DASHBOARD_DATA.ar_aging), itemStyle: { color: '#FF9900' } }]
+});
+
+// 应付账龄
+mk('chart-ap', {
+  tooltip: { trigger: 'axis' },
+  grid: { left: 56, right: 16, top: 28, bottom: 28 },
+  xAxis: { type: 'category', data: names(DASHBOARD_DATA.ap_aging) },
+  yAxis: { type: 'value', name: '金额', axisLabel: { formatter: fmtWan } },
+  series: [{ name: '未付金额', type: 'bar', data: vals(DASHBOARD_DATA.ap_aging), itemStyle: { color: '#DE350B' } }]
+});
+
+// 部门费用
+mk('chart-dept', {
+  tooltip: { trigger: 'item' },
+  series: [{ type: 'pie', radius: '65%', data: toPie(DASHBOARD_DATA.dept_expense),
+    label: { formatter: p => p.name + '\n¥' + Number(p.value).toLocaleString('zh-CN', { maximumFractionDigits: 0 }) } }]
+});
+
+// 供应商 Top10（横向条形，自上而下与原版顺序一致）
+mk('chart-vendor', {
+  tooltip: { trigger: 'axis' },
+  grid: { left: 110, right: 24, top: 16, bottom: 28 },
+  xAxis: { type: 'value', name: '金额', axisLabel: { formatter: fmtWan } },
+  yAxis: { type: 'category', inverse: true, data: names(DASHBOARD_DATA.vendor_top10), axisLabel: { fontSize: 11 } },
+  series: [{ name: '交易总额', type: 'bar', data: vals(DASHBOARD_DATA.vendor_top10), itemStyle: { color: '#0052CC' } }]
+});
+
+// 未匹配明细表
+const tbody = document.getElementById('unmatched-body');
+(DASHBOARD_DATA.unmatched_items || []).forEach(item => {
+  const key_amount = item['金额'] || item['支出'] || item['收入'] || 0;
+  const tr = el('tr');
+  tr.appendChild(el('td', '', item['交易流水号'] || ''));
+  tr.appendChild(el('td', '', item['交易日期'] || ''));
+  tr.appendChild(el('td', '', item['交易摘要'] || ''));
+  const amt = el('td', '', '¥' + Number(key_amount).toLocaleString('zh-CN', {minimumFractionDigits:2}));
+  amt.style.textAlign = 'right';
+  tr.appendChild(amt);
+  tbody.appendChild(tr);
+});
+</script>
+</body>
+</html>

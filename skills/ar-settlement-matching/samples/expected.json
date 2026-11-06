@@ -1,0 +1,100 @@
+{
+  "clean": {
+    "cutoff": "2026-09-30",
+    "data_issues~len": 0,
+    "all_ok": true,
+    "rec_summary~keys": [
+      "pass"
+    ],
+    "inv_summary~keys": [
+      "已结清",
+      "未收",
+      "部分核销"
+    ],
+    "alloc_summary~keys": [
+      "无效",
+      "有效"
+    ],
+    "pass_rate": 100.0,
+    "issue_types~keys": [],
+    "gl_issues~len": 0,
+    "unbooked_bank~len": 0,
+    "conservation~keys": [
+      "1122总账",
+      "2203总账",
+      "发票张数",
+      "收款合计",
+      "收款笔数",
+      "有效核销合计",
+      "期末应收(核销结果)",
+      "未核销余额合计",
+      "未核销收款(预收)",
+      "核销笔数",
+      "正常发票应收合计",
+      "银行到账合计",
+      "银行到账未入账合计",
+      "银行流水号重复行合计"
+    ],
+    "inputs~len": 7,
+    "receipts~len": 66,
+    "invoices~len": 142,
+    "allocations~len": 103
+  },
+  "error": {
+    "cutoff": "2026-09-30",
+    "data_issues~len": 1,
+    "all_ok": false,
+    "rec_summary~keys": [
+      "fail",
+      "pass"
+    ],
+    "inv_summary~keys": [
+      "作废",
+      "已结清",
+      "未收",
+      "部分核销"
+    ],
+    "alloc_summary~keys": [
+      "无效",
+      "有效"
+    ],
+    "pass_rate": 86.6,
+    "issue_types~keys": [
+      "发票·作废发票被核销",
+      "发票·超额核销",
+      "含无效核销",
+      "收款挂错客户",
+      "收款无银行流水",
+      "收款早于银行到账",
+      "收款金额与银行不符",
+      "数据质量·数值无法解析",
+      "期末应收与1122总账不符",
+      "未核销收款与2203总账不符",
+      "核销超收款",
+      "银行到账未入账",
+      "银行流水号重复"
+    ],
+    "gl_issues~len": 2,
+    "unbooked_bank~len": 1,
+    "conservation~keys": [
+      "1122总账",
+      "2203总账",
+      "发票张数",
+      "收款合计",
+      "收款笔数",
+      "有效核销合计",
+      "期末应收(核销结果)",
+      "未核销余额合计",
+      "未核销收款(预收)",
+      "核销笔数",
+      "正常发票应收合计",
+      "银行到账合计",
+      "银行到账未入账合计",
+      "银行流水号重复行合计"
+    ],
+    "inputs~len": 7,
+    "receipts~len": 67,
+    "invoices~len": 142,
+    "allocations~len": 106
+  }
+}

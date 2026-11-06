@@ -1,0 +1,70 @@
+{
+  "clean": {
+    "summary~keys": [
+      "matched"
+    ],
+    "data_issues~len": 0,
+    "all_ok": true,
+    "total": 59,
+    "match_rate": 100.0,
+    "issue_types~keys": [],
+    "missing_count~len": 0,
+    "normal_loss_items": 10,
+    "n_loss": 0,
+    "n_gain": 0,
+    "conservation~keys": [
+      "净差异",
+      "多仓漏盘",
+      "实盘行数",
+      "盘亏毛额",
+      "盘亏金额",
+      "盘盈毛额",
+      "盘盈金额",
+      "账存行数",
+      "账面总额"
+    ],
+    "inputs~len": 4,
+    "results~len": 59
+  },
+  "error": {
+    "summary~keys": [
+      "difference",
+      "exception",
+      "matched"
+    ],
+    "data_issues~len": 1,
+    "all_ok": false,
+    "total": 60,
+    "match_rate": 83.3,
+    "issue_types~keys": [
+      "单价为零",
+      "单位不一致",
+      "多仓漏盘",
+      "实有账无",
+      "实盘为负",
+      "数据质量·数值无法解析",
+      "盘亏",
+      "盘盈",
+      "账存为负",
+      "账有实无",
+      "重大差异"
+    ],
+    "missing_count~len": 2,
+    "normal_loss_items": 7,
+    "n_loss": 5,
+    "n_gain": 2,
+    "conservation~keys": [
+      "净差异",
+      "多仓漏盘",
+      "实盘行数",
+      "盘亏毛额",
+      "盘亏金额",
+      "盘盈毛额",
+      "盘盈金额",
+      "账存行数",
+      "账面总额"
+    ],
+    "inputs~len": 4,
+    "results~len": 60
+  }
+}

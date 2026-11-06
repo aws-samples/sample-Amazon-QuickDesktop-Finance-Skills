@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><title>#3 报表勾稽自检 · 方案讲解 — Amazon Quick Desktop 财务场景库</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'PingFang SC',-apple-system,'Microsoft YaHei',sans-serif;background:#0a0e1a;color:#1e2a44}
+.slide{position:absolute;inset:0;height:calc(100% - 54px);display:none;flex-direction:column;justify-content:center;padding:32px 56px;opacity:0;transition:opacity .5s}
+.slide.active{display:flex;opacity:1}
+.brand{position:absolute;top:20px;left:56px;font-size:12px;color:#4299e1;font-weight:700}
+.tag{position:absolute;top:18px;right:56px;font-size:10px;color:#f6ad55;background:rgba(246,173,85,.1);border:1px solid rgba(246,173,85,.28);border-radius:5px;padding:4px 10px}
+h1{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.3}
+h1 .hl{background:linear-gradient(90deg,#4299e1,#6d4ad8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:14px;color:#5f6b82;margin-bottom:20px;line-height:1.6;max-width:760px}
+.kpi-row{display:flex;gap:14px;margin:10px 0}
+.kpi{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:14px 18px;flex:1}
+.kpi .v{font-size:26px;font-weight:800}.kpi .l{font-size:11px;color:#5f6b82;margin-top:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:12px;padding:18px}
+.card h3{font-size:15px;margin-bottom:8px;color:#2b7fd4}.card p{font-size:12.5px;color:#3f4c66;line-height:1.65}
+.brow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bname{width:120px;font-size:11px;color:#3f4c66;text-align:right;flex-shrink:0}
+.btrack{flex:1;height:14px;background:rgba(30,45,75,.05);border-radius:3px;overflow:hidden}
+.bfill{height:14px;border-radius:3px}.bval{width:48px;font-size:11px;color:#5f6b82}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:11px;color:#5f6b82}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{text-align:left;color:#718096;font-weight:600;padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.12);font-size:9.5px}
+td{padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.05)}
+.flow{display:flex;align-items:center;gap:6px;margin:14px 0}
+.fstep{flex:1;background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:12px;text-align:center}
+.fstep .n{font-size:10px;color:#718096;font-weight:700}.fstep .t{font-size:12.5px;font-weight:600;margin:3px 0}.fstep .d{font-size:10px;color:#5f6b82}
+.farr{color:#4a5568;font-size:16px}
+.quote{border-left:3px solid #4299e1;background:rgba(66,153,225,.08);border-radius:0 8px 8px 0;padding:12px 16px;font-size:13.5px;color:#2b6fb0;font-style:italic;line-height:1.55;margin-top:14px}
+.judge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(66,153,225,.15);color:#2b7fd4;margin:2px}
+.ctrl{position:fixed;bottom:0;left:0;right:0;height:54px;background:rgba(10,14,26,.97);border-top:1px solid rgba(30,45,75,.08);display:flex;align-items:center;padding:0 20px;gap:10px;z-index:99}
+.ctrl button{background:rgba(30,45,75,.1);border:1px solid rgba(30,45,75,.15);color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer}
+.ctrl button.pri{background:#4299e1;border-color:#4299e1}
+.dots{flex:1;display:flex;gap:6px;justify-content:center}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(30,45,75,.2);cursor:pointer}
+.dot.on{background:#2b7fd4;width:22px;border-radius:4px}
+.info{font-size:11px;color:#718096;min-width:56px;text-align:right}
+.sub-bar{position:fixed;bottom:54px;left:0;right:0;background:rgba(0,0,0,.75);color:#fff;padding:10px 24px;text-align:center;font-size:14px;display:none;z-index:98}
+.sub-bar.on{display:block}
+</style></head><body>
+<div class="slide active" data-i="0" style="justify-content:center;text-align:center">
+  <div class="tag">⚠️ 数据及企业均为构造，非真实数据</div>
+  <div style="max-width:860px;margin:0 auto"><div style="font-size:24px;font-weight:800;letter-spacing:.8px;color:#4299e1;margin-bottom:14px">Amazon Quick Desktop</div>
+  <h1>报表勾稽自检 <span class="hl">财报报出前的平衡闸门</span></h1>
+  <p class="sub" style="margin:0 auto 20px">资产负债表 · 利润表 · 现金流量表 · 未分配利润滚动表，四表 17 项勾稽一次校验。核心判据：<b style="color:#2b7fd4">守恒 · 恒等式</b>。</p>
+  <div class="kpi-row" style="max-width:760px;margin:0 auto">
+    <div class="kpi"><div class="v" style="color:#4299e1">17</div><div class="l">勾稽校验项</div></div>
+    <div class="kpi"><div class="v" style="color:#48bb78">17/17</div><div class="l">全平版通过</div></div>
+    <div class="kpi"><div class="v" style="color:#f56565">5 → 8</div><div class="l">植入错误 → 告警</div></div>
+  </div></div></div>
+<div class="slide" data-i="1"><div class="brand">报表勾稽 · 端到端流程</div>
+  <h1 style="font-size:23px">端到端方案：输入 → 处理 → 输出</h1>
+  <div style="display:grid;grid-template-columns:0.95fr 1.15fr;gap:18px;margin-top:8px">
+    <div class="card"><h3>① 输入契约</h3>
+      <table style="font-size:11px"><tr><th>字段</th><th>说明</th></tr><tr><td style="color:#2b7fd4;white-space:nowrap">资产负债表</td><td style="color:#3f4c66">项目, 金额, 分区（流动/非流动资产、负债、权益及各层合计）</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">利润表</td><td style="color:#3f4c66">营业收入至净利润，含营业利润、利润总额两层小计</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">现金流量表 & 未分配利润滚动</td><td style="color:#3f4c66">三类现金流、期初期末现金；期初、净利润、盈余公积、分红、期末</td></tr></table></div>
+    <div class="card"><h3>③ 输出契约</h3>
+      <ul style="font-size:12px;color:#3f4c66;padding-left:16px;margin-top:4px"><li style="margin-bottom:5px">逐项结果：勾稽项、类型、左值、右值、差异、是否通过</li><li style="margin-bottom:5px">结论：全平可报出 / 有不平须修正</li><li style="margin-bottom:5px">可回溯证据 JSON + 网页/PDF/Markdown/Excel 四种报告</li></ul></div>
+  </div>
+  <div style="margin-top:14px"><div style="font-size:12px;color:#2b7fd4;margin-bottom:6px;font-weight:600">② 处理步骤（确定性）</div>
+    <div class="flow" style="margin:0"><div class="fstep"><div class="n">1</div><div class="t" style="font-size:11.5px">读四表</div><div class="d">按分区
+载入</div></div><div class="farr">›</div><div class="fstep"><div class="n">2</div><div class="t" style="font-size:11.5px">表内小计</div><div class="d">合计=明细
+逐层核对</div></div><div class="farr">›</div><div class="fstep"><div class="n">3</div><div class="t" style="font-size:11.5px">会计恒等式</div><div class="d">资产=负债
++权益</div></div><div class="farr">›</div><div class="fstep"><div class="n">4</div><div class="t" style="font-size:11.5px">三表勾稽</div><div class="d">跨表同源
+一致</div></div><div class="farr">›</div><div class="fstep"><div class="n">5</div><div class="t" style="font-size:11.5px">证据落盘</div><div class="d">逐条留痕
++口径声明</div></div></div></div>
+</div>
+<div class="slide" data-i="2"><div class="brand">报表勾稽 · 架构全景</div>
+  <h1 style="font-size:23px">架构全景：一句话触发，五层完成校验</h1>
+  <div style="display:flex;justify-content:center;align-items:center;flex:1;margin-top:4px"><svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-height:calc(100vh - 300px)">
+<defs><marker id="am63b3ed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2b7fd4"/></marker><marker id="amb794f4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#8b5cf0"/></marker><marker id="am48bb78" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#48bb78"/></marker><marker id="amf6ad55" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f6ad55"/></marker><filter id="ash"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.18"/></filter>
+<linearGradient id="agc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2b7fd4" stop-opacity="0.10"/><stop offset="100%" stop-color="#2b7fd4" stop-opacity="0.02"/></linearGradient></defs>
+<text x="95" y="22" font-size="13" font-weight="700" fill="#2b7fd4" text-anchor="middle">输入与触发</text>
+<rect x="20" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="58" font-size="16" text-anchor="middle">📑</text><text x="95.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">三大报表 CSV</text><text x="95.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">资产负债/利润/现金流</text>
+<rect x="20" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="134" font-size="16" text-anchor="middle">🔄</text><text x="95.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">未分配利润滚动</text><text x="95.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">期初·净利·公积·分红</text>
+<rect x="20" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="210" font-size="16" text-anchor="middle">🗂️</text><text x="95.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">数据来源</text><text x="95.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">授权文件夹 / 系统导出</text>
+<rect x="20" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="95.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">一句话触发</text><text x="95.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">“报表勾稽”</text>
+<rect x="20" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="362" font-size="16" text-anchor="middle">⏰</text><text x="95.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">定时任务（使用者配置）</text><text x="95.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">每期报表编制完成后</text>
+<rect x="240" y="16" width="480" height="412" rx="16" fill="url(#agc)" stroke="#2b7fd4" stroke-width="1.4" stroke-dasharray="6,3"/>
+<text x="480" y="40" font-size="14.5" font-weight="800" fill="#2b6fb0" text-anchor="middle">Amazon Quick</text>
+<rect x="262" y="52" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#8b5cf0" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="75" font-size="16">🧭</text><text x="304" y="75" font-size="12.5" font-weight="700" fill="#8b5cf0">① 编排层 · 模型（指挥官）</text><text x="280" y="94" font-size="10.5" fill="#3f4c66">识别意图、编排工具；不接触原始财报数据，只看结果摘要</text>
+<rect x="262" y="116" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="139" font-size="16">📥</text><text x="304" y="139" font-size="12.5" font-weight="700" fill="#2b7fd4">② 数据接入层</text><text x="280" y="158" font-size="10.5" fill="#3f4c66">读取四表 CSV，按「分区」识别明细与小计；云上可走 OneDrive</text>
+<rect x="262" y="180" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#48bb78" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="203" font-size="16">⚙️</text><text x="304" y="203" font-size="12.5" font-weight="700" fill="#48bb78">③ 确定性校验层 · 本地沙箱（操作员）</text><text x="280" y="222" font-size="10.5" fill="#3f4c66">report_tieout_check_v2.py：表内小计 12 项 · 会计恒等式 1 项 · 三表勾稽 4 项</text>
+<rect x="262" y="244" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#f6ad55" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="267" font-size="16">🧾</text><text x="304" y="267" font-size="12.5" font-weight="700" fill="#f6ad55">④ 证据层</text><text x="280" y="286" font-size="10.5" fill="#3f4c66">逐条左值/右值/差异 + 口径三元组（时点·主体·准则）+ 时间戳 → 证据 JSON</text>
+<rect x="262" y="308" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="331" font-size="16">📤</text><text x="304" y="331" font-size="12.5" font-weight="700" fill="#2b7fd4">⑤ 交付层</text><text x="280" y="350" font-size="10.5" fill="#3f4c66">网页 · PDF · Markdown · Excel 四种报告；不平时生成脱敏摘要，由使用者自行分发</text>
+<rect x="262" y="374" width="436" height="40" rx="8" fill="rgba(183,148,244,0.08)" stroke="#8b5cf0" stroke-width="1" stroke-dasharray="4,2"/>
+<text x="280" y="399" font-size="15">🧩</text><text x="304" y="399" font-size="11.5" font-weight="700" fill="#8b5cf0">Skill 固化：report-tieout-check</text>
+<text x="486" y="399" font-size="10" fill="#5f6b82">上层契约+判据不折旧 · 下层脚本可替换</text>
+<text x="865" y="22" font-size="13" font-weight="700" fill="#48bb78" text-anchor="middle">输出端</text>
+<rect x="790" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="58" font-size="16" text-anchor="middle">🌐</text><text x="865.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">网页报告</text><text x="865.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">逐条校验表</text>
+<rect x="790" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="134" font-size="16" text-anchor="middle">📕</text><text x="865.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">PDF / Excel</text><text x="865.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">报送 · 筛选复核</text>
+<rect x="790" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="210" font-size="16" text-anchor="middle">📝</text><text x="865.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">证据 JSON</text><text x="865.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">可回溯 · 可复算</text>
+<rect x="790" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="865.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">脱敏摘要</text><text x="865.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">由使用者自行分发</text>
+<rect x="790" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="362" font-size="16" text-anchor="middle">🗄️</text><text x="865.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">Agent Files 归档</text><text x="865.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">跨期留档</text>
+<line x1="172" y1="68" x2="258" y2="79" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="144" x2="258" y2="143" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="220" x2="258" y2="150" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/>
+<line x1="172" y1="296" x2="258" y2="90" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="172" y1="372" x2="258" y2="96" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/>
+<line x1="700" y1="335" x2="786" y2="68" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="335" x2="786" y2="144" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="271" x2="786" y2="220" stroke="#f6ad55" stroke-width="1.6" marker-end="url(#amf6ad55)"/><line x1="700" y1="340" x2="786" y2="296" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="345" x2="786" y2="372" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/>
+</svg></div>
+  <div class="quote" style="margin-top:6px">local 模式下，四表数据、校验计算和明细结果全程留在本机，模型只看到结果摘要；云上模式则由连接器取数、云端沙箱计算。两种模式只看数据源头在哪。</div></div>
+<div class="slide" data-i="3"><div class="brand">报表勾稽 · 是什么实现的</div>
+  <h1 style="font-size:23px">实现机制：从对话到 <span class="hl">可复用 Skill</span></h1>
+  <p class="sub" style="margin-bottom:14px">模型当"指挥官"做意图识别与工具编排，本地沙箱当"操作员"跑确定性脚本——最终固化为一个 Skill</p>
+  <div class="flow" style="margin:6px 0 14px">
+    <div class="fstep" style="border-top:3px solid #4299e1"><div class="t">🗣️ 触发</div><div class="d">一句话 / 连接器<br>/ 定时任务（使用者配置）</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #6d4ad8"><div class="t">🧭 模型编排</div><div class="d">意图识别<br>工具编排(指挥官)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #48bb78"><div class="t">🔒 本地沙箱</div><div class="d">确定性脚本<br>数据本地(操作员)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #ed8936"><div class="t">✅ 判据校验</div><div class="d">守恒<br>恒等式</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #f6ad55"><div class="t">📊 产出</div><div class="d">报告+仪表盘<br>+沉淀归档</div></div>
+  </div>
+  <div class="two" style="gap:16px">
+    <div class="card" style="border-color:rgba(99,179,237,.4)"><h3>🧱 固化为 Skill（核心）</h3>
+      <p style="font-size:12px;line-height:1.7">这套流程被写成一个 <b style="color:#2b7fd4">SKILL.md</b>，一句"<b>报表勾稽</b>"即可复用：<br>
+      · <b style="color:#2b6fb0">上层不折旧</b>：目标+输入契约+处理步骤+输出契约+<b>验收判据</b>（跨平台、核心IP）<br>
+      · <b style="color:#9ae6b4">下层可替换</b>：连接器+API+脚本+路径（随平台演进替换）</p></div>
+    <div class="card"><h3>⚙️ 本场景实现</h3>
+      <p style="font-size:12px;line-height:1.7">
+      · 连接器：本地报表 CSV、或财务系统导出<br>
+      · 确定性脚本：<code style="color:#f6ad55">report_tieout_check_v2.py</code>（含守恒自检 assert）<br>
+      · Skill 名：<code style="color:#2b7fd4">report-tieout-check</code><br>
+      · 敏感数据走 <b style="color:#9ae6b4">本地安全执行</b>（financial-local-safety）</p></div>
+  </div>
+</div>
+<div class="slide" data-i="4"><div class="brand">报表勾稽 · 样例数据</div>
+  <h1 style="font-size:23px">构造数据：接近真实报表结构</h1>
+  <div class="two">
+    <div><div class="card"><h3>四表规模（示例集团 · 虚构）</h3>
+    <table><tr><th>表</th><th style="text-align:right">行数</th><th>结构</th></tr>
+    <tr><td>资产负债表</td><td style="text-align:right">32（植错版 33）</td><td>流动/非流动分区 + 四层小计</td></tr>
+    <tr><td>利润表</td><td style="text-align:right">14</td><td>营业利润、利润总额两层</td></tr>
+    <tr><td>现金流量表</td><td style="text-align:right">6</td><td>三类现金流 + 期初期末</td></tr>
+    <tr><td>未分配利润滚动</td><td style="text-align:right">5</td><td>含提取盈余公积、分红</td></tr></table></div></div>
+    <div><div class="card"><h3>两个版本做对照</h3>
+    <p>· <b style="color:#48bb78">全平版</b>：按勾稽关系生成，理论上全部平衡<br><br>
+    · <b style="color:#f56565">植错版</b>：改 5 处<br>
+    　① 资产总计少计 42.75 万<br>　② 净利润多计 2.5 万<br>　③ 期末现金少计 10 万<br>　④ 投资收益写成 "600,000"（千分位，无法解析）<br>　⑤ 新增一行其他综合收益 "1,500,000"（无法解析；按 0 计时所有者权益合计恰好相符）</p></div></div>
+  </div>
+  <div class="quote">口径：2026-08-31 期末 · 示例集团（虚构）· 企业会计准则。资产总计 1.064 亿 = 负债 5,120 万 + 所有者权益 5,523 万。</div></div>
+<div class="slide" data-i="5"><div class="brand">报表勾稽 · 核心判据</div>
+  <h1 style="font-size:23px">三类勾稽，17 项校验</h1>
+  <div class="three">
+    <div class="card"><h3>会计恒等式 · 1 项</h3><p>资产 = 负债 + 所有者权益。报表平衡的总闸门。</p></div>
+    <div class="card"><h3>表内小计 · 12 项</h3><p>各层合计 = 明细之和，覆盖资产负债表四层、利润表两层、现金流量表。</p></div>
+    <div class="card"><h3>三表勾稽 · 4 项</h3><p>期末现金 = 货币资金；净利润 = 滚动表净利润；未分配利润前后一致。</p></div>
+  </div>
+  <div style="max-width:680px;margin-top:14px"><div style="font-size:12px;color:#5f6b82;margin-bottom:6px">植错版各类结果（绿=通过，红=不平）</div><div class="brow"><div class="bname" style="width:90px">表内小计</div><div class="btrack"><div class="bfill" style="width:58%;background:#48bb78;display:inline-block"></div><div class="bfill" style="width:42%;background:#f56565;display:inline-block"></div></div><div class="bval">7✓ / 5✗</div></div><div class="brow"><div class="bname" style="width:90px">会计恒等式</div><div class="btrack"><div class="bfill" style="width:0%;background:#48bb78;display:inline-block"></div><div class="bfill" style="width:8%;background:#f56565;display:inline-block"></div></div><div class="bval">0✓ / 1✗</div></div><div class="brow"><div class="bname" style="width:90px">三表勾稽</div><div class="btrack"><div class="bfill" style="width:17%;background:#48bb78;display:inline-block"></div><div class="bfill" style="width:17%;background:#f56565;display:inline-block"></div></div><div class="bval">2✓ / 2✗</div></div></div></div>
+<div class="slide" data-i="6"><div class="brand">报表勾稽 · 校验结果</div>
+  <h1 style="font-size:23px">5 处错误，触发 8 条告警</h1>
+  <div class="two">
+    <div class="card" style="text-align:center"><h3>全平版</h3><svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#48bb78" stroke-width="16" stroke-dasharray="301.6 0.0" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="20" font-weight="800" fill="#1e2a44">17/17</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">通过</text></svg><p style="color:#48bb78"><b>全部平衡 · 可以报出</b></p></div>
+    <div class="card" style="text-align:center"><h3>植错版</h3><svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#f56565" stroke-width="16" stroke-dasharray="159.7 141.9" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="20" font-weight="800" fill="#1e2a44">9/17</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">通过</text></svg><p style="color:#f56565"><b>8 处不平（含 2 处缺数据）· 须修正后报出</b></p></div>
+  </div>
+  <div class="quote">勾稽关系是一张网：资产总计填错，会同时打破"表内小计"和"会计恒等式"两条链。所以告警数多于错误数，但每条告警都能顺着追回同一个根源。</div></div>
+<div class="slide" data-i="7"><div class="brand">报表勾稽 · 不平清单</div>
+  <h1 style="font-size:23px">植错版不平明细</h1>
+  <div class="card"><table><tr><th>勾稽项</th><th>类型</th><th style="text-align:right">左值</th><th style="text-align:right">右值</th><th style="text-align:right">差异</th></tr><tr><td>资产总计=流动+非流动资产</td><td>表内小计</td><td style="text-align:right">106,000,000</td><td style="text-align:right">106,427,500</td><td style="text-align:right;color:#fc8181">-427,500</td></tr><tr><td>所有者权益合计=各权益科目之和</td><td>表内小计</td><td style="text-align:right">55,227,500</td><td style="text-align:right">55,227,500</td><td style="text-align:right;color:#fc8181">缺数据：其他综合收益</td></tr><tr><td>会计恒等式:资产=负债+所有者权益</td><td>会计恒等式</td><td style="text-align:right">106,000,000</td><td style="text-align:right">106,427,500</td><td style="text-align:right;color:#fc8181">-427,500</td></tr><tr><td>营业利润=收入-成本-税金-费用+投资收益</td><td>表内小计</td><td style="text-align:right">7,200,000</td><td style="text-align:right">6,600,000</td><td style="text-align:right;color:#fc8181">缺数据：投资收益</td></tr><tr><td>净利润=利润总额-所得税</td><td>表内小计</td><td style="text-align:right">5,500,000</td><td style="text-align:right">5,475,000</td><td style="text-align:right;color:#fc8181">+25,000</td></tr><tr><td>期末现金=期初+净增加</td><td>表内小计</td><td style="text-align:right">12,400,000</td><td style="text-align:right">12,500,000</td><td style="text-align:right;color:#fc8181">-100,000</td></tr><tr><td>[跨表]CF期末现金=BS货币资金</td><td>三表勾稽</td><td style="text-align:right">12,400,000</td><td style="text-align:right">12,500,000</td><td style="text-align:right;color:#fc8181">-100,000</td></tr><tr><td>[跨表]净利润:利润表=未分配利润滚动</td><td>三表勾稽</td><td style="text-align:right">5,500,000</td><td style="text-align:right">5,475,000</td><td style="text-align:right;color:#fc8181">+25,000</td></tr></table></div>
+  <div class="quote">按差异金额归并即可定位根源：−427,500 指向资产总计，+25,000 指向净利润，−100,000 指向期末现金——正好对应植入的 3 处金额错误；第 4 处投资收益无法解析，引用它的营业利润勾稽项标为缺数据，不按 0 计；第 5 处其他综合收益无法解析，按 0 计时所有者权益合计左右恰好相等，脚本仍把这一项标为缺数据、判不通过。</div></div>
+<div class="slide" data-i="8"><div class="brand">报表勾稽 · 判据边界</div>
+  <h1 style="font-size:23px">勾稽全平，不等于报表一定正确</h1>
+  <table>
+    <tr><th>盲区</th><th>为什么抓不到</th><th>处置</th><th>可闭合性</th></tr>
+    <tr><td>口径与时点</td><td>等式内部自洽，但取的是错期、错主体的数</td><td>声明口径三元组（时点·主体·准则）；跨期衔接：本期期初 = 上期期末</td><td style="color:#48bb78">🟢 可自补</td></tr>
+    <tr><td>同源一起错</td><td>三张表若由同一张错误的试算平衡表生成，跨表勾稽照样全平</td><td>关键项接外部锚点：银行对账单、纳税申报、审计调整</td><td style="color:#f6ad55">🟡 需外部锚点</td></tr>
+  </table>
+  <div class="quote">恒等式只能证明"表与表之间说法一致"，不能证明"说的是真的"。这两类边界已写入 Skill 的判据覆盖声明。</div></div>
+<div class="slide" data-i="9"><div class="brand">报表勾稽 · 过程可回溯</div>
+  <h1 style="font-size:23px">每个结论都能倒查回原始数</h1>
+  <div class="three">
+    <div class="card"><h3>① 逐条留痕</h3><p>17 项每项记录左值、右值、差异、是否通过，不只给一个总结论。</p></div>
+    <div class="card"><h3>② 口径声明</h3><p>时点 2026-08-31 · 主体 示例集团（虚构）· 准则 企业会计准则 · 生成时间戳。</p></div>
+    <div class="card"><h3>③ 独立复算</h3><p>同一份 CSV 在云端和本机分别重算，结果一致。</p></div>
+  </div>
+  <div class="quote">证据 JSON 同时输出为网页、PDF、Markdown、Excel 四种报告，审计可按任意一条追溯到源数据。</div></div>
+<div class="slide" data-i="10"><div class="brand">报表勾稽 · 部署与复用</div>
+  <h1 style="font-size:23px">一次构建 · 处处复用</h1>
+  <div class="three" style="margin-bottom:14px">
+    <div class="card"><h3>🗣️ 一句话触发</h3><p>对话框输入"报表勾稽"触发词即时运行</p></div>
+    <div class="card"><h3>⏰ 定时任务</h3><p>使用者在 Mission Control 自行配置定时任务（routine）周期运行；产出由使用者确认后自行分发</p></div>
+    <div class="card"><h3>🧠 Agent Files 记忆</h3><p>规则表、上期结果持久缓存，形成环比链</p></div>
+  </div>
+  <div class="kpi-row" style="margin-bottom:12px"><div class="kpi"><div class="v" style="color:#48bb78;font-size:22px">秒级</div><div class="l">人工逐项对表 → 自动校验</div></div><div class="kpi"><div class="v" style="color:#4299e1;font-size:22px">100%</div><div class="l">逐条可追溯</div></div><div class="kpi"><div class="v" style="color:#f6ad55;font-size:22px">0</div><div class="l">原始财报数据上云（本地模式）</div></div></div>
+  <div class="quote">恒等式判据可直接复用到合并报表、分部报表、月报季报和预算实际对比——凡是“合计等于明细、跨表同源一致”的场景都适用。</div>
+</div>
+<div class="sub-bar" id="subbar"><span id="subtxt"></span></div>
+<div class="ctrl">
+  <button class="pri" id="play" onclick="toggle()">▶ 开始讲解</button>
+  <button onclick="go(cur-1)">‹ 上一页</button>
+  <div class="dots" id="dots"></div>
+  <button onclick="go(cur+1)">下一页 ›</button>
+  <button onclick="fs()">⛶ 全屏</button>
+  <div class="info" id="info">1 / 10</div>
+</div>
+<script>
+var TOTAL=11,cur=0,speaking=false,synth=window.speechSynthesis;
+var narr=[
+"本页介绍报表勾稽自检方案。财务报表对外报出前，自动校验资产负债表、利润表、现金流量表和未分配利润滚动表之间的全部勾稽关系，共 17 项，核心判据是守恒和恒等式。需要说明，以下数据及企业均为构造，非真实数据。",
+"先看端到端流程。输入是四张表，每一行带一个分区标记，说明它属于流动资产、非流动负债还是所有者权益。处理分五步：按分区读入四表；逐层核对表内小计；校验会计恒等式；校验三表之间的跨表勾稽；最后把每一条结果连同口径声明落盘。输出是逐项结果、报出结论和四种格式的报告。",
+"这是架构全景图。左侧是输入与触发：三大报表和未分配利润滚动表的 C S V，来自本机授权文件夹或财务系统导出，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，在每期报表编制完成后运行。中间是 Amazon Quick 内部的五层。第一层是编排层，模型充当指挥官，识别意图、选择 Skill、编排工具，但不接触原始财报数据，只看结果摘要。第二层是数据接入层，按分区识别明细和小计。第三层是确定性校验层，由本地沙箱里的脚本充当操作员，完成表内小计 12 项、会计恒等式 1 项、三表勾稽 4 项。第四层是证据层，逐条记录左值、右值、差异和口径声明。第五层是交付层，输出四种格式的报告。底部这条是 Skill 固化，上层契约和判据不会过时，下层脚本可以替换。右侧是输出端：网页、P D F、Excel 报告，可回溯的证据文件，由使用者自行分发的脱敏摘要，以及 Agent Files 归档。在全部本地模式下，数据、计算和明细结果都留在本机。",
+"这套方案是怎么实现的。用户一句报表勾稽即可触发。模型负责理解意图和编排工具，但它不接触原始财报数据，只看结果摘要；真正的校验在本地沙箱里由确定性脚本完成。脚本按分区动态求和，不把科目名写死，因此能处理完整的报表结构。整套流程已固化为可复用的 Skill，契约和判据是不会过时的上层，连接器和脚本是可替换的下层。",
+"来看样例数据。我们构造了一家虚构的示例集团，资产负债表 32 行（植错版多一行），带流动和非流动分区以及四层小计；利润表 14 行，分营业利润和利润总额两层；未分配利润滚动表包含提取盈余公积和分红。数据有两个版本：全平版按勾稽关系生成，理论上全部平衡；植错版改了 5 处，分别是资产总计少计 42.75 万、净利润多计 2.5 万、期末现金少计 10 万，把投资收益写成带千分位的 600,000，以及新增一行写成 1,500,000 的其他综合收益，后两处都无法解析。",
+"核心判据是三类勾稽。会计恒等式 1 项，资产必须等于负债加所有者权益；表内小计 12 项，每一层合计都必须等于明细之和；三表勾稽 4 项，比如现金流量表的期末现金必须等于资产负债表的货币资金。三类加起来一共 17 项。",
+"来看结果对照。全平版 17 项全部通过，可以报出。植错版改了 5 处，触发了 8 条告警，通过 9 项。金额无法解析时，脚本不把它当 0，而是把引用它的勾稽项判为不通过，并报出数据质量问题，整套报表不能判为全平。其他综合收益如果按 0 计，所有者权益合计会恰好相符，脚本照样判这一项不通过。原因是勾稽关系是一张网，资产总计填错，会同时打破表内小计和会计恒等式两条链。告警多于错误，但每条告警都能顺着追回同一个根源。",
+"这是植错版的不平清单，每条都列出勾稽项、左值、右值和差异。把差异金额相同的告警归并，就能定位根源：负 42 万 7 千 5 百指向资产总计，正 2 万 5 千指向净利润，负 10 万指向期末现金；营业利润和所有者权益合计两条标着缺数据，分别指向无法解析的投资收益和其他综合收益，正好对应植入的 5 处错误。",
+"还要讲清楚判据的边界。勾稽全平，不等于报表一定正确。第一类是口径与时点：等式内部自洽，但取的可能是错误期间或错误主体的数，处置办法是声明时点、主体、准则三要素，并校验本期期初等于上期期末，这一类可以自己补上。第二类是同源一起错：如果三张表都由同一张错误的试算平衡表生成，跨表勾稽照样全平，这需要接入银行对账单、纳税申报等外部来源才能打破。",
+"最后是过程可回溯。第一，逐条留痕，17 项每一项都记录左值、右值、差异和是否通过。第二，口径声明，记下时点、主体、准则和生成时间。第三，独立复算，同一份数据在云端和本机分别重算，结果一致。这些证据同时输出为网页、PDF、Markdown 和 Excel 四种报告，审计可以按任意一条追回源数据。",
+"部署上，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，在每期报表编制完成后运行，发现不平时在结果中标出预警。恒等式这套判据还能直接复用到合并报表、分部报表、月报季报和预算实际对比。总结一句：报表勾稽把人工逐项对表，变成可追溯的自动校验，并且清楚说明它能抓到什么、抓不到什么。"
+];
+var dd=document.getElementById('dots');
+for(var i=0;i<TOTAL;i++){var e=document.createElement('div');e.className='dot'+(i===0?' on':'');e.onclick=(function(k){return function(){go(k)}})(i);dd.appendChild(e);}
+function go(n){if(n<0||n>=TOTAL)return;var sl=document.querySelectorAll('.slide');sl.forEach(function(x){x.classList.remove('active')});sl[n].classList.add('active');cur=n;document.querySelectorAll('.dot').forEach(function(x,k){x.className='dot'+(k===n?' on':'')});document.getElementById('info').textContent=(n+1)+' / '+TOTAL;if(speaking)speakCur();}
+function splitS(t){var p=t.replace(/([。！？；])/g,'$1\n').split('\n');return p.map(function(x){return x.trim()}).filter(function(x){return x.length>0});}
+function voice(){var v=synth.getVoices();return v.find(function(x){return x.name.indexOf('Yunxi')>-1})||v.find(function(x){return x.name.indexOf('Yunyang')>-1})||v.find(function(x){return x.name.indexOf('Yunjian')>-1})||v.find(function(x){return x.lang==='zh-CN'&&x.name.indexOf('Microsoft')>-1})||v.find(function(x){return x.lang==='zh-CN'})||v.find(function(x){return x.lang.indexOf('zh')===0});}
+function speakCur(){if(!speaking)return;synth.cancel();var ss=splitS(narr[cur]);if(!ss.length)ss=[narr[cur]];var i=0;var bar=document.getElementById('subbar'),tx=document.getElementById('subtxt');function nx(){if(!speaking){bar.classList.remove('on');return;}if(i>=ss.length){bar.classList.remove('on');if(speaking&&cur<TOTAL-1){go(cur+1);setTimeout(speakCur,400);}else if(speaking){toggle();}return;}bar.classList.add('on');tx.textContent=ss[i];var u=new SpeechSynthesisUtterance(ss[i]);u.lang='zh-CN';u.rate=0.9;u.pitch=1.1;var vo=voice();if(vo)u.voice=vo;u.onend=function(){i++;nx();};synth.speak(u);}nx();}
+function toggle(){if(speaking){speaking=false;synth.cancel();document.getElementById('subbar').classList.remove('on');document.getElementById('play').textContent='▶ 开始讲解';}else{speaking=true;document.getElementById('play').textContent='■ 停止讲解';speakCur();}}
+function fs(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1);}else if(e.key==='ArrowLeft'){go(cur-1);}else if(e.key==='f'||e.key==='F'){fs();}else if(e.key==='Escape'&&speaking){toggle();}});
+if(synth.onvoiceschanged!==undefined)synth.onvoiceschanged=function(){};
+</script><style id="light-theme-v2">
+html,body{background:#eef2f8!important;color:#1e2a44!important}
+.sub{color:#4a5676!important}
+.card,.kpi,.fstep{background:#fff!important;border:1px solid #e4eaf2!important;box-shadow:0 1px 3px rgba(20,35,66,.07),0 1px 2px rgba(20,35,66,.04)!important}
+.card h3{color:#2b6cb0!important}.card p{color:#3f4c66!important}
+.btrack{background:#e6ebf3!important}
+.kpi .l,.fstep .d,.bval,.bname,.info,.legend{color:#5f6b82!important}
+.fstep .n{color:#8a94a8!important}.farr{color:#aab4c6!important}
+table th{color:#6b7589!important;border-bottom:1px solid #dbe2ec!important}
+table td{border-bottom:1px solid #eef1f6!important}
+.quote{background:rgba(43,108,176,.08)!important;border-left-color:#2b6cb0!important;color:#27496d!important}
+.ctrl{background:rgba(248,250,253,.97)!important;border-top:1px solid #e2e8f1!important}
+.ctrl button{background:#fff!important;border:1px solid #d4dce8!important;color:#28334a!important}
+.ctrl button.pri{background:#2b7fd4!important;border-color:#2b7fd4!important;color:#fff!important}
+.dot{background:#c4cedd!important}.dot.on{background:#2b7fd4!important}
+.judge{background:rgba(43,127,212,.12)!important;color:#2366a8!important}
+</style>
+</body></html>

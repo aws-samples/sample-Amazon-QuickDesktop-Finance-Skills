@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><title>#12 应收账龄与坏账 · 方案讲解 — Amazon Quick Desktop 财务场景库</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'PingFang SC',-apple-system,'Microsoft YaHei',sans-serif;background:#0a0e1a;color:#1e2a44}
+.slide{position:absolute;inset:0;height:calc(100% - 54px);display:none;flex-direction:column;justify-content:center;padding:32px 56px;opacity:0;transition:opacity .5s}
+.slide.active{display:flex;opacity:1}
+.brand{position:absolute;top:20px;left:56px;font-size:12px;color:#4299e1;font-weight:700}
+.tag{position:absolute;top:18px;right:56px;font-size:10px;color:#f6ad55;background:rgba(246,173,85,.1);border:1px solid rgba(246,173,85,.28);border-radius:5px;padding:4px 10px}
+h1{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.3}
+h1 .hl{background:linear-gradient(90deg,#4299e1,#6d4ad8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:14px;color:#5f6b82;margin-bottom:20px;line-height:1.6;max-width:760px}
+.kpi-row{display:flex;gap:14px;margin:10px 0}
+.kpi{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:14px 18px;flex:1}
+.kpi .v{font-size:26px;font-weight:800}.kpi .l{font-size:11px;color:#5f6b82;margin-top:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:12px;padding:18px}
+.card h3{font-size:15px;margin-bottom:8px;color:#2b7fd4}.card p{font-size:12.5px;color:#3f4c66;line-height:1.65}
+.brow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bname{width:120px;font-size:11px;color:#3f4c66;text-align:right;flex-shrink:0}
+.btrack{flex:1;height:14px;background:rgba(30,45,75,.05);border-radius:3px;overflow:hidden}
+.bfill{height:14px;border-radius:3px}.bval{width:48px;font-size:11px;color:#5f6b82}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:11px;color:#5f6b82}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{text-align:left;color:#718096;font-weight:600;padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.12);font-size:9.5px}
+td{padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.05)}
+.flow{display:flex;align-items:center;gap:6px;margin:14px 0}
+.fstep{flex:1;background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:12px;text-align:center}
+.fstep .n{font-size:10px;color:#718096;font-weight:700}.fstep .t{font-size:12.5px;font-weight:600;margin:3px 0}.fstep .d{font-size:10px;color:#5f6b82}
+.farr{color:#4a5568;font-size:16px}
+.quote{border-left:3px solid #4299e1;background:rgba(66,153,225,.08);border-radius:0 8px 8px 0;padding:12px 16px;font-size:13.5px;color:#2b6fb0;font-style:italic;line-height:1.55;margin-top:14px}
+.judge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(66,153,225,.15);color:#2b7fd4;margin:2px}
+.ctrl{position:fixed;bottom:0;left:0;right:0;height:54px;background:rgba(10,14,26,.97);border-top:1px solid rgba(30,45,75,.08);display:flex;align-items:center;padding:0 20px;gap:10px;z-index:99}
+.ctrl button{background:rgba(30,45,75,.1);border:1px solid rgba(30,45,75,.15);color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer}
+.ctrl button.pri{background:#4299e1;border-color:#4299e1}
+.dots{flex:1;display:flex;gap:6px;justify-content:center}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(30,45,75,.2);cursor:pointer}
+.dot.on{background:#2b7fd4;width:22px;border-radius:4px}
+.info{font-size:11px;color:#718096;min-width:56px;text-align:right}
+.sub-bar{position:fixed;bottom:54px;left:0;right:0;background:rgba(0,0,0,.75);color:#fff;padding:10px 24px;text-align:center;font-size:14px;display:none;z-index:98}
+.sub-bar.on{display:block}
+</style></head><body>
+<div class="slide active" data-i="0" style="justify-content:center;text-align:center">
+  <div class="tag">⚠️ 数据及企业均为构造，非真实数据</div>
+  <div style="max-width:900px;margin:0 auto"><div style="font-size:24px;font-weight:800;letter-spacing:.8px;color:#4299e1;margin-bottom:14px">Amazon Quick Desktop</div>
+  <h1>应收账龄与坏账计提 <span class="hl">谁欠我们、能收回多少</span></h1>
+  <p class="sub" style="margin:0 auto 20px">把客户欠款按逾期多久分组，再按“越久越难收”的比例预提损失。前提是每笔余额算对，破产、涉诉的客户<b style="color:#2b7fd4">单项计提</b>，最后和账面坏账准备核对。</p>
+  <div class="kpi-row" style="max-width:820px;margin:0 auto"><div class="kpi"><div class="v" style="color:#4299e1">2,604 万</div><div class="l">应收（170 张发票）</div></div><div class="kpi"><div class="v" style="color:#48bb78">12/12</div><div class="l">植入错误全部抓出</div></div><div class="kpi"><div class="v" style="color:#f6ad55">360 万</div><div class="l">植错版应补提坏账准备</div></div></div></div></div>
+<div class="slide" data-i="1"><div class="brand">应收账龄与坏账 · 端到端流程</div>
+  <h1 style="font-size:23px">端到端方案：输入 → 处理 → 输出</h1>
+  <div style="display:grid;grid-template-columns:0.95fr 1.15fr;gap:18px;margin-top:8px">
+    <div class="card"><h3>① 输入契约</h3>
+      <table style="font-size:11px"><tr><th>字段</th><th>说明</th></tr><tr><td style="color:#2b7fd4;white-space:nowrap">应收台账与收款</td><td style="color:#3f4c66">发票号, 客户, 开票日期, 信用期, 应收/已收/未收；收款单号, 收款日期, 金额</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">计提规则</td><td style="color:#3f4c66">六档账龄计提率；单项计提客户清单（比例、原因）</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">主数据与总账</td><td style="color:#3f4c66">客户信用期、等级；1122 应收账款、1231 坏账准备；基准日 2026-09-30</td></tr></table></div>
+    <div class="card"><h3>③ 输出契约</h3>
+      <ul style="font-size:12px;color:#3f4c66;padding-left:16px;margin-top:4px"><li style="margin-bottom:5px">逐张发票：推算到期日、账龄段、核实未收、计提方式、计提额</li><li style="margin-bottom:5px">账龄分段、客户逾期与计提排名、本期应补提或冲回</li><li style="margin-bottom:5px">无发票收款、多收余额 + 证据 JSON + 四种报告</li></ul></div>
+  </div>
+  <div style="margin-top:14px"><div style="font-size:12px;color:#2b7fd4;margin-bottom:6px;font-weight:600">② 处理步骤（确定性）</div>
+    <div class="flow" style="margin:0"><div class="fstep"><div class="n">1</div><div class="t" style="font-size:11.5px">核实余额</div><div class="d">到期日自推
+已收对明细</div></div><div class="farr">›</div><div class="fstep"><div class="n">2</div><div class="t" style="font-size:11.5px">分组</div><div class="d">借方分段
+贷方另列</div></div><div class="farr">›</div><div class="fstep"><div class="n">3</div><div class="t" style="font-size:11.5px">校验规则</div><div class="d">计提率
+单调</div></div><div class="farr">›</div><div class="fstep"><div class="n">4</div><div class="t" style="font-size:11.5px">计提</div><div class="d">单项优先
+再按组合</div></div><div class="farr">›</div><div class="fstep"><div class="n">5</div><div class="t" style="font-size:11.5px">对账面</div><div class="d">应计提 vs
+坏账准备</div></div></div></div>
+</div>
+<div class="slide" data-i="2"><div class="brand">应收账龄与坏账 · 架构全景</div><h1 style="font-size:23px">架构全景：一句话触发，五层完成校验</h1><div style="display:flex;justify-content:center;align-items:center;flex:1;margin-top:4px"><svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-height:calc(100vh - 300px)"><defs><marker id="am63b3ed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2b7fd4"/></marker><marker id="amb794f4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#8b5cf0"/></marker><marker id="am48bb78" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#48bb78"/></marker><marker id="amf6ad55" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f6ad55"/></marker><filter id="ash"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.18"/></filter><linearGradient id="agc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2b7fd4" stop-opacity="0.10"/><stop offset="100%" stop-color="#2b7fd4" stop-opacity="0.02"/></linearGradient></defs><text x="95" y="22" font-size="13" font-weight="700" fill="#2b7fd4" text-anchor="middle">输入与触发</text><rect x="20" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="58" font-size="16" text-anchor="middle">📒</text><text x="95.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">应收台账</text><text x="95.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">ERP 应收模块</text><rect x="20" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="134" font-size="16" text-anchor="middle">💰</text><text x="95.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">收款明细</text><text x="95.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">银行回单 · 资金系统</text><rect x="20" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="210" font-size="16" text-anchor="middle">📋</text><text x="95.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">计提规则</text><text x="95.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">账龄矩阵 · 单项清单</text><rect x="20" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="95.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">一句话触发</text><text x="95.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">“坏账计提”</text><rect x="20" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="362" font-size="16" text-anchor="middle">⏰</text><text x="95.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">定时任务（使用者配置）</text><text x="95.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">每月结账前</text><rect x="240" y="16" width="480" height="412" rx="16" fill="url(#agc)" stroke="#2b7fd4" stroke-width="1.4" stroke-dasharray="6,3"/><text x="480" y="40" font-size="14.5" font-weight="800" fill="#2b6fb0" text-anchor="middle">Amazon Quick</text><rect x="262" y="52" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#8b5cf0" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="75" font-size="16">🧭</text><text x="304" y="75" font-size="12.5" font-weight="700" fill="#8b5cf0">① 编排层 · 模型（指挥官）</text><text x="280" y="94" font-size="10.5" fill="#3f4c66">识别意图、编排工具；不接触原始应收数据，只看结果摘要</text><rect x="262" y="116" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="139" font-size="16">📥</text><text x="304" y="139" font-size="12.5" font-weight="700" fill="#2b7fd4">② 数据接入层</text><text x="280" y="158" font-size="10.5" fill="#3f4c66">读取台账、收款、规则、主数据与总账</text><rect x="262" y="180" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#48bb78" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="203" font-size="16">⚙️</text><text x="304" y="203" font-size="12.5" font-weight="700" fill="#48bb78">③ 确定性校验层 · 本地沙箱（操作员）</text><text x="280" y="222" font-size="10.5" fill="#3f4c66">校验脚本：核实余额 · 分段 · 计提 · 对账面</text><rect x="262" y="244" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#f6ad55" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="267" font-size="16">🧾</text><text x="304" y="267" font-size="12.5" font-weight="700" fill="#f6ad55">④ 证据层</text><text x="280" y="286" font-size="10.5" fill="#3f4c66">逐张到期日/账龄/计提方式 + 输入指纹</text><rect x="262" y="308" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="331" font-size="16">📤</text><text x="304" y="331" font-size="12.5" font-weight="700" fill="#2b7fd4">⑤ 交付层</text><text x="280" y="350" font-size="10.5" fill="#3f4c66">网页 · PDF · Markdown · Excel；脱敏摘要由使用者自行分发</text><rect x="262" y="374" width="436" height="40" rx="8" fill="rgba(183,148,244,0.08)" stroke="#8b5cf0" stroke-width="1" stroke-dasharray="4,2"/><text x="280" y="399" font-size="15">🧩</text><text x="304" y="399" font-size="11.5" font-weight="700" fill="#8b5cf0">Skill 固化：ar-aging-baddebt</text><text x="696" y="399" font-size="10" fill="#5f6b82" text-anchor="end">上层判据不折旧 · 下层可替换</text><text x="865" y="22" font-size="13" font-weight="700" fill="#48bb78" text-anchor="middle">输出端</text><rect x="790" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="58" font-size="16" text-anchor="middle">🌐</text><text x="865.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">网页报告</text><text x="865.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">账龄与计提</text><rect x="790" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="134" font-size="16" text-anchor="middle">📕</text><text x="865.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">PDF / Excel</text><text x="865.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">结账底稿</text><rect x="790" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="210" font-size="16" text-anchor="middle">📝</text><text x="865.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">证据 JSON</text><text x="865.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">可回溯 · 可复算</text><rect x="790" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="865.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">脱敏摘要</text><text x="865.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">由使用者自行分发</text><rect x="790" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="362" font-size="16" text-anchor="middle">🗄️</text><text x="865.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">Agent Files 归档</text><text x="865.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">逐月留档</text><line x1="172" y1="68" x2="258" y2="143" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="144" x2="258" y2="146" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="220" x2="258" y2="150" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="296" x2="258" y2="79" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="172" y1="372" x2="258" y2="85" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="700" y1="335" x2="786" y2="68" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="335" x2="786" y2="144" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="271" x2="786" y2="220" stroke="#f6ad55" stroke-width="1.6" marker-end="url(#amf6ad55)"/><line x1="700" y1="340" x2="786" y2="296" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="345" x2="786" y2="372" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/></svg></div><div class="quote" style="margin-top:6px">全部本地模式下，客户应收与收款数据、计算和结果都留在本机，模型只看到结果摘要；云上模式则由连接器取数、云端沙箱计算。两种模式只看数据源头在哪。</div></div>
+<div class="slide" data-i="3"><div class="brand">应收账龄与坏账 · 是什么实现的</div>
+  <h1 style="font-size:23px">实现机制：从对话到 <span class="hl">可复用 Skill</span></h1>
+  <p class="sub" style="margin-bottom:14px">模型当"指挥官"做意图识别与工具编排，本地沙箱当"操作员"跑确定性脚本——最终固化为一个 Skill</p>
+  <div class="flow" style="margin:6px 0 14px">
+    <div class="fstep" style="border-top:3px solid #4299e1"><div class="t">🗣️ 触发</div><div class="d">一句话 / 连接器<br>/ 定时任务（使用者配置）</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #6d4ad8"><div class="t">🧭 模型编排</div><div class="d">意图识别<br>工具编排(指挥官)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #48bb78"><div class="t">🔒 本地沙箱</div><div class="d">确定性脚本<br>数据本地(操作员)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #ed8936"><div class="t">✅ 判据校验</div><div class="d">守恒 · 恒等式<br>白名单 · 交叉一致</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #f6ad55"><div class="t">📊 产出</div><div class="d">报告+仪表盘<br>+沉淀归档</div></div>
+  </div>
+  <div class="two" style="gap:16px">
+    <div class="card" style="border-color:rgba(99,179,237,.4)"><h3>🧱 固化为 Skill（核心）</h3>
+      <p style="font-size:12px;line-height:1.7">这套流程被写成一个 <b style="color:#2b7fd4">SKILL.md</b>，一句"<b>坏账计提</b>"即可复用：<br>
+      · <b style="color:#2b6fb0">上层不折旧</b>：目标+输入契约+处理步骤+输出契约+<b>验收判据</b>（跨平台、核心IP）<br>
+      · <b style="color:#9ae6b4">下层可替换</b>：连接器+API+脚本+路径（随平台演进替换）</p></div>
+    <div class="card"><h3>⚙️ 本场景实现</h3>
+      <p style="font-size:12px;line-height:1.7">
+      · 连接器：ERP 应收 / 资金系统导出、计提政策与单项清单<br>
+      · 确定性脚本：<code style="color:#f6ad55">ar_aging_baddebt_v2.py</code>（含守恒自检 assert）<br>
+      · Skill 名：<code style="color:#2b7fd4">ar-aging-baddebt</code><br>
+      · 敏感数据走 <b style="color:#9ae6b4">本地安全执行</b>（financial-local-safety）</p></div>
+  </div>
+</div>
+<div class="slide" data-i="4"><div class="brand">应收账龄与坏账 · 样例数据</div>
+  <h1 style="font-size:23px">构造数据：10 家客户、170 张发票</h1>
+  <div class="two"><div><div class="card"><h3>账龄分段与计提率（全平版）</h3><p style="font-size:11.5px">10 家虚构客户 · 信用期 30–90 天 · A/B/C 三级 · 基准日 2026-09-30</p><div class="brow"><div class="bname" style="width:80px">未到期</div><div class="btrack"><div class="bfill" style="width:100%;background:#48bb78"></div></div><div class="bval">1,243 万 · 1%</div></div><div class="brow"><div class="bname" style="width:80px">1-30天</div><div class="btrack"><div class="bfill" style="width:42%;background:#f6ad55"></div></div><div class="bval">521 万 · 3%</div></div><div class="brow"><div class="bname" style="width:80px">31-90天</div><div class="btrack"><div class="bfill" style="width:28%;background:#f6ad55"></div></div><div class="bval">344 万 · 10%</div></div><div class="brow"><div class="bname" style="width:80px">91-180天</div><div class="btrack"><div class="bfill" style="width:4%;background:#f56565"></div></div><div class="bval">49 万 · 30%</div></div><div class="brow"><div class="bname" style="width:80px">181-365天</div><div class="btrack"><div class="bfill" style="width:22%;background:#f56565"></div></div><div class="bval">268 万 · 60%</div></div><div class="brow"><div class="bname" style="width:80px">365天以上</div><div class="btrack"><div class="bfill" style="width:14%;background:#f56565"></div></div><div class="bval">179 万 · 100%</div></div><p style="font-size:11px;margin-top:4px">单项计提：示例公司43（破产清算）100%，示例公司26（涉诉）50%</p></div></div>
+  <div><div class="card"><h3>两个版本做对照</h3><p style="font-size:12px">· <b style="color:#48bb78">全平版</b>：应收 2,604 万，组合计提 286 万 + 单项 540 万 = 826 万，与账面一致<br><br>· <b style="color:#f56565">植错版</b>：植入 12 处<br><b style="color:#f6ad55">少提</b>：到期日推后 90 天 · 期后收款提前冲减 · 计提率不单调 · 账面漏单项计提<br><b>余额</b>：台账已收无收款 · 未收少记<br><b>重复与范围</b>：重复开票 · 客户未登记 · 无发票收款<br><b>方向与总账</b>：多收 6.8 万 · 总账未同步<br><b>数据质量</b>：一笔收款金额写成 "12,345.60"（无法解析，登记为数据质量问题，该行不参与计算）</p></div></div></div>
+  <div class="quote">期后收款：10 月 12 日才收到的钱，不能记进 9 月末的账来冲减应收——否则 9 月的应收和坏账准备都会被少算。</div></div>
+<div class="slide" data-i="5"><div class="brand">应收账龄与坏账 · 核心判据</div>
+  <h1 style="font-size:23px">先把余额算对，再单项优先、组合补充</h1>
+  <table style="font-size:11.5px"><tr><th>判据</th><th>规则</th><th>结果</th></tr><tr><td><b style="color:#f6ad55">到期日推算</b></td><td>到期日 = 开票日期 + 主数据信用期</td><td>不符</td></tr><tr><td><b style="color:#f6ad55">已收核实</b></td><td>台账已收 = 收款明细；只计基准日前，期后收款不提前冲减</td><td>不符</td></tr><tr><td>余额与方向</td><td>未收 = 应收 − 已收；多收的贷方余额单列、不计提</td><td>不符 / 单列</td></tr><tr><td>唯一与范围</td><td>同客户同日同金额只开一次；收款必须对应存在的发票</td><td>不符</td></tr><tr><td><b style="color:#f6ad55">计提率表</b></td><td>六档账龄计提率越久越高，在 0–100% 内</td><td>不符</td></tr><tr><td><b style="color:#f6ad55">计提与账面</b></td><td>单项客户按单项比例，其余按组合；应计提 vs 账面坏账准备</td><td>补提 / 冲回</td></tr></table>
+  <div class="quote">守恒：各账龄段合计 = 核实应收；应计提 = Σ(段余额 × 段计提率) + Σ单项计提。</div></div>
+<div class="slide" data-i="6"><div class="brand">应收账龄与坏账 · 校验结果</div>
+  <h1 style="font-size:23px">12 处全部抓出</h1>
+  <div class="two"><div style="display:flex;gap:10px;justify-content:center;flex-direction:column">
+      <div style="display:flex;gap:10px;justify-content:center">
+      <div class="card" style="text-align:center"><h3>全平版</h3><svg viewBox="0 0 120 120" width="116" height="116"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#48bb78" stroke-width="16" stroke-dasharray="301.6 0.0" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2a44">100.0%</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">发票正确率</text></svg><p style="font-size:12px">应计提 826 万</p></div>
+      <div class="card" style="text-align:center"><h3>植错版</h3><svg viewBox="0 0 120 120" width="116" height="116"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#f56565" stroke-width="16" stroke-dasharray="287.4 14.2" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2a44">95.3%</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">发票正确率</text></svg><p style="font-size:12px">不符 8 张 + 表/账面 4 项</p></div></div>
+      </div><div><table style="font-size:10px"><tr><th>植入错误</th><th>检出</th></tr><tr><td>到期日推后</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>台账已收无收款</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>未收少记</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>重复开票</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>客户未登记</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>多收负余额</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>无发票收款</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>期后收款提前冲减</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>计提率不单调</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>账面漏单项计提</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>总账未同步</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>收款金额写成千分位</td><td><span style="color:#48bb78">✓</span></td></tr></table></div></div></div>
+<div class="slide" data-i="7"><div class="brand">应收账龄与坏账 · 问题清单</div>
+  <h1 style="font-size:23px">问题清单（发票 + 规则 + 账面）</h1>
+  <div class="card"><table style="font-size:10px"><tr><th>对象</th><th>客户</th><th style="text-align:right">台账值</th><th style="text-align:right">核实值</th><th>账龄段</th><th>问题</th></tr><tr><td>XS-2026-00001</td><td>示例公司42</td><td style="text-align:right">-68,000</td><td style="text-align:right">-68,000</td><td>贷方余额</td><td>收款超过应收</td></tr><tr><td>XS-2026-00007</td><td>示例公司42</td><td style="text-align:right">481,813</td><td style="text-align:right">481,813</td><td>31-90天</td><td>到期日与信用期不符</td></tr><tr><td>XS-2026-00027</td><td>示例公司11</td><td style="text-align:right">171,260</td><td style="text-align:right">428,151</td><td>31-90天</td><td>已收与收款明细不符</td></tr><tr><td>XS-2026-00055</td><td>示例公司09</td><td style="text-align:right">0</td><td style="text-align:right">446,727</td><td>365天以上</td><td>期后收款提前冲减</td></tr><tr><td>XS-2026-00087</td><td>示例公司39</td><td style="text-align:right">185,088</td><td style="text-align:right">185,088</td><td>未到期</td><td>疑似重复开票</td></tr><tr><td>XS-2026-00162</td><td>示例公司29</td><td style="text-align:right">-12,458</td><td style="text-align:right">17,542</td><td>未到期</td><td>余额≠应收−已收</td></tr><tr><td>XS-2026-00165</td><td>示例公司45</td><td style="text-align:right">123,411</td><td style="text-align:right">123,411</td><td>181-365天</td><td>客户不在主数据</td></tr><tr><td>XS-2026-00087-R</td><td>示例公司39</td><td style="text-align:right">185,088</td><td style="text-align:right">185,088</td><td>未到期</td><td>疑似重复开票</td></tr><tr><td>SK-90002</td><td>示例公司39</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td>—</td><td>收款引用了不存在的发票（9.5 万）</td></tr><tr><td>计提率表</td><td>—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td>—</td><td>181-365 天 25% 低于 91-180 天 30%</td></tr><tr><td>1231 坏账准备</td><td>—</td><td style="text-align:right">4,169,025</td><td style="text-align:right">7,772,587</td><td>—</td><td>漏单项计提，需补提 3,603,562</td></tr></table></div>
+  <div class="quote">账面坏账准备 4,169,025，应计提 7,772,587，本期需补提 3,603,562；若按修正后的计提率表，补提额还会更高。</div></div>
+<div class="slide" data-i="8"><div class="brand">应收账龄与坏账 · 判据边界</div>
+  <h1 style="font-size:23px">计提算对了，也不等于损失估计一定准</h1>
+  <table style="font-size:11.5px"><tr><th>盲区</th><th>为什么抓不到</th><th>处置</th><th>可闭合性</th></tr><tr><td>期后收款冲减</td><td>十月的钱记进九月的账</td><td>按收款日期截断，<b>已在脚本中实现</b></td><td><span style="color:#48bb78">🟢 已闭合</span></td></tr><tr><td>漏单项计提</td><td>破产客户按组合只提一点</td><td>单项清单优先，<b>已在脚本中实现</b></td><td><span style="color:#48bb78">🟢 已闭合</span></td></tr><tr><td>计提率本身偏低</td><td>矩阵单调，但比历史损失率低</td><td>用历史迁徙率回测计提矩阵</td><td><span style="color:#48bb78">🟢 可自补</span></td></tr><tr><td>客户信用恶化未识别</td><td>客户出事了，但单项清单没更新</td><td>对接工商、司法、舆情数据</td><td><span style="color:#f6ad55">🟡 需外部锚点</span></td></tr><tr><td>欠款是否真实</td><td>台账与总账一致，客户却不认</td><td>客户对账单确认（#13 客户对账单）</td><td><span style="color:#f6ad55">🟡 需外部锚点</span></td></tr></table>
+  <div class="quote">判据能证明“按既定规则算对了”，不能证明“规则和清单本身合理”——这些边界已写入 Skill 的判据覆盖声明。</div></div>
+<div class="slide" data-i="9"><div class="brand">应收账龄与坏账 · 过程可回溯</div>
+  <h1 style="font-size:23px">每个结论都能倒查回原始数据</h1>
+  <div class="three"><div class="card"><h3>① 逐张留痕</h3><p>170 张发票各记推算到期日、账龄段、核实未收、计提方式与计提额。</p></div><div class="card"><h3>② 口径与指纹</h3><p>基准日固定；六个输入各记 SHA-256 指纹与行数。</p></div><div class="card"><h3>③ 守恒 + 复算</h3><p>分段守恒、计提恒等式成立；本机用同一份 CSV 独立复算，与云端一致。</p></div></div>
+  <div class="quote">证据 JSON 同时输出为网页、PDF、Markdown、Excel 四种报告，审计可从坏账准备的每一分追溯到具体发票和计提方式。</div></div>
+<div class="slide" data-i="10"><div class="brand">应收账龄与坏账 · 部署与复用</div>
+  <h1 style="font-size:23px">一次构建 · 处处复用</h1>
+  <div class="three" style="margin-bottom:14px">
+    <div class="card"><h3>🗣️ 一句话触发</h3><p>对话框输入"坏账计提"触发词即时运行</p></div>
+    <div class="card"><h3>⏰ 定时任务</h3><p>使用者在 Mission Control 自行配置定时任务（routine）周期运行；产出由使用者确认后自行分发</p></div>
+    <div class="card"><h3>🧠 Agent Files 记忆</h3><p>规则表、上期结果持久缓存，形成环比链</p></div>
+  </div>
+  <div class="kpi-row" style="margin-bottom:12px"><div class="kpi"><div class="v" style="color:#48bb78;font-size:22px">秒级</div><div class="l">人工算账龄计提 → 自动核实</div></div><div class="kpi"><div class="v" style="color:#4299e1;font-size:22px">100%</div><div class="l">计提逐张可追溯</div></div><div class="kpi"><div class="v" style="color:#f6ad55;font-size:22px">0</div><div class="l">原始应收数据上云（本地模式）</div></div></div>
+  <div class="quote">“先核实余额、再按规则分层计量、最后对账面”这套判据，可复用到存货跌价准备、合同资产减值、其他应收款减值。</div>
+</div>
+<div class="sub-bar" id="subbar"><span id="subtxt"></span></div>
+<div class="ctrl">
+  <button class="pri" id="play" onclick="toggle()">▶ 开始讲解</button>
+  <button onclick="go(cur-1)">‹ 上一页</button>
+  <div class="dots" id="dots"></div>
+  <button onclick="go(cur+1)">下一页 ›</button>
+  <button onclick="fs()">⛶ 全屏</button>
+  <div class="info" id="info">1 / 11</div>
+</div>
+<script>
+var TOTAL=11,cur=0,speaking=false,synth=window.speechSynthesis;
+var narr=[
+"本页介绍应收账龄与坏账计提方案。前面应付账龄看的是我们欠别人，这一场景反过来，看客户欠我们多少、能收回多少。按逾期时间分组后，再按越久越难收的比例预提损失；破产、涉诉这类客户要单独按个别情况计提，最后和账上的坏账准备核对。需要说明，以下数据及企业均为构造，非真实数据。本次样例应收约 2,604 万元，植入的 12 处错误全部抓出，植错版账面坏账准备少提了约 360 万。",
+"先看端到端流程。输入有三类：应收台账和收款明细；计提规则，包括六档账龄计提率和单项计提的客户清单；以及客户主数据和总账，基准日是九月三十日。处理分五步：先用开票日期加信用期推算到期日，用收款明细核实已收；再把欠款分段，多收的另外列；然后检查计提率是不是越久越高；接着计提，单项客户按单项比例，其余按账龄组合；最后把应计提和账上的坏账准备对比，得出本期该补提还是冲回。",
+"这是架构全景图。左侧是应收台账、收款明细和计提规则，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，每月结账前运行。中间是 Amazon Quick 内部的五层：编排层由模型充当指挥官，不接触原始应收数据，只看结果摘要；数据接入层读取五类数据；确定性校验层由本地沙箱里的脚本核实余额、分段、计提并对账面；证据层记录每张发票的推算过程和计提方式；交付层输出四种格式的报告，可以直接作为结账底稿。",
+"这套方案是怎么实现的。用户一句坏账计提即可触发。模型负责理解意图和编排工具，不接触原始应收数据，只看结果摘要；计算在本地沙箱里由确定性脚本完成。有四个关键设计：到期日自己推算，已收用收款明细核实，期后收款不能提前冲减；账龄分六档，并支持单项计提；检查计提率表是否越久越高；最后把应计提和账面坏账准备对比，给出补提或冲回金额。",
+"来看样例数据。我们为虚构的示例集团构造了 10 家客户，信用期从 30 到 90 天，分 A、B、C 三级，共 170 张销售发票。左边是全平版的账龄分段和对应计提率，越久比例越高，超过一年的全额计提；另外两家客户单项计提，一家破产清算按百分之百，一家涉诉按一半。植错版植入了 12 处，其中 4 处会导致少提坏账，比如十月才收到的钱被记进了九月的账。",
+"核心判据是先把余额算对，再单项优先、组合补充。到期日用开票日期加信用期推算。已收要等于收款明细，只算基准日之前的，期后收款不能提前冲减。未收要等于应收减已收，多收的钱单独列出、不计提。同一张发票只能开一次，收款必须对应存在的发票。计提率表要越久越高。计提时，单项客户按单项比例，其余按账龄组合，最后和账上的坏账准备对比。",
+"来看结果。全平版 170 张发票全部正确，应计提约 826 万元，和账面一致。植错版 8 张发票不符，另有计提率表、总账、坏账准备和孤立收款四项问题，12 处全部抓出，没有误报。其中一处是一笔收款金额写成了带千分位的 12,345.60，无法解析，按数据质量问题报出，该行不参与计算，不按 0 计。",
+"这是问题清单，前面是有问题的发票，后面是孤立收款、计提率表和坏账准备。账上的坏账准备约 417 万元，只按账龄组合计提，漏掉了破产和涉诉客户的单项计提，本期需要补提约 360 万；如果再把计提率表修正为单调，补提额还会更高。",
+"还要讲清判据的边界。期后收款冲减和漏单项计提，脚本已经补上。计提矩阵虽然单调，但可能比历史实际损失率低，可以用历史迁徙率回测，自己就能补。但还有两类需要外部数据：客户信用已经恶化、单项清单却没更新，需要对接工商、司法和舆情数据；台账和总账一致，客户却不认这笔账，需要客户对账单确认，这正是下一个场景要做的。",
+"最后是过程可回溯。第一，逐张留痕，每张发票记录推算到期日、账龄段、核实未收、计提方式和计提额。第二，口径和指纹，基准日固定，六个输入文件各记下指纹。第三，守恒加复算，分段守恒和计提恒等式都成立，同一份数据在本机独立复算，结果与云端一致。",
+"部署上，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，每月结账前运行。先核实余额、再按规则分层计量、最后对账面这套思路，还能复用到存货跌价准备、合同资产减值和其他应收款减值。总结一句：应收账龄与坏账计提不只是分组乘比例，而是先把每一笔算对，再算清该提多少、账上差多少。"
+];
+var dd=document.getElementById('dots');
+for(var i=0;i<TOTAL;i++){var e=document.createElement('div');e.className='dot'+(i===0?' on':'');e.onclick=(function(k){return function(){go(k)}})(i);dd.appendChild(e);}
+function go(n){if(n<0||n>=TOTAL)return;var sl=document.querySelectorAll('.slide');sl.forEach(function(x){x.classList.remove('active')});sl[n].classList.add('active');cur=n;document.querySelectorAll('.dot').forEach(function(x,k){x.className='dot'+(k===n?' on':'')});document.getElementById('info').textContent=(n+1)+' / '+TOTAL;if(speaking)speakCur();}
+function splitS(t){var p=t.replace(/([。！？；])/g,'$1\n').split('\n');return p.map(function(x){return x.trim()}).filter(function(x){return x.length>0});}
+function voice(){var v=synth.getVoices();return v.find(function(x){return x.name.indexOf('Yunxi')>-1})||v.find(function(x){return x.name.indexOf('Yunyang')>-1})||v.find(function(x){return x.name.indexOf('Yunjian')>-1})||v.find(function(x){return x.lang==='zh-CN'&&x.name.indexOf('Microsoft')>-1})||v.find(function(x){return x.lang==='zh-CN'})||v.find(function(x){return x.lang.indexOf('zh')===0});}
+function speakCur(){if(!speaking)return;synth.cancel();var ss=splitS(narr[cur]);if(!ss.length)ss=[narr[cur]];var i=0;var bar=document.getElementById('subbar'),tx=document.getElementById('subtxt');function nx(){if(!speaking){bar.classList.remove('on');return;}if(i>=ss.length){bar.classList.remove('on');if(speaking&&cur<TOTAL-1){go(cur+1);setTimeout(speakCur,400);}else if(speaking){toggle();}return;}bar.classList.add('on');tx.textContent=ss[i];var u=new SpeechSynthesisUtterance(ss[i]);u.lang='zh-CN';u.rate=0.9;u.pitch=1.1;var vo=voice();if(vo)u.voice=vo;u.onend=function(){i++;nx();};synth.speak(u);}nx();}
+function toggle(){if(speaking){speaking=false;synth.cancel();document.getElementById('subbar').classList.remove('on');document.getElementById('play').textContent='▶ 开始讲解';}else{speaking=true;document.getElementById('play').textContent='■ 停止讲解';speakCur();}}
+function fs(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1);}else if(e.key==='ArrowLeft'){go(cur-1);}else if(e.key==='f'||e.key==='F'){fs();}else if(e.key==='Escape'&&speaking){toggle();}});
+if(synth.onvoiceschanged!==undefined)synth.onvoiceschanged=function(){};
+</script><style id="light-theme-v2">
+html,body{background:#eef2f8!important;color:#1e2a44!important}
+.sub{color:#4a5676!important}
+.card,.kpi,.fstep{background:#fff!important;border:1px solid #e4eaf2!important;box-shadow:0 1px 3px rgba(20,35,66,.07),0 1px 2px rgba(20,35,66,.04)!important}
+.card h3{color:#2b6cb0!important}.card p{color:#3f4c66!important}
+.btrack{background:#e6ebf3!important}
+.kpi .l,.fstep .d,.bval,.bname,.info,.legend{color:#5f6b82!important}
+.fstep .n{color:#8a94a8!important}.farr{color:#aab4c6!important}
+table th{color:#6b7589!important;border-bottom:1px solid #dbe2ec!important}
+table td{border-bottom:1px solid #eef1f6!important}
+.quote{background:rgba(43,108,176,.08)!important;border-left-color:#2b6cb0!important;color:#27496d!important}
+.ctrl{background:rgba(248,250,253,.97)!important;border-top:1px solid #e2e8f1!important}
+.ctrl button{background:#fff!important;border:1px solid #d4dce8!important;color:#28334a!important}
+.ctrl button.pri{background:#2b7fd4!important;border-color:#2b7fd4!important;color:#fff!important}
+.dot{background:#c4cedd!important}.dot.on{background:#2b7fd4!important}
+.judge{background:rgba(43,127,212,.12)!important;color:#2366a8!important}
+</style>
+</body></html>

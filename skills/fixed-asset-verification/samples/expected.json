@@ -1,0 +1,69 @@
+{
+  "clean": {
+    "summary~keys": [
+      "matched"
+    ],
+    "data_issues~len": 0,
+    "all_ok": true,
+    "total": 40,
+    "match_rate": 100.0,
+    "issue_types~keys": [],
+    "n_loss": 0,
+    "n_gain": 0,
+    "loss_amount": 0,
+    "conservation~keys": [
+      "净值=原值−累计",
+      "卡片数",
+      "原值合计",
+      "盘亏",
+      "盘点数",
+      "盘盈",
+      "累计折旧合计",
+      "账面净值合计"
+    ],
+    "inputs~len": 4,
+    "results~len": 40
+  },
+  "error": {
+    "summary~keys": [
+      "difference",
+      "exception",
+      "matched"
+    ],
+    "data_issues~len": 1,
+    "all_ok": false,
+    "total": 41,
+    "match_rate": 75.6,
+    "issue_types~keys": [
+      "位置不符",
+      "使用年限低于最低",
+      "净值≠原值−累计",
+      "净值低于残值",
+      "实物盘亏",
+      "实物盘盈",
+      "已处置仍在盘点表",
+      "已处置仍有净值",
+      "数据质量·数值无法解析",
+      "月折旧额≠重算",
+      "残值率不符规则",
+      "累计折旧≠重算",
+      "超额折旧",
+      "部门不符"
+    ],
+    "n_loss": 1,
+    "n_gain": 1,
+    "loss_amount": 535369.41,
+    "conservation~keys": [
+      "净值=原值−累计",
+      "卡片数",
+      "原值合计",
+      "盘亏",
+      "盘点数",
+      "盘盈",
+      "累计折旧合计",
+      "账面净值合计"
+    ],
+    "inputs~len": 4,
+    "results~len": 41
+  }
+}

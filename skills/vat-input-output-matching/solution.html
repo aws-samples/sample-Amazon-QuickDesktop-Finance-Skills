@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><title>#15 增值税进销项匹配 · 方案讲解 — Amazon Quick Desktop 财务场景库</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'PingFang SC',-apple-system,'Microsoft YaHei',sans-serif;background:#0a0e1a;color:#1e2a44}
+.slide{position:absolute;inset:0;height:calc(100% - 54px);display:none;flex-direction:column;justify-content:center;padding:32px 56px;opacity:0;transition:opacity .5s}
+.slide.active{display:flex;opacity:1}
+.brand{position:absolute;top:20px;left:56px;font-size:12px;color:#4299e1;font-weight:700}
+.tag{position:absolute;top:18px;right:56px;font-size:10px;color:#f6ad55;background:rgba(246,173,85,.1);border:1px solid rgba(246,173,85,.28);border-radius:5px;padding:4px 10px}
+h1{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.3}
+h1 .hl{background:linear-gradient(90deg,#4299e1,#6d4ad8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:14px;color:#5f6b82;margin-bottom:20px;line-height:1.6;max-width:760px}
+.kpi-row{display:flex;gap:14px;margin:10px 0}
+.kpi{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:14px 18px;flex:1}
+.kpi .v{font-size:26px;font-weight:800}.kpi .l{font-size:11px;color:#5f6b82;margin-top:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card{background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:12px;padding:18px}
+.card h3{font-size:15px;margin-bottom:8px;color:#2b7fd4}.card p{font-size:12.5px;color:#3f4c66;line-height:1.65}
+.brow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bname{width:120px;font-size:11px;color:#3f4c66;text-align:right;flex-shrink:0}
+.btrack{flex:1;height:14px;background:rgba(30,45,75,.05);border-radius:3px;overflow:hidden}
+.bfill{height:14px;border-radius:3px}.bval{width:48px;font-size:11px;color:#5f6b82}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:11px;color:#5f6b82}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{text-align:left;color:#718096;font-weight:600;padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.12);font-size:9.5px}
+td{padding:6px 8px;border-bottom:1px solid rgba(30,45,75,.05)}
+.flow{display:flex;align-items:center;gap:6px;margin:14px 0}
+.fstep{flex:1;background:rgba(30,45,75,.04);border:1px solid rgba(30,45,75,.1);border-radius:10px;padding:12px;text-align:center}
+.fstep .n{font-size:10px;color:#718096;font-weight:700}.fstep .t{font-size:12.5px;font-weight:600;margin:3px 0}.fstep .d{font-size:10px;color:#5f6b82}
+.farr{color:#4a5568;font-size:16px}
+.quote{border-left:3px solid #4299e1;background:rgba(66,153,225,.08);border-radius:0 8px 8px 0;padding:12px 16px;font-size:13.5px;color:#2b6fb0;font-style:italic;line-height:1.55;margin-top:14px}
+.judge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(66,153,225,.15);color:#2b7fd4;margin:2px}
+.ctrl{position:fixed;bottom:0;left:0;right:0;height:54px;background:rgba(10,14,26,.97);border-top:1px solid rgba(30,45,75,.08);display:flex;align-items:center;padding:0 20px;gap:10px;z-index:99}
+.ctrl button{background:rgba(30,45,75,.1);border:1px solid rgba(30,45,75,.15);color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer}
+.ctrl button.pri{background:#4299e1;border-color:#4299e1}
+.dots{flex:1;display:flex;gap:6px;justify-content:center}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(30,45,75,.2);cursor:pointer}
+.dot.on{background:#2b7fd4;width:22px;border-radius:4px}
+.info{font-size:11px;color:#718096;min-width:56px;text-align:right}
+.sub-bar{position:fixed;bottom:54px;left:0;right:0;background:rgba(0,0,0,.75);color:#fff;padding:10px 24px;text-align:center;font-size:14px;display:none;z-index:98}
+.sub-bar.on{display:block}
+</style></head><body>
+<div class="slide active" data-i="0" style="justify-content:center;text-align:center">
+  <div class="tag">⚠️ 数据及企业均为构造，非真实数据</div>
+  <div style="max-width:900px;margin:0 auto"><div style="font-size:24px;font-weight:800;letter-spacing:.8px;color:#4299e1;margin-bottom:14px">Amazon Quick Desktop</div>
+  <h1>增值税进销项匹配 <span class="hl">每张票的税算对、该抵的才抵</span></h1>
+  <p class="sub" style="margin:0 auto 20px">本月该交多少增值税 = 卖出去开的税 − 买进来能抵的税 − 上月没抵完的。难点在“能抵”：<b style="color:#2b7fd4">勾选了、是本期、抬头对、不属于不得抵扣</b>。</p>
+  <div class="kpi-row" style="max-width:820px;margin:0 auto"><div class="kpi"><div class="v" style="color:#4299e1">216</div><div class="l">张发票（销项 98 · 进项 118）</div></div><div class="kpi"><div class="v" style="color:#48bb78">13/13</div><div class="l">植入错误全部抓出</div></div><div class="kpi"><div class="v" style="color:#f6ad55">9.2 万</div><div class="l">未经校验会多算的应纳税额</div></div></div></div></div>
+<div class="slide" data-i="1"><div class="brand">增值税进销项 · 端到端流程</div>
+  <h1 style="font-size:23px">端到端方案：输入 → 处理 → 输出</h1>
+  <div style="display:grid;grid-template-columns:0.95fr 1.15fr;gap:18px;margin-top:8px">
+    <div class="card"><h3>① 输入契约</h3>
+      <table style="font-size:11px"><tr><th>字段</th><th>说明</th></tr><tr><td style="color:#2b7fd4;white-space:nowrap">销项发票</td><td style="color:#3f4c66">发票代码号码, 开票日期, 购方, 商品服务类别, 金额, 税率, 税额, 状态, 原蓝字发票</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">进项发票</td><td style="color:#3f4c66">销方, 购方税号, 类别, 用途, 金额, 税率, 税额, 状态, 勾选状态, 勾选期间</td></tr><tr><td style="color:#2b7fd4;white-space:nowrap">规则与期间</td><td style="color:#3f4c66">类别×税率；不得抵扣清单；所属期、本公司税号、上期留抵</td></tr></table></div>
+    <div class="card"><h3>③ 输出契约</h3>
+      <ul style="font-size:12px;color:#3f4c66;padding-left:16px;margin-top:4px"><li style="margin-bottom:5px">逐票：计税状态（计入/可抵扣/不抵扣/作废/剔除）与原因</li><li style="margin-bottom:5px">应纳税额或期末留抵；按方向×税率的分布</li><li style="margin-bottom:5px">销项、进项守恒 + 证据 JSON + 四种报告（交给 #16 申报核对）</li></ul></div>
+  </div>
+  <div style="margin-top:14px"><div style="font-size:12px;color:#2b7fd4;margin-bottom:6px;font-weight:600">② 处理步骤（确定性）</div>
+    <div class="flow" style="margin:0"><div class="fstep"><div class="n">1</div><div class="t" style="font-size:11.5px">逐票算税</div><div class="d">税额=金额
+×税率</div></div><div class="farr">›</div><div class="fstep"><div class="n">2</div><div class="t" style="font-size:11.5px">税率规则</div><div class="d">白名单
+类别×税率</div></div><div class="farr">›</div><div class="fstep"><div class="n">3</div><div class="t" style="font-size:11.5px">状态</div><div class="d">唯一·作废
+红字对蓝字</div></div><div class="farr">›</div><div class="fstep"><div class="n">4</div><div class="t" style="font-size:11.5px">能否抵扣</div><div class="d">抬头·勾选
+不得抵扣</div></div><div class="farr">›</div><div class="fstep"><div class="n">5</div><div class="t" style="font-size:11.5px">应纳税额</div><div class="d">销项−进项
+−留抵</div></div></div></div>
+</div>
+<div class="slide" data-i="2"><div class="brand">增值税进销项 · 架构全景</div><h1 style="font-size:23px">架构全景：一句话触发，五层完成校验</h1><div style="display:flex;justify-content:center;align-items:center;flex:1;margin-top:4px"><svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-height:calc(100vh - 300px)"><defs><marker id="am63b3ed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2b7fd4"/></marker><marker id="amb794f4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#8b5cf0"/></marker><marker id="am48bb78" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#48bb78"/></marker><marker id="amf6ad55" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f6ad55"/></marker><filter id="ash"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.18"/></filter><linearGradient id="agc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2b7fd4" stop-opacity="0.10"/><stop offset="100%" stop-color="#2b7fd4" stop-opacity="0.02"/></linearGradient></defs><text x="95" y="22" font-size="13" font-weight="700" fill="#2b7fd4" text-anchor="middle">输入与触发</text><rect x="20" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="58" font-size="16" text-anchor="middle">🧾</text><text x="95.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">销项发票</text><text x="95.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">开票系统导出</text><rect x="20" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="134" font-size="16" text-anchor="middle">📥</text><text x="95.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">进项发票</text><text x="95.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">勾选平台导出</text><rect x="20" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="210" font-size="16" text-anchor="middle">📋</text><text x="95.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">规则与期间</text><text x="95.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">税率 · 不得抵扣 · 留抵</text><rect x="20" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="95.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">一句话触发</text><text x="95.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">“增值税进销项”</text><rect x="20" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="95.0" y="362" font-size="16" text-anchor="middle">⏰</text><text x="95.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">定时任务（使用者配置）</text><text x="95.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">每月申报前</text><rect x="240" y="16" width="480" height="412" rx="16" fill="url(#agc)" stroke="#2b7fd4" stroke-width="1.4" stroke-dasharray="6,3"/><text x="480" y="40" font-size="14.5" font-weight="800" fill="#2b6fb0" text-anchor="middle">Amazon Quick</text><rect x="262" y="52" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#8b5cf0" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="75" font-size="16">🧭</text><text x="304" y="75" font-size="12.5" font-weight="700" fill="#8b5cf0">① 编排层 · 模型（指挥官）</text><text x="280" y="94" font-size="10.5" fill="#3f4c66">识别意图、编排工具；不接触原始发票数据，只看结果摘要</text><rect x="262" y="116" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="139" font-size="16">📥</text><text x="304" y="139" font-size="12.5" font-weight="700" fill="#2b7fd4">② 数据接入层</text><text x="280" y="158" font-size="10.5" fill="#3f4c66">读取销项、进项、规则与期间信息</text><rect x="262" y="180" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#48bb78" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="203" font-size="16">⚙️</text><text x="304" y="203" font-size="12.5" font-weight="700" fill="#48bb78">③ 确定性校验层 · 本地沙箱（操作员）</text><text x="280" y="222" font-size="10.5" fill="#3f4c66">校验脚本：算税 · 税率 · 状态 · 抵扣 · 应纳</text><rect x="262" y="244" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#f6ad55" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="267" font-size="16">🧾</text><text x="304" y="267" font-size="12.5" font-weight="700" fill="#f6ad55">④ 证据层</text><text x="280" y="286" font-size="10.5" fill="#3f4c66">逐票计税状态与原因 + 输入指纹</text><rect x="262" y="308" width="436" height="54" rx="10" fill="rgba(30,45,75,0.04)" stroke="#2b7fd4" stroke-width="1.2" filter="url(#ash)"/><text x="280" y="331" font-size="16">📤</text><text x="304" y="331" font-size="12.5" font-weight="700" fill="#2b7fd4">⑤ 交付层</text><text x="280" y="350" font-size="10.5" fill="#3f4c66">网页 · PDF · Markdown · Excel；脱敏摘要由使用者自行分发</text><rect x="262" y="374" width="436" height="40" rx="8" fill="rgba(183,148,244,0.08)" stroke="#8b5cf0" stroke-width="1" stroke-dasharray="4,2"/><text x="280" y="399" font-size="15">🧩</text><text x="304" y="399" font-size="11.5" font-weight="700" fill="#8b5cf0">Skill 固化：vat-input-output-matching</text><text x="696" y="399" font-size="10" fill="#5f6b82" text-anchor="end">上层判据不折旧 · 下层可替换</text><text x="865" y="22" font-size="13" font-weight="700" fill="#48bb78" text-anchor="middle">输出端</text><rect x="790" y="36" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="58" font-size="16" text-anchor="middle">🌐</text><text x="865.0" y="76" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">网页报告</text><text x="865.0" y="91" font-size="9.5" fill="#5f6b82" text-anchor="middle">问题发票</text><rect x="790" y="112" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="134" font-size="16" text-anchor="middle">📕</text><text x="865.0" y="152" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">PDF / Excel</text><text x="865.0" y="167" font-size="9.5" fill="#5f6b82" text-anchor="middle">申报前底稿</text><rect x="790" y="188" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="210" font-size="16" text-anchor="middle">📝</text><text x="865.0" y="228" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">证据 JSON</text><text x="865.0" y="243" font-size="9.5" fill="#5f6b82" text-anchor="middle">交 #16 申报核对</text><rect x="790" y="264" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="286" font-size="16" text-anchor="middle">💬</text><text x="865.0" y="304" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">脱敏摘要</text><text x="865.0" y="319" font-size="9.5" fill="#5f6b82" text-anchor="middle">由使用者自行分发</text><rect x="790" y="340" width="150" height="64" rx="10" fill="rgba(30,45,75,0.05)" stroke="rgba(30,45,75,0.15)" stroke-width="1.2" filter="url(#ash)"/><text x="865.0" y="362" font-size="16" text-anchor="middle">🗄️</text><text x="865.0" y="380" font-size="12" font-weight="600" fill="#1e2a44" text-anchor="middle">Agent Files 归档</text><text x="865.0" y="395" font-size="9.5" fill="#5f6b82" text-anchor="middle">逐月留档</text><line x1="172" y1="68" x2="258" y2="143" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="144" x2="258" y2="146" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="220" x2="258" y2="150" stroke="#2b7fd4" stroke-width="1.6" marker-end="url(#am63b3ed)"/><line x1="172" y1="296" x2="258" y2="79" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="172" y1="372" x2="258" y2="85" stroke="#8b5cf0" stroke-width="1.6" marker-end="url(#amb794f4)"/><line x1="700" y1="335" x2="786" y2="68" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="335" x2="786" y2="144" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="271" x2="786" y2="220" stroke="#f6ad55" stroke-width="1.6" marker-end="url(#amf6ad55)"/><line x1="700" y1="340" x2="786" y2="296" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/><line x1="700" y1="345" x2="786" y2="372" stroke="#48bb78" stroke-width="1.6" marker-end="url(#am48bb78)"/></svg></div><div class="quote" style="margin-top:6px">涉税数据敏感。全部本地模式下，发票数据、计算和结果都留在本机，模型只看到结果摘要；云上模式则由连接器取数、云端沙箱计算。两种模式只看数据源头在哪。</div></div>
+<div class="slide" data-i="3"><div class="brand">增值税进销项 · 是什么实现的</div>
+  <h1 style="font-size:23px">实现机制：从对话到 <span class="hl">可复用 Skill</span></h1>
+  <p class="sub" style="margin-bottom:14px">模型当"指挥官"做意图识别与工具编排，本地沙箱当"操作员"跑确定性脚本——最终固化为一个 Skill</p>
+  <div class="flow" style="margin:6px 0 14px">
+    <div class="fstep" style="border-top:3px solid #4299e1"><div class="t">🗣️ 触发</div><div class="d">一句话 / 连接器<br>/ 定时任务（使用者配置）</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #6d4ad8"><div class="t">🧭 模型编排</div><div class="d">意图识别<br>工具编排(指挥官)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #48bb78"><div class="t">🔒 本地沙箱</div><div class="d">确定性脚本<br>数据本地(操作员)</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #ed8936"><div class="t">✅ 判据校验</div><div class="d">恒等式 · 白名单<br>唯一性</div></div>
+    <div class="farr">›</div>
+    <div class="fstep" style="border-top:3px solid #f6ad55"><div class="t">📊 产出</div><div class="d">报告+仪表盘<br>+沉淀归档</div></div>
+  </div>
+  <div class="two" style="gap:16px">
+    <div class="card" style="border-color:rgba(99,179,237,.4)"><h3>🧱 固化为 Skill（核心）</h3>
+      <p style="font-size:12px;line-height:1.7">这套流程被写成一个 <b style="color:#2b7fd4">SKILL.md</b>，一句"<b>增值税进销项</b>"即可复用：<br>
+      · <b style="color:#2b6fb0">上层不折旧</b>：目标+输入契约+处理步骤+输出契约+<b>验收判据</b>（跨平台、核心IP）<br>
+      · <b style="color:#9ae6b4">下层可替换</b>：连接器+API+脚本+路径（随平台演进替换）</p></div>
+    <div class="card"><h3>⚙️ 本场景实现</h3>
+      <p style="font-size:12px;line-height:1.7">
+      · 连接器：开票系统导出、进项勾选平台导出<br>
+      · 确定性脚本：<code style="color:#f6ad55">vat_matching_v2.py</code>（含守恒自检 assert）<br>
+      · Skill 名：<code style="color:#2b7fd4">vat-input-output-matching</code><br>
+      · 敏感数据走 <b style="color:#9ae6b4">本地安全执行</b>（financial-local-safety）</p></div>
+  </div>
+</div>
+<div class="slide" data-i="4"><div class="brand">增值税进销项 · 样例数据</div>
+  <h1 style="font-size:23px">构造数据：一个月的销项与进项</h1>
+  <div class="two"><div><div class="card"><h3>规模（示例集团 · 虚构）</h3><p style="font-size:12px">销项：货物、软件产品、技术服务，含红字 1 张、作废 1 张<br>进项：货物、运输、现代服务、住宿、餐饮、不动产租赁</p><table style="font-size:10.5px"><tr><th>口径（全平版）</th><th style="text-align:right">金额</th></tr><tr><td>销项税额（计入）</td><td style="text-align:right">3,886,984</td></tr><tr><td>可抵扣进项</td><td style="text-align:right">2,192,038</td></tr><tr><td>不抵扣（餐饮、福利、未勾选）</td><td style="text-align:right">23,328</td></tr><tr><td>上期留抵</td><td style="text-align:right">186,420</td></tr><tr><td>应纳税额</td><td style="text-align:right">1,508,525</td></tr></table></div></div>
+  <div><div class="card"><h3>两个版本做对照</h3><p style="font-size:12px">· <b style="color:#48bb78">全平版</b>：216 张全部正确<br><br>· <b style="color:#f56565">植错版</b>：植入 13 处<br><b>销项</b>：税额多写 · 技术服务开 13% · 用旧的 11% · 10 月票记 9 月 · 重复 · 红字找不到蓝字<br><b style="color:#f6ad55">进项</b>：餐饮抵扣 · 员工福利抵扣 · 抬头不是本公司 · 作废票抵扣 · 上月已抵又计 · 运输开 6%<br><b>数据质量</b>：一张进项发票税额写成 "7,819.03"（无法解析，登记为数据质量问题，该行不参与计算）</p></div></div></div>
+  <div class="quote">餐饮服务、用于集体福利的购进，即使拿到了专用发票，进项也不得抵扣——这是“税率合法、税额也对”却仍然错的典型。</div></div>
+<div class="slide" data-i="5"><div class="brand">增值税进销项 · 核心判据</div>
+  <h1 style="font-size:23px">算对税，还要判对能不能抵</h1>
+  <table style="font-size:11.5px"><tr><th>判据</th><th>规则</th><th>结果</th></tr><tr><td>税额恒等式</td><td>税额 = 金额 × 税率</td><td>剔除</td></tr><tr><td><b style="color:#f6ad55">类别 × 税率</b></td><td>税率合法，还要和商品服务类别对应：运输 9%、技术服务 6%</td><td>剔除</td></tr><tr><td><b style="color:#f6ad55">唯一与状态</b></td><td>发票号唯一；作废不计税；红字必须对应存在的蓝字</td><td>剔除 / 不计税</td></tr><tr><td>销项所属期</td><td>开票日期在本月；销方是本公司</td><td>剔除</td></tr><tr><td><b style="color:#f6ad55">进项能否抵扣</b></td><td>抬头是本公司；本月勾选；发票正常；不是餐饮、集体福利</td><td>剔除 / 不抵扣</td></tr><tr><td><b style="color:#f6ad55">应纳税额</b></td><td>销项 − (可抵扣进项 − 进项转出) − 上期留抵</td><td>计算</td></tr></table>
+  <div class="quote">守恒：全部销项税额 = 计入 + 作废 + 剔除；全部进项税额 = 可抵扣 + 不抵扣 + 剔除。每一分税额都有去向。</div></div>
+<div class="slide" data-i="6"><div class="brand">增值税进销项 · 校验结果</div>
+  <h1 style="font-size:23px">13 处全部抓出</h1>
+  <div class="two"><div style="display:flex;gap:10px;justify-content:center;flex-direction:column">
+      <div style="display:flex;gap:10px;justify-content:center">
+      <div class="card" style="text-align:center"><h3>全平版</h3><svg viewBox="0 0 120 120" width="116" height="116"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#48bb78" stroke-width="16" stroke-dasharray="301.6 0.0" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2a44">100.0%</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">发票正确率</text></svg><p style="font-size:12px">应纳 150.9 万</p></div>
+      <div class="card" style="text-align:center"><h3>植错版</h3><svg viewBox="0 0 120 120" width="116" height="116"><circle cx="60" cy="60" r="48" fill="none" stroke="#e4eaf2" stroke-width="16"/><circle cx="60" cy="60" r="48" fill="none" stroke="#f56565" stroke-width="16" stroke-dasharray="283.5 18.1" transform="rotate(-90 60 60)"/><text x="60" y="58" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2a44">94.0%</text><text x="60" y="76" text-anchor="middle" font-size="10" fill="#5f6b82">发票正确率</text></svg><p style="font-size:12px">销项不符 7 · 进项不符 6</p></div></div>
+      </div><div><table style="font-size:10px"><tr><th>植入错误</th><th>检出</th></tr><tr><td>销项税额多写</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>用旧的 11% 税率</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>红字找不到蓝字</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>技术服务开 13%</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>10 月票记 9 月</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>发票重复</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>餐饮进项抵扣</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>员工福利抵扣</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>抬头不是本公司</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>作废票抵扣</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>上月已抵又计</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>运输开 6%</td><td><span style="color:#48bb78">✓</span></td></tr><tr><td>税额写成千分位</td><td><span style="color:#48bb78">✓</span></td></tr></table></div></div></div>
+<div class="slide" data-i="7"><div class="brand">增值税进销项 · 问题发票</div>
+  <h1 style="font-size:23px">植错版问题发票（销项 + 进项）</h1>
+  <div class="card"><table style="font-size:10px"><tr><th>方向</th><th>发票代码号码</th><th>类别</th><th style="text-align:right">税额</th><th>问题</th></tr><tr><td>销项</td><td>XS2600000001</td><td>技术服务</td><td style="text-align:right">11,488</td><td>类别与税率不符</td></tr><tr><td>销项</td><td>XS2600000015</td><td>货物</td><td style="text-align:right">35,543</td><td>税额≠金额×税率</td></tr><tr><td>销项</td><td>XS2600000028</td><td>货物</td><td style="text-align:right">45,450</td><td>销项跨期</td></tr><tr><td>销项</td><td>XS2600000045</td><td>技术服务</td><td style="text-align:right">34,898</td><td>非法税率</td></tr><tr><td>销项</td><td>XS2600000071</td><td>货物</td><td style="text-align:right">83,982</td><td>发票重复</td></tr><tr><td>销项</td><td>XS2600000071</td><td>货物</td><td style="text-align:right">83,982</td><td>发票重复</td></tr><tr><td>销项</td><td>XS2600000099</td><td>货物</td><td style="text-align:right">-7,800</td><td>红字无对应蓝字</td></tr><tr><td>进项</td><td>JX2600000003</td><td>运输服务</td><td style="text-align:right">6,055</td><td>类别与税率不符</td></tr><tr><td>进项</td><td>JX2600000010</td><td>货物·福利</td><td style="text-align:right">20,579</td><td>不得抵扣项目已勾选</td></tr><tr><td>进项</td><td>JX2600000016</td><td>餐饮服务</td><td style="text-align:right">944</td><td>不得抵扣项目已勾选</td></tr><tr><td>进项</td><td>JX2600000019</td><td>现代服务</td><td style="text-align:right">9,840</td><td>购方抬头错误</td></tr><tr><td>进项</td><td>JX2600000035</td><td>运输服务</td><td style="text-align:right">36,478</td><td>作废发票已勾选抵扣</td></tr><tr><td>进项</td><td>JX2600000068</td><td>运输服务</td><td style="text-align:right">37,471</td><td>勾选期间不是本期</td></tr></table></div>
+  <div class="quote">问题发票剔除后应纳 1,517,944；若不经校验直接计算为 1,610,140，差 92,196。剔除的发票更正后重跑再申报。</div></div>
+<div class="slide" data-i="8"><div class="brand">增值税进销项 · 应纳税额</div>
+  <h1 style="font-size:23px">本月应纳税额怎么来的</h1><div class="two"><div class="card"><h3>植错版（校验后）</h3><div class="brow"><div class="bname" style="width:92px">销项计入</div><div class="btrack"><div class="bfill" style="width:100%;background:#f6ad55"></div></div><div class="bval">+378.3 万</div></div><div class="brow"><div class="bname" style="width:92px">可抵扣进项</div><div class="btrack"><div class="bfill" style="width:55%;background:#2b7fd4"></div></div><div class="bval">-207.9 万</div></div><div class="brow"><div class="bname" style="width:92px">上期留抵</div><div class="btrack"><div class="bfill" style="width:5%;background:#2b7fd4"></div></div><div class="bval">-18.6 万</div></div><div class="brow"><div class="bname" style="width:92px">应纳税额</div><div class="btrack"><div class="bfill" style="width:40%;background:#48bb78"></div></div><div class="bval">+151.8 万</div></div><p style="font-size:11px;color:#5f6b82;margin-top:6px">销项 3,782,953 − 可抵扣进项 2,078,588 − 上期留抵 186,420 = 1,517,944</p></div><div class="card"><h3>税额去向（守恒）</h3><table style="font-size:10.5px"><tr><th>口径</th><th style="text-align:right">税额</th></tr><tr><td>销项：计入</td><td style="text-align:right">3,782,953</td></tr><tr><td>销项：作废</td><td style="text-align:right">11,440</td></tr><tr><td>销项：剔除待更正</td><td style="text-align:right">203,562</td></tr><tr><td>进项：可抵扣</td><td style="text-align:right">2,078,588</td></tr><tr><td>进项：不抵扣</td><td style="text-align:right">22,384</td></tr><tr><td>进项：剔除</td><td style="text-align:right">111,366</td></tr></table></div></div>
+  <div class="quote">这里算出的应纳税额，就是下一个场景 #16 核对申报表时的“账载基准”。</div></div>
+<div class="slide" data-i="9"><div class="brand">增值税进销项 · 判据边界</div>
+  <h1 style="font-size:23px">票面都对了，也不等于税一定交对</h1>
+  <table style="font-size:11.5px"><tr><th>盲区</th><th>为什么抓不到</th><th>处置</th><th>可闭合性</th></tr><tr><td>类别用错税率</td><td>税率合法，但与业务不符</td><td>类别×税率交叉白名单，<b>已在脚本中实现</b></td><td><span style="color:#48bb78">🟢 已闭合</span></td></tr><tr><td>不得抵扣已抵扣</td><td>餐饮、福利拿了专票就抵</td><td>不得抵扣清单，<b>已在脚本中实现</b></td><td><span style="color:#48bb78">🟢 已闭合</span></td></tr><tr><td>用途事后改变</td><td>购进时用于生产，后来用于福利</td><td>按领用记录计算进项转出</td><td><span style="color:#48bb78">🟢 可自补</span></td></tr><tr><td>发票真伪与异常凭证</td><td>票面合规，但被税局列为异常</td><td>对接税务发票查验与异常凭证清单</td><td><span style="color:#f6ad55">🟡 需外部锚点</span></td></tr><tr><td>销售未开票</td><td>有收入却没开票，销项漏计</td><td>与收入明细、出库记录核对</td><td><span style="color:#f6ad55">🟡 需外部锚点</span></td></tr></table>
+  <div class="quote">判据能证明“已开的票算对了、该抵的才抵”，不能证明“该开的票都开了、票是真的”——这些边界已写入 Skill 的判据覆盖声明。</div></div>
+<div class="slide" data-i="10"><div class="brand">增值税进销项 · 过程可回溯</div>
+  <h1 style="font-size:23px">每个结论都能倒查回原始数据</h1>
+  <div class="three"><div class="card"><h3>① 逐票留痕</h3><p>216 张发票各记计税状态（计入/可抵扣/不抵扣/作废/剔除）与原因。</p></div><div class="card"><h3>② 期间与指纹</h3><p>所属期、本公司税号、上期留抵固定；五个输入各记 SHA-256 指纹。</p></div><div class="card"><h3>③ 守恒 + 复算</h3><p>销项、进项、张数守恒成立；本机用同一份 CSV 独立复算，与云端一致。</p></div></div>
+  <div class="quote">证据 JSON 同时输出为网页、PDF、Markdown、Excel 四种报告，申报表上的每一个税额都能追溯到具体发票。</div></div>
+<div class="slide" data-i="11"><div class="brand">增值税进销项 · 部署与复用</div>
+  <h1 style="font-size:23px">一次构建 · 处处复用</h1>
+  <div class="three" style="margin-bottom:14px">
+    <div class="card"><h3>🗣️ 一句话触发</h3><p>对话框输入"增值税进销项"触发词即时运行</p></div>
+    <div class="card"><h3>⏰ 定时任务</h3><p>使用者在 Mission Control 自行配置定时任务（routine）周期运行；产出由使用者确认后自行分发</p></div>
+    <div class="card"><h3>🧠 Agent Files 记忆</h3><p>规则表、上期结果持久缓存，形成环比链</p></div>
+  </div>
+  <div class="kpi-row" style="margin-bottom:12px"><div class="kpi"><div class="v" style="color:#48bb78;font-size:22px">分钟级</div><div class="l">人工逐票复核 → 自动校验</div></div><div class="kpi"><div class="v" style="color:#4299e1;font-size:22px">100%</div><div class="l">税额逐票可追溯</div></div><div class="kpi"><div class="v" style="color:#f6ad55;font-size:22px">0</div><div class="l">涉税数据上云（本地模式）</div></div></div>
+  <div class="quote">“逐票恒等式 + 类别×税率交叉白名单 + 准入清单 + 守恒”这套判据，可复用到消费税、附加税计算，以及出口退税单证核对。</div>
+</div>
+<div class="sub-bar" id="subbar"><span id="subtxt"></span></div>
+<div class="ctrl">
+  <button class="pri" id="play" onclick="toggle()">▶ 开始讲解</button>
+  <button onclick="go(cur-1)">‹ 上一页</button>
+  <div class="dots" id="dots"></div>
+  <button onclick="go(cur+1)">下一页 ›</button>
+  <button onclick="fs()">⛶ 全屏</button>
+  <div class="info" id="info">1 / 12</div>
+</div>
+<script>
+var TOTAL=12,cur=0,speaking=false,synth=window.speechSynthesis;
+var narr=[
+"本页介绍增值税进销项匹配方案。前面几个场景理顺的是往来款项，接下来进入税务：本月该交多少增值税？等于卖出去开票的税，减去买进来能抵的税，再减去上月没抵完的。难点在能抵这两个字：要勾选了、是本期、抬头对、还不能属于餐饮、员工福利这类不得抵扣的项目。需要说明，以下数据及企业均为构造，非真实数据。本次样例 216 张发票，植入的 13 处错误全部抓出；如果不经校验直接计算，应纳税额会多算约 9.2 万元。",
+"先看端到端流程。输入有三类：销项发票、进项发票，以及税率规则、不得抵扣清单和本期信息。处理分五步：先逐张验算税额是否等于金额乘税率；再检查税率是否合法、是否和商品服务类别对得上；然后看发票状态，是否重复、作废，红字发票是否对应存在的蓝字发票；接着判断每张进项能不能抵扣；最后算出应纳税额。结果会交给下一个场景，和纳税申报表核对。",
+"这是架构全景图。左侧是销项发票、进项发票和规则期间信息，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，每月申报前运行。中间是 Amazon Quick 内部的五层：编排层由模型充当指挥官，不接触原始发票数据，只看结果摘要；数据接入层读取五类数据；确定性校验层由本地沙箱里的脚本逐票算税、查税率、看状态、判抵扣、算应纳；证据层记录每张票的计税状态和原因；交付层输出四种格式的报告，证据还会交给下一个场景做申报核对。",
+"这套方案是怎么实现的。用户一句增值税进销项即可触发。模型负责理解意图和编排工具，不接触原始发票数据，只看结果摘要；计算在本地沙箱里由确定性脚本完成。有三个关键设计：检查商品服务类别和税率的对应关系，税率合法但用错了类别也能抓出来；进项抵扣要同时满足抬头、勾选期间、发票状态和不得抵扣清单；应纳税额计入上期留抵和进项转出，红字和作废发票按规则处理。",
+"来看样例数据。我们为虚构的示例集团构造了一个月的发票：销项 98 张，包括一张红字、一张作废；进项 118 张，涵盖货物、运输、各类服务和房屋租赁。全平版全部正确，应纳税额约 150.9 万元。植错版植入了 13 处，销项 6 处、进项 6 处，另有 1 处数据质量问题。其中餐饮服务和员工福利这两类，就算拿到了专用发票，进项也不能抵扣，这是税率合法、税额也对，却仍然错了的典型。",
+"核心判据是算对税，还要判对能不能抵。税额要等于金额乘税率；税率不仅要合法，还要和商品服务类别对应，比如运输是百分之九、技术服务是百分之六。发票号不能重复，作废的不计税，红字要对应存在的蓝字。销项要在本月、销方是本公司。进项要抬头是本公司、本月勾选、发票正常，还不能是餐饮或员工福利。最后应纳税额要扣除上期留抵。守恒保证每一分税额都有去向。",
+"来看结果。全平版 216 张全部正确。植错版销项 7 张、进项 6 张不符，13 处全部抓出，没有误报。其中一处是一张进项发票的税额写成了带千分位的 7,819.03，无法解析，按数据质量问题报出，该行不参与计算，不按 0 计。",
+"这是植错版的问题发票清单，销项和进项分开列出，每张写明问题。问题发票剔除后，应纳税额约 151.8 万元；如果不经校验直接计算，是约 161.0 万，相差约 9.2 万。剔除的发票更正后重跑，再去申报。",
+"这一屏说明应纳税额怎么来的。植错版校验后，计入的销项税额约 378 万，减去可抵扣进项约 208 万，再减去上期留抵约 18.6 万，应纳约 151.8 万元。右边是税额去向，每一分都落在计入、作废、剔除、可抵扣或不抵扣里。这里算出的应纳税额，就是下一个场景核对申报表时的基准。",
+"还要讲清判据的边界。类别用错税率、不得抵扣项目被抵扣，这两类脚本已经补上。购进时用于生产、后来改用于福利，可以按领用记录计算进项转出，自己就能补。但还有两类需要外部数据：发票票面合规，却被税务局列为异常凭证，需要对接发票查验平台；有收入却没开票，销项漏计了，需要和收入明细、出库记录核对。",
+"最后是过程可回溯。第一，逐票留痕，每张发票记录计税状态和原因。第二，期间和指纹，所属期、本公司税号和上期留抵固定，五个输入文件各记下指纹。第三，守恒加复算，销项、进项和张数守恒都成立，同一份数据在本机独立复算，结果与云端一致。",
+"部署上，可以一句话触发，也可以由使用者在 Mission Control 配置定时任务，每月申报前运行。逐票恒等式、类别和税率的交叉白名单、准入清单再加守恒这套思路，还能复用到消费税、附加税计算和出口退税单证核对。总结一句：增值税进销项匹配不只是验算税额，而是确保该抵的才抵，并且清楚说明它能抓到什么、抓不到什么。"
+];
+var dd=document.getElementById('dots');
+for(var i=0;i<TOTAL;i++){var e=document.createElement('div');e.className='dot'+(i===0?' on':'');e.onclick=(function(k){return function(){go(k)}})(i);dd.appendChild(e);}
+function go(n){if(n<0||n>=TOTAL)return;var sl=document.querySelectorAll('.slide');sl.forEach(function(x){x.classList.remove('active')});sl[n].classList.add('active');cur=n;document.querySelectorAll('.dot').forEach(function(x,k){x.className='dot'+(k===n?' on':'')});document.getElementById('info').textContent=(n+1)+' / '+TOTAL;if(speaking)speakCur();}
+function splitS(t){var p=t.replace(/([。！？；])/g,'$1\n').split('\n');return p.map(function(x){return x.trim()}).filter(function(x){return x.length>0});}
+function voice(){var v=synth.getVoices();return v.find(function(x){return x.name.indexOf('Yunxi')>-1})||v.find(function(x){return x.name.indexOf('Yunyang')>-1})||v.find(function(x){return x.name.indexOf('Yunjian')>-1})||v.find(function(x){return x.lang==='zh-CN'&&x.name.indexOf('Microsoft')>-1})||v.find(function(x){return x.lang==='zh-CN'})||v.find(function(x){return x.lang.indexOf('zh')===0});}
+function speakCur(){if(!speaking)return;synth.cancel();var ss=splitS(narr[cur]);if(!ss.length)ss=[narr[cur]];var i=0;var bar=document.getElementById('subbar'),tx=document.getElementById('subtxt');function nx(){if(!speaking){bar.classList.remove('on');return;}if(i>=ss.length){bar.classList.remove('on');if(speaking&&cur<TOTAL-1){go(cur+1);setTimeout(speakCur,400);}else if(speaking){toggle();}return;}bar.classList.add('on');tx.textContent=ss[i];var u=new SpeechSynthesisUtterance(ss[i]);u.lang='zh-CN';u.rate=0.9;u.pitch=1.1;var vo=voice();if(vo)u.voice=vo;u.onend=function(){i++;nx();};synth.speak(u);}nx();}
+function toggle(){if(speaking){speaking=false;synth.cancel();document.getElementById('subbar').classList.remove('on');document.getElementById('play').textContent='▶ 开始讲解';}else{speaking=true;document.getElementById('play').textContent='■ 停止讲解';speakCur();}}
+function fs(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1);}else if(e.key==='ArrowLeft'){go(cur-1);}else if(e.key==='f'||e.key==='F'){fs();}else if(e.key==='Escape'&&speaking){toggle();}});
+if(synth.onvoiceschanged!==undefined)synth.onvoiceschanged=function(){};
+</script><style id="light-theme-v2">
+html,body{background:#eef2f8!important;color:#1e2a44!important}
+.sub{color:#4a5676!important}
+.card,.kpi,.fstep{background:#fff!important;border:1px solid #e4eaf2!important;box-shadow:0 1px 3px rgba(20,35,66,.07),0 1px 2px rgba(20,35,66,.04)!important}
+.card h3{color:#2b6cb0!important}.card p{color:#3f4c66!important}
+.btrack{background:#e6ebf3!important}
+.kpi .l,.fstep .d,.bval,.bname,.info,.legend{color:#5f6b82!important}
+.fstep .n{color:#8a94a8!important}.farr{color:#aab4c6!important}
+table th{color:#6b7589!important;border-bottom:1px solid #dbe2ec!important}
+table td{border-bottom:1px solid #eef1f6!important}
+.quote{background:rgba(43,108,176,.08)!important;border-left-color:#2b6cb0!important;color:#27496d!important}
+.ctrl{background:rgba(248,250,253,.97)!important;border-top:1px solid #e2e8f1!important}
+.ctrl button{background:#fff!important;border:1px solid #d4dce8!important;color:#28334a!important}
+.ctrl button.pri{background:#2b7fd4!important;border-color:#2b7fd4!important;color:#fff!important}
+.dot{background:#c4cedd!important}.dot.on{background:#2b7fd4!important}
+.judge{background:rgba(43,127,212,.12)!important;color:#2366a8!important}
+</style>
+</body></html>

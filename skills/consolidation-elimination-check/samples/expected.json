@@ -1,0 +1,98 @@
+{
+  "clean": {
+    "summary~keys": [
+      "pass"
+    ],
+    "data_issues~len": 0,
+    "total_entries": 80,
+    "total_lines": 169,
+    "pass_rate": 100.0,
+    "entity_tb~keys": [
+      "示例子公司A",
+      "示例子公司B",
+      "示例子公司C",
+      "示例子公司D",
+      "示例子公司E",
+      "示例集团母公司"
+    ],
+    "entity_unbalanced~keys": [],
+    "types_present~len": 4,
+    "types_missing~len": 0,
+    "elim_by_type~keys": [
+      "往来抵消",
+      "收入成本抵消",
+      "未实现利润抵消",
+      "长投权益抵消"
+    ],
+    "scope~len": 0,
+    "source_mismatch~len": 0,
+    "missed_pairs~len": 0,
+    "issue_types~keys": [
+      "合规"
+    ],
+    "conservation~keys": [
+      "个别报表不平合计",
+      "合并试算差",
+      "抵消分录不平合计",
+      "抵消分录数",
+      "抵消行数"
+    ],
+    "consolidated_sheet~len": 15,
+    "all_ok": true,
+    "inputs~len": 6,
+    "entries~len": 80
+  },
+  "error": {
+    "summary~keys": [
+      "fail",
+      "pass"
+    ],
+    "data_issues~len": 1,
+    "total_entries": 80,
+    "total_lines": 170,
+    "pass_rate": 88.8,
+    "entity_tb~keys": [
+      "示例子公司A",
+      "示例子公司B",
+      "示例子公司C",
+      "示例子公司D",
+      "示例子公司E",
+      "示例联营公司F",
+      "示例集团母公司"
+    ],
+    "entity_unbalanced~keys": [
+      "示例子公司E"
+    ],
+    "types_present~len": 4,
+    "types_missing~len": 0,
+    "elim_by_type~keys": [
+      "往来抵消",
+      "收入成本抵消",
+      "未实现利润抵消",
+      "长投权益抵消"
+    ],
+    "scope~len": 2,
+    "source_mismatch~len": 19,
+    "missed_pairs~len": 1,
+    "issue_types~keys": [
+      "与来源重算不符",
+      "借贷不平",
+      "合规",
+      "对应主体不应纳入合并",
+      "数据质量·数值无法解析",
+      "来源数值无法解析",
+      "科目与抵消类型不符"
+    ],
+    "conservation~keys": [
+      "个别报表不平合计",
+      "合并试算差",
+      "抵消分录不平合计",
+      "抵消分录数",
+      "抵消行数"
+    ],
+    "consolidated_sheet~len": 15,
+    "all_ok": false,
+    "inputs~len": 6,
+    "entries~len": 80
+  }
+}
